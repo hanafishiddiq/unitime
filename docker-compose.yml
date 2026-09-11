@@ -1,0 +1,41 @@
+services:
+  unitime-db:
+    container_name: unitime-db
+    image: mysql:8.3
+    restart: unless-stopped
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_USER=timetable
+      - MYSQL_PASSWORD=unitime
+      - MYSQL_DATABASE=timetable
+    volumes:
+      - ./Documentation/Database/MySQL/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./Documentation/Database/MySQL/woebegon-data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./docker/mysql-init/03-permissions.sql:/docker-entrypoint-initdb.d/03-permissions.sql:ro
+      - unitime-db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "timetable", "-punitime"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  unitime-web:
+    container_name: unitime-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      unitime-db:
+        condition: service_healthy
+    ports:
+      - "8888:8080"
+    volumes:
+      - unitime-app-data:/usr/local/tomcat/data
+
+volumes:
+  unitime-db-data:
+  unitime-app-data:

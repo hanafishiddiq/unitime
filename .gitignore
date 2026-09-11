@@ -1,0 +1,29 @@
+/Distributions/
+/temp/
+/.settings/
+/.gwt/
+/target/
+/WebContent/WEB-INF/classes/
+/.tern-project
+.DS_Store
+/.zanata-cache
+/Documentation/Translations
+/gwt-unitCache
+/WebContent/unitime
+/WebContent/WEB-INF/deploy
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+
+# Local AI gateway SQLite runtime databases
+ai-gateway/data/*.db*
+!ai-gateway/data/.gitkeep
+ai-gateway/reports/*.md
+!ai-gateway/reports/.gitkeep

@@ -1,0 +1,121 @@
+/*
+ * Licensed to The Apereo Foundation under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work for
+ * additional information regarding copyright ownership.
+ *
+ * The Apereo Foundation licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+*/
+package org.unitime.timetable.server.script;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.unitime.timetable.events.QueryEncoderBackend;
+import org.unitime.timetable.gwt.command.client.GwtRpcResponseList;
+import org.unitime.timetable.gwt.command.server.GwtRpcImplementation;
+import org.unitime.timetable.gwt.command.server.GwtRpcImplements;
+import org.unitime.timetable.gwt.command.server.GwtRpcLogging;
+import org.unitime.timetable.gwt.command.server.GwtRpcLogging.Level;
+import org.unitime.timetable.gwt.shared.ScriptInterface.GetQueueTableRpcRequest;
+import org.unitime.timetable.gwt.shared.ScriptInterface.QueueItemInterface;
+import org.unitime.timetable.security.SessionContext;
+import org.unitime.timetable.security.rights.Right;
+import org.unitime.timetable.solver.service.SolverServerService;
+import org.unitime.timetable.util.queue.PdfExamReportQueueItem;
+import org.unitime.timetable.util.queue.QueueItem;
+
+/**
+ * @author Tomas Muller
+ */
+@GwtRpcImplements(GetQueueTableRpcRequest.class)
+@GwtRpcLogging(Level.ON_EXCEPTION)
+public class GetQueueTableBackend implements GwtRpcImplementation<GetQueueTableRpcRequest, GwtRpcResponseList<QueueItemInterface>>{
+	
+	@Autowired SolverServerService solverServerService;
+
+	@Override
+	public GwtRpcResponseList<QueueItemInterface> execute(GetQueueTableRpcRequest request, SessionContext context) {
+
+		String type = null;
+		switch(request.getType()) {
+		case ExamPdfReport:
+			type = PdfExamReportQueueItem.TYPE;
+			context.checkPermission(Right.ExaminationPdfReports);
+			break;
+		case DataExchange:
+			type = "Data Exchange";
+			context.checkPermission(Right.DataExchange);
+			break;
+		case EnrollmentPdfReport:
+			type = "PDF Enrollment Report";
+			context.checkPermission(Right.EnrollmentAuditPDFReports);
+			break;
+		case RollForward:
+			type = "Roll Forward";
+			context.checkPermission(Right.SessionRollForward);
+			break;
+		case Script:
+		default:
+			type = "Script";
+			context.checkPermission(Right.Scripts);
+		}
+	
+		if (request.getDeleteId() != null)
+			solverServerService.getQueueProcessor().remove(request.getDeleteId());
+
+		List<QueueItemInterface> queue = solverServerService.getQueueProcessor().getItemsTable(null, null, type, 1000 * 60 * 60);
+		GwtRpcResponseList<QueueItemInterface> table = new GwtRpcResponseList<QueueItemInterface>();
+		
+		String local = solverServerService.getLocalServer().getHost();
+		for (QueueItemInterface item: queue) {
+			item.setCanDelete(context.hasPermissionAnyAuthority(item.getSessionId(), "Session", Right.Chameleon) || context.getUser().getExternalUserId().equals(item.getOwnerId()));
+			if (item.getOtuput() != null && !local.equals(item.getHost()))
+				item.setOutputLink("qpfile?q=" + QueryEncoderBackend.encode(item.getId()));
+			table.add(item);
+		}
+		
+		return table;
+	}
+	
+	public static QueueItemInterface convert(QueueItem item, SessionContext context) {
+		QueueItemInterface q = new QueueItemInterface();
+		
+		q.setId(item.getId());
+		q.setHost(item.getHost());
+		q.setName(item.name());
+		q.setStatus(item.status());
+		q.setProgress(item.progress() <= 0.0 || item.progress() >= 1.0 ? "" : String.valueOf(Math.round(100 * item.progress())) + "%");
+		q.setOwnerId(item.getOwnerId());
+		q.setOwner(item.getOwnerName());
+		q.setSessionId(item.getSessionId());
+		q.setSession(item.getSession() == null ? "None" : item.getSession().getLabel());
+		q.setCreated(item.created());
+		q.setStarted(item.started());
+		q.setFinished(item.finished());
+		if (item.hasOutput()) {
+			q.setOutput(item.getOutputName());
+			q.setOutputLink(item.getOutputLink());
+		}
+		//q.setLog(item.log());
+		if (context != null)
+			q.setCanDelete((context.hasPermissionAnyAuthority(item.getSessionId(), "Session", Right.Chameleon) || context.getUser().getExternalUserId().equals(item.getOwnerId())));
+		
+		if (item instanceof ScriptExecution)
+			q.setExecutionRequest(((ScriptExecution)item).getRequest());
+		
+		return q;
+	}
+
+}

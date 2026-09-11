@@ -1,0 +1,9 @@
+.git
+.github
+target
+temp
+Distributions
+.settings
+.project
+.classpath
+*.log

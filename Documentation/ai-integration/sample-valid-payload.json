@@ -1,0 +1,665 @@
+{
+  "ingestControl": {
+    "mode": "incremental",
+    "actionOnDuplicate": "upsert",
+    "sourceDocumentName": "Jadwal_Kuliah_Teknik_Informatika_Ganjil_2024_2025.xlsx",
+    "extractedAt": "2026-08-31T18:00:00Z",
+    "validationStrictness": "strict"
+  },
+  "academicSession": {
+    "year": "2024-2025",
+    "term": "Ganjil",
+    "campus": "Kampus Ganesha"
+  },
+  "department": {
+    "code": "IF",
+    "name": "Teknik Informatika"
+  },
+  "subjectArea": {
+    "abbreviation": "IF",
+    "title": "Teknik Informatika",
+    "externalId": "SA_IF_01"
+  },
+  "courses": [
+    {
+      "courseNumber": "IF2110",
+      "title": "Algoritma dan Struktur Data",
+      "credit": {
+        "units": 4,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "projectedDemand": 90,
+      "consentType": "None",
+      "scheduleBookNote": "Mata kuliah wajib semester 3. Terdiri dari 3 SKS Kuliah dan 1 SKS Praktikum di Laboratorium.",
+      "controlling": true,
+      "configurations": [
+        {
+          "name": "Teori + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "roomRatio": 1.0,
+                  "scheduleNote": "Kelas Paralel 1 (Reguler)",
+                  "instructors": [
+                    {
+                      "id": "198503152010122001",
+                      "name": "Dr. Eng. Ayu Pratama, S.T., M.T.",
+                      "email": "ayu.pratama@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 50
+                    },
+                    {
+                      "id": "197808202003121002",
+                      "name": "Budi Raharjo, S.T., M.Kom.",
+                      "email": "budi.raharjo@univ.ac.id",
+                      "isLead": false,
+                      "sharePercentage": 50
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "7601",
+                      "feature": "Projector",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "roomRatio": 1.0,
+                  "scheduleNote": "Kelas Paralel 2 (Reguler)",
+                  "instructors": [
+                    {
+                      "id": "198503152010122001",
+                      "name": "Dr. Eng. Ayu Pratama, S.T., M.T.",
+                      "email": "ayu.pratama@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 50
+                    },
+                    {
+                      "id": "199001102015041003",
+                      "name": "Ahmad Fauzi, S.Kom., M.Cs.",
+                      "email": "ahmad.fauzi@univ.ac.id",
+                      "isLead": false,
+                      "sharePercentage": 50
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "7602",
+                      "feature": "Projector",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 120,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "capacity": 25,
+                  "roomRatio": 1.0,
+                  "parentClassSection": "K01",
+                  "scheduleNote": "Sesi Praktikum Lab 1 untuk K01",
+                  "instructors": [
+                    {
+                      "id": "198503152010122001",
+                      "name": "Dr. Eng. Ayu Pratama, S.T., M.T.",
+                      "email": "ayu.pratama@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "13:00",
+                      "endTime": "15:00",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "Lab-1",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "capacity": 25,
+                  "roomRatio": 1.0,
+                  "parentClassSection": "K01",
+                  "scheduleNote": "Sesi Praktikum Lab 2 untuk K01",
+                  "instructors": [
+                    {
+                      "id": "198503152010122001",
+                      "name": "Dr. Eng. Ayu Pratama, S.T., M.T.",
+                      "email": "ayu.pratama@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "15:00",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "Lab-1",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L03",
+                  "capacity": 25,
+                  "roomRatio": 1.0,
+                  "parentClassSection": "K02",
+                  "scheduleNote": "Sesi Praktikum Lab 1 untuk K02",
+                  "instructors": [
+                    {
+                      "id": "199001102015041003",
+                      "name": "Ahmad Fauzi, S.Kom., M.Cs.",
+                      "email": "ahmad.fauzi@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "08:00",
+                      "endTime": "10:00",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "Lab-2",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L04",
+                  "capacity": 25,
+                  "roomRatio": 1.0,
+                  "parentClassSection": "K02",
+                  "scheduleNote": "Sesi Praktikum Lab 2 untuk K02",
+                  "instructors": [
+                    {
+                      "id": "199001102015041003",
+                      "name": "Ahmad Fauzi, S.Kom., M.Cs.",
+                      "email": "ahmad.fauzi@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "13:30",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "Lab-2",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "IF2120",
+      "title": "Matematika Diskrit",
+      "credit": {
+        "units": 3,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "projectedDemand": 100,
+      "consentType": "None",
+      "scheduleBookNote": "Mata kuliah wajib semester 3.",
+      "controlling": true,
+      "configurations": [
+        {
+          "name": "Kuliah Reguler",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "roomRatio": 1.0,
+                  "instructors": [
+                    {
+                      "id": "196504121990031001",
+                      "name": "Prof. Dr. Hendra Wijaya, M.Sc.",
+                      "email": "hendra.wijaya@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GK1",
+                      "roomNumber": "9001",
+                      "feature": "Projector",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "roomRatio": 1.0,
+                  "instructors": [
+                    {
+                      "id": "196504121990031001",
+                      "name": "Prof. Dr. Hendra Wijaya, M.Sc.",
+                      "email": "hendra.wijaya@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GK1",
+                      "roomNumber": "9002",
+                      "feature": "Projector",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "IF3150",
+      "title": "Sistem Basis Data",
+      "credit": {
+        "units": 3,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "projectedDemand": 80,
+      "consentType": "None",
+      "scheduleBookNote": "Mata kuliah wajib semester 5. Terdiri dari 2 SKS Teori dan 1 SKS Responsi/Praktikum.",
+      "controlling": true,
+      "configurations": [
+        {
+          "name": "Teori + Responsi",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 100,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 40,
+                  "roomRatio": 1.0,
+                  "instructors": [
+                    {
+                      "id": "197206181998021001",
+                      "name": "Dr. Bambang Supeno, S.T., M.T.",
+                      "email": "bambang.supeno@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "10:00",
+                      "endTime": "11:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "7601",
+                      "feature": "Projector",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 40,
+                  "roomRatio": 1.0,
+                  "instructors": [
+                    {
+                      "id": "197206181998021001",
+                      "name": "Dr. Bambang Supeno, S.T., M.T.",
+                      "email": "bambang.supeno@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "10:00",
+                      "endTime": "11:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "7602",
+                      "feature": "Projector",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Responsi",
+              "minPerWeek": 100,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "R01",
+                  "capacity": 40,
+                  "roomRatio": 1.0,
+                  "parentClassSection": "K01",
+                  "instructors": [
+                    {
+                      "id": "197206181998021001",
+                      "name": "Dr. Bambang Supeno, S.T., M.T.",
+                      "email": "bambang.supeno@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "15:00",
+                      "endTime": "16:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "Lab-2",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "R02",
+                  "capacity": 40,
+                  "roomRatio": 1.0,
+                  "parentClassSection": "K02",
+                  "instructors": [
+                    {
+                      "id": "197206181998021001",
+                      "name": "Dr. Bambang Supeno, S.T., M.T.",
+                      "email": "bambang.supeno@univ.ac.id",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "15:00",
+                      "endTime": "16:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V",
+                      "roomNumber": "Lab-2",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "distributionConstraints": [
+    {
+      "type": "CANNOT_OVERLAP",
+      "level": "REQUIRED",
+      "courseNumber": "IF2110",
+      "classes": [
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lecture",
+          "sectionName": "K01"
+        },
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lecture",
+          "sectionName": "K02"
+        }
+      ],
+      "structure": "AllClasses",
+      "note": "Dosen Dr. Eng. Ayu Pratama mengajar di K01 dan K02 sehingga waktu tidak boleh bersamaan."
+    },
+    {
+      "type": "CANNOT_OVERLAP",
+      "level": "REQUIRED",
+      "courseNumber": "IF2120",
+      "classes": [
+        {
+          "courseNumber": "IF2120",
+          "subpartType": "Lecture",
+          "sectionName": "K01"
+        },
+        {
+          "courseNumber": "IF2120",
+          "subpartType": "Lecture",
+          "sectionName": "K02"
+        }
+      ],
+      "structure": "AllClasses",
+      "note": "Prof. Dr. Hendra Wijaya mengampu kelas K01 dan K02."
+    },
+    {
+      "type": "CANNOT_OVERLAP",
+      "level": "REQUIRED",
+      "courseNumber": "IF3150",
+      "classes": [
+        {
+          "courseNumber": "IF3150",
+          "subpartType": "Lecture",
+          "sectionName": "K01"
+        },
+        {
+          "courseNumber": "IF3150",
+          "subpartType": "Lecture",
+          "sectionName": "K02"
+        }
+      ],
+      "structure": "AllClasses",
+      "note": "Dr. Bambang Supeno mengajar kuliah K01 dan K02."
+    },
+    {
+      "type": "SAME_ROOM",
+      "level": "REQUIRED",
+      "courseNumber": "IF2110",
+      "classes": [
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lab",
+          "sectionName": "L01"
+        },
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lab",
+          "sectionName": "L02"
+        }
+      ],
+      "structure": "AllClasses",
+      "note": "Kedua sesi praktikum L01 dan L02 harus bertempat di Lab Komputer 1."
+    },
+    {
+      "type": "SAME_ROOM",
+      "level": "REQUIRED",
+      "courseNumber": "IF2110",
+      "classes": [
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lab",
+          "sectionName": "L03"
+        },
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lab",
+          "sectionName": "L04"
+        }
+      ],
+      "structure": "AllClasses",
+      "note": "Kedua sesi praktikum L03 dan L04 harus bertempat di Lab Komputer 2."
+    },
+    {
+      "type": "PRECEDENCE",
+      "level": "REQUIRED",
+      "courseNumber": "IF2110",
+      "classes": [
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lecture",
+          "sectionName": "K01"
+        },
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lab",
+          "sectionName": "L01"
+        }
+      ],
+      "structure": "Progressive",
+      "note": "Kuliah teori IF2110 K01 pada hari Senin harus mendahului sesi praktikum L01 pada hari Selasa."
+    },
+    {
+      "type": "BACK_TO_BACK",
+      "level": "PREFERRED",
+      "classes": [
+        {
+          "courseNumber": "IF2110",
+          "subpartType": "Lecture",
+          "sectionName": "K01"
+        },
+        {
+          "courseNumber": "IF3150",
+          "subpartType": "Lecture",
+          "sectionName": "K01"
+        }
+      ],
+      "structure": "Progressive",
+      "note": "Kuliah IF2110 K01 dan IF3150 K01 diusahakan berturutan di Labtek V 7601 untuk optimalisasi penggunaan ruang kuliah."
+    },
+    {
+      "type": "AT_MOST_2_HOURS_APART",
+      "level": "PREFERRED",
+      "courseNumber": "IF3150",
+      "classes": [
+        {
+          "courseNumber": "IF3150",
+          "subpartType": "Lecture",
+          "sectionName": "K01"
+        },
+        {
+          "courseNumber": "IF3150",
+          "subpartType": "Responsi",
+          "sectionName": "R01"
+        }
+      ],
+      "structure": "AllClasses",
+      "note": "Jeda antara kuliah dan responsi IF3150 maksimal 2 jam."
+    }
+  ]
+}

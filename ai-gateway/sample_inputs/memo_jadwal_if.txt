@@ -1,0 +1,44 @@
+====================================================================================================
+KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI
+INSTITUT TEKNOLOGI BANDUNG - SEKOLAH TEKNIK ELEKTRO DAN INFORMATIKA
+PROGRAM STUDI SARJANA TEKNIK INFORMATIKA (IF) - KAMPUS GANESHA
+====================================================================================================
+
+MEMORANDUM PENETAPAN BEBAN MENGAJAR & JADWAL KULIAH
+Nomor: 042/IT1.B04/SK/AK/2024
+Tahun Akademik: 2024-2025
+Semester: Ganjil
+Lokasi: Kampus Ganesha, Bandung
+
+Kepada Yth. Seluruh Dosen Pengampu & Tim Asisten Akademik
+Berdasarkan hasil rapat alokasi beban kurikulum Program Studi Teknik Informatika, berikut kami sampaikan daftar penugasan mata kuliah, jadwal kelas perkuliahan, praktikum laboratorium, dan batasan preferensi ruangan untuk Semester Ganjil 2024/2025.
+
+----------------------------------------------------------------------------------------------------
+TABEL 1: ALOKASI MATA KULIAH, KELAS PARALEL, JADWAL, DAN RUANG KULIAH
+----------------------------------------------------------------------------------------------------
+KODE    | NAMA MATA KULIAH          | SKS | KLS | KUOTA | HARI   | WAKTU         | RUANG         | DOSEN PENGAMPU
+----------------------------------------------------------------------------------------------------
+IF2110  | Algoritma & Struktur Data | 4   | K01 | 45    | Senin  | 07.00 - 09.30 | Labtek V 7601 | Dr. Eng. Ayu Pratama (PJMK), Budi Raharjo, M.Kom.
+IF2110  | Algoritma & Struktur Data | 4   | K02 | 45    | Rabu   | 07.00 - 09.30 | Labtek V 7602 | Dr. Eng. Ayu Pratama (PJMK), Ahmad Fauzi, M.Cs.
+IF2110  | [Praktikum ASD]           | -   | L01 | 25    | Selasa | 13.00 - 15.00 | Labtek V Lab-1| Dr. Eng. Ayu Pratama (PJMK)
+IF2110  | [Praktikum ASD]           | -   | L02 | 25    | Kamis  | 13.00 - 15.00 | Labtek V Lab-1| Dr. Eng. Ayu Pratama (PJMK)
+----------------------------------------------------------------------------------------------------
+IF2120  | Matematika Diskrit        | 3   | K01 | 50    | Selasa | 07.00 - 09.30 | GK1 9001      | Prof. Dr. Hendra Wijaya
+IF2120  | Matematika Diskrit        | 3   | K02 | 50    | Kamis  | 07.00 - 09.30 | GK1 9002      | Prof. Dr. Hendra Wijaya
+----------------------------------------------------------------------------------------------------
+IF3150  | Manajemen Proyek PL       | 3   | K01 | 40    | Senin  | 10.00 - 11.40 | Labtek V 7601 | Dr. Bambang Supeno
+IF3150  | Manajemen Proyek PL       | 3   | K02 | 40    | Rabu   | 10.00 - 11.40 | Labtek V 7601 | Dr. Bambang Supeno
+IF3150  | [Responsi MPPL]           | -   | R01 | 40    | Senin  | 13.00 - 14.00 | Labtek V 7601 | Dr. Bambang Supeno
+----------------------------------------------------------------------------------------------------
+
+CATATAN KHUSUS & KENDALA DISTRIBUSI JADWAL (DISTRIBUTION CONSTRAINTS):
+1. Kuliah IF2110 K01 dan K02 diajar oleh Dr. Eng. Ayu Pratama sehingga waktu kuliah tidak boleh tabrakan (CANNOT_OVERLAP / DIFF_TIME).
+2. Kuliah teori IF2110 K01 pada hari Senin harus mendahului sesi praktikum L01 pada hari Selasa (PRECEDENCE).
+3. Sesi praktikum IF2110 L01 dan L02 harus bertempat di ruangan yang sama yaitu Lab Komputer 1 Labtek V (SAME_ROOM).
+4. Kuliah IF2110 K01 dan IF3150 K01 diusahakan berturutan (BACK_TO_BACK) di Labtek V 7601 untuk optimalisasi penggunaan ruang kelas.
+5. Jeda antara kuliah IF3150 K01 dan responsi R01 maksimal 2 jam pada hari Senin (AT_MOST_2_HOURS_APART).
+
+Bandung, 15 Agustus 2024
+Ketua Program Studi Sarjana Teknik Informatika
+Dr. Ir. Rinaldi Munir, M.T.
+NIP. 196611081993021001

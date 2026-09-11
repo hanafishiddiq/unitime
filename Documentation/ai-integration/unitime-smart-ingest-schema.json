@@ -1,0 +1,704 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://unitime.org/schema/v1/unitime-smart-ingest-schema.json",
+  "title": "UniTime Smart AI Ingestion Schema",
+  "description": "Standard JSON Schema for importing academic curriculum, course offerings, class schedules, instructors, time/room preferences, and distribution constraints into UniTime via AI ingestion pipelines.",
+  "type": "object",
+  "required": [
+    "ingestControl",
+    "academicSession",
+    "department",
+    "subjectArea",
+    "courses"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "ingestControl": {
+      "type": "object",
+      "description": "Control metadata directing how UniTime imports and processes the payload.",
+      "required": [
+        "mode",
+        "actionOnDuplicate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["incremental", "full_replace"],
+          "default": "incremental",
+          "description": "Ingestion mode. 'incremental' updates existing or appends new courses without removing unmentioned offerings. 'full_replace' synchronizes the entire subject area, removing offerings not present in the payload."
+        },
+        "actionOnDuplicate": {
+          "type": "string",
+          "enum": ["upsert", "skip", "error"],
+          "default": "upsert",
+          "description": "Action taken when a course offering or class section already exists in the target session."
+        },
+        "sourceDocumentName": {
+          "type": "string",
+          "description": "Name or identifier of the source document parsed by the AI (e.g. 'Jadwal_Kuliah_Ganjil_2024.xlsx').",
+          "examples": ["Jadwal_Kuliah_Ganjil_2024.xlsx", "RPS_Kurikulum_2024.pdf"]
+        },
+        "extractedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO-8601 timestamp indicating when this payload was extracted by the AI engine.",
+          "examples": ["2026-08-31T18:00:00Z"]
+        },
+        "validationStrictness": {
+          "type": "string",
+          "enum": ["strict", "lenient"],
+          "default": "strict",
+          "description": "Validation policy during ingestion. 'strict' fails the batch on any unresolvable reference, 'lenient' logs warnings."
+        }
+      }
+    },
+    "academicSession": {
+      "type": "object",
+      "description": "Target academic session, term, and campus for the imported data.",
+      "required": [
+        "year",
+        "term",
+        "campus"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "year": {
+          "type": "string",
+          "pattern": "^[0-9]{4}([-/][0-9]{4})?$",
+          "description": "Academic year (e.g. '2024', '2024-2025', or '2024/2025').",
+          "examples": ["2024", "2024-2025", "2024/2025"]
+        },
+        "term": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50,
+          "description": "Academic term / semester designation (e.g. 'Ganjil', 'Genap', 'Fall', 'Spring', 'Summer').",
+          "examples": ["Ganjil", "Genap", "Fall", "Spring", "Term 1"]
+        },
+        "campus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50,
+          "description": "Campus code or location name matching UniTime session configuration.",
+          "examples": ["MAIN", "Depok", "Kampus Ganesha", "Kampus Jatinangor"]
+        }
+      }
+    },
+    "department": {
+      "type": "object",
+      "description": "Academic department or Program Studi managing the subject area offerings.",
+      "required": [
+        "code",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "description": "Unique departmental identifier / department code.",
+          "examples": ["IF", "CS", "TE", "DEPT_IF"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Official name of the department / program studi.",
+          "examples": ["Teknik Informatika", "Computer Science", "Teknik Elektro"]
+        }
+      }
+    },
+    "subjectArea": {
+      "type": "object",
+      "description": "Subject area classification under which courses are cataloged.",
+      "required": [
+        "abbreviation",
+        "title"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "abbreviation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[A-Za-z0-9_\\-]+$",
+          "description": "Short code / prefix for the subject area (e.g. 'IF', 'CS', 'KU').",
+          "examples": ["IF", "CS", "TIF", "KU"]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Full title of the subject area.",
+          "examples": ["Informatika", "Ilmu Komputer", "Teknik Komputer"]
+        },
+        "externalId": {
+          "type": "string",
+          "description": "External system reference ID for synchronization with SIS / PD-Dikti.",
+          "examples": ["SA_IF_01"]
+        }
+      }
+    },
+    "courses": {
+      "type": "array",
+      "description": "List of course offerings within the subject area.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/course"
+      }
+    },
+    "distributionConstraints": {
+      "type": "array",
+      "description": "Cross-class and inter-course distribution constraints (e.g. DIFF_TIME / CANNOT_OVERLAP, SAME_ROOM, SAME_INSTR / SAME_INSTRUCTOR, BTB / BACK_TO_BACK, MEET_WITH / MEET_TOGETHER, PRECEDENCE, AT_MOST_2_HOURS_APART).",
+      "items": {
+        "$ref": "#/$defs/distributionConstraint"
+      }
+    }
+  },
+  "$defs": {
+    "course": {
+      "type": "object",
+      "description": "Course offering entity containing instructional configurations and subparts.",
+      "required": [
+        "courseNumber",
+        "title",
+        "credit",
+        "configurations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "courseNumber": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_\\-\\.]+$",
+          "description": "Unique course code / number within the subject area (e.g. 'IF2110', 'CS101').",
+          "examples": ["IF2110", "CS204", "KU1011"]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Full official course title (Nama Mata Kuliah).",
+          "examples": ["Algoritma dan Pemrograman", "Struktur Data", "Basis Data"]
+        },
+        "credit": {
+          "$ref": "#/$defs/courseCredit"
+        },
+        "projectedDemand": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total projected student enrollment demand for this course.",
+          "examples": [90, 120, 45]
+        },
+        "consentType": {
+          "type": "string",
+          "enum": ["None", "Department", "Instructor"],
+          "default": "None",
+          "description": "Special approval required for student enrollment."
+        },
+        "scheduleBookNote": {
+          "type": "string",
+          "description": "Public schedule book note / prerequisites displayed to students during registration.",
+          "examples": ["Prasyarat: IF2110 Algoritma dan Struktur Data dengan nilai minimal C"]
+        },
+        "controlling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Indicates if this course is the controlling course in cross-listed offerings."
+        },
+        "configurations": {
+          "type": "array",
+          "description": "Instructional configurations breaking down course delivery methods and subparts.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/configuration"
+          }
+        }
+      }
+    },
+    "courseCredit": {
+      "type": "object",
+      "description": "Academic credit structure (SKS / Units) associated with the course.",
+      "required": [
+        "units"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "units": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 30.0,
+          "description": "Credit value in SKS / credit hours.",
+          "examples": [2, 3, 4, 1.5]
+        },
+        "creditType": {
+          "type": "string",
+          "enum": [
+            "collegiate",
+            "equivalent",
+            "mastersCredit",
+            "phdThesisCredit",
+            "continuingEdUnits"
+          ],
+          "default": "collegiate",
+          "description": "UniTime course credit classification type."
+        },
+        "creditUnitType": {
+          "type": "string",
+          "enum": [
+            "sks",
+            "semesterHours",
+            "quarterHours"
+          ],
+          "default": "sks",
+          "description": "Academic credit unit type (e.g. 'sks' for Indonesian curriculum, 'semesterHours', 'quarterHours')."
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "fixedUnit",
+            "arrangeHours",
+            "variableMinMax",
+            "variableRange"
+          ],
+          "default": "fixedUnit",
+          "description": "Credit format specification ('fixedUnit', 'arrangeHours', 'variableMinMax', 'variableRange')."
+        },
+        "minimumUnits": {
+          "type": "number",
+          "minimum": 0.0,
+          "description": "Minimum units if variable credit format is used."
+        },
+        "maximumUnits": {
+          "type": "number",
+          "minimum": 0.0,
+          "description": "Maximum units if variable credit format is used."
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "description": "An instructional structure configuration (e.g. 'Default', 'Teori + Praktikum').",
+      "required": [
+        "name",
+        "subparts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "Default",
+          "description": "Name of the configuration.",
+          "examples": ["Default", "Teori + Praktikum", "Reguler", "Online"]
+        },
+        "durationType": {
+          "type": "string",
+          "enum": [
+            "MIN_PER_WEEK",
+            "SEMESTER_MIN",
+            "SEMESTER_HRS",
+            "MEETING_MIN",
+            "MEETING_HRS"
+          ],
+          "default": "MIN_PER_WEEK",
+          "description": "Class duration calculation method in UniTime."
+        },
+        "instructionalMethod": {
+          "type": "string",
+          "enum": [
+            "Standard",
+            "Online",
+            "Hybrid",
+            "Lab",
+            "FieldWork",
+            "Blended",
+            "Practicum"
+          ],
+          "default": "Standard",
+          "description": "Delivery format / instructional method reference."
+        },
+        "subparts": {
+          "type": "array",
+          "description": "Instructional subparts that comprise this configuration (e.g. Lecture, Lab, Recitation).",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/subpart"
+          }
+        }
+      }
+    },
+    "subpart": {
+      "type": "object",
+      "description": "An instructional subpart (e.g. Kuliah / Lecture, Lab / Praktikum, Responsi / Recitation).",
+      "required": [
+        "type",
+        "minPerWeek",
+        "classes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Lecture",
+            "Lab",
+            "Recitation",
+            "Tutorial",
+            "Seminar",
+            "FieldTrip",
+            "Studio",
+            "IndependentStudy",
+            "Workshop",
+            "Practical",
+            "Responsi"
+          ],
+          "description": "Instructional subpart type.",
+          "examples": ["Lecture", "Lab", "Recitation", "Tutorial", "Seminar"]
+        },
+        "minPerWeek": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2400,
+          "description": "Contact minutes per week required for this subpart (e.g., 3 SKS Kuliah = 150 min, 2 SKS = 100 min, 1 SKS Lab = 100-170 min, 0 for arrange-hours / unscheduled components).",
+          "examples": [0, 50, 100, 150, 200, 300]
+        },
+        "parentSubpartType": {
+          "type": "string",
+          "description": "Reference to parent subpart type if child subpart is nested in scheduling hierarchy.",
+          "examples": ["Lecture"]
+        },
+        "classes": {
+          "type": "array",
+          "description": "Class sections / parallel classes instantiated under this subpart.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/class"
+          }
+        }
+      }
+    },
+    "class": {
+      "type": "object",
+      "description": "A specific class section offering (e.g. Kelas K01, Paralel A, Lab Section L1).",
+      "required": [
+        "sectionName",
+        "capacity"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "sectionName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30,
+          "description": "Section name or identifier (e.g. 'K01', 'K02', 'A', 'IF-01', 'LAB-1').",
+          "examples": ["K01", "K02", "A", "B", "L01", "R01"]
+        },
+        "capacity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000,
+          "description": "Maximum enrollment capacity (kuota kelas).",
+          "examples": [40, 50, 30, 25]
+        },
+        "roomRatio": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 10.0,
+          "default": 1.0,
+          "description": "Ratio of required room size to class capacity (default 1.0; 1.2 requires room 20% larger than capacity).",
+          "examples": [1.0, 1.2, 0.8]
+        },
+        "scheduleNote": {
+          "type": "string",
+          "description": "Scheduling or instructional note specific to this section.",
+          "examples": ["Khusus mahasiswa jalur reguler", "Diadakan di Lab Jaringan Komputer"]
+        },
+        "cancelled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates whether this class section is cancelled."
+        },
+        "splitAttendance": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether students alternate attendance across meeting days."
+        },
+        "parentClassSection": {
+          "type": "string",
+          "description": "Section name of the parent class section if hierarchical sectioning is used (e.g. Lab L01 tied to Lecture K01).",
+          "examples": ["K01", "A"]
+        },
+        "instructors": {
+          "type": "array",
+          "description": "Teaching staff / instructors assigned to this class section.",
+          "items": {
+            "$ref": "#/$defs/instructor"
+          }
+        },
+        "timePreferences": {
+          "type": "array",
+          "description": "Time preferences or fixed scheduled times for this class.",
+          "items": {
+            "$ref": "#/$defs/timePreference"
+          }
+        },
+        "roomPreferences": {
+          "type": "array",
+          "description": "Room, building, or room feature preferences for this class.",
+          "items": {
+            "$ref": "#/$defs/roomPreference"
+          }
+        }
+      }
+    },
+    "instructor": {
+      "type": "object",
+      "description": "Instructor / Lecturer assignment for a class section.",
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique instructor identifier (NIP, NIDN, or employee ID).",
+          "examples": ["198001012005011001", "0012038401", "DOSEN_IF_01"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 150,
+          "description": "Full name of the instructor, including academic degrees/titles.",
+          "examples": ["Dr. Eng. Ayu Pratama, S.T., M.T.", "Prof. Dr. Ir. Budi Santoso, M.Sc.", "Ahmad Fauzi, S.Kom., M.Cs."]
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Official institutional email address of the instructor.",
+          "examples": ["ayu.pratama@univ.ac.id", "budi.santoso@itb.ac.id"]
+        },
+        "isLead": {
+          "type": "boolean",
+          "default": false,
+          "description": "True if this instructor is the lead/coordinator for the class (Koordinator Dosen Pengampu)."
+        },
+        "sharePercentage": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 100,
+          "description": "Teaching load percentage share (e.g. 50 for 50:50 team teaching, or 100 for sole lecturer).",
+          "examples": [100, 50, 33]
+        }
+      }
+    },
+    "timePreference": {
+      "type": "object",
+      "description": "Time pattern and preference level for scheduling a class.",
+      "required": [
+        "days",
+        "startTime",
+        "endTime"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "days": {
+          "type": "string",
+          "pattern": "^((M|T|W|Th|R|F|S|Su|U)+|Mon|Tue|Wed|Thu|Fri|Sat|Sun|[01]{7})$",
+          "description": "Day pattern representation. Uses UniTime day codes ('M'=Monday, 'T'=Tuesday, 'W'=Wednesday, 'Th'/'R'=Thursday, 'F'=Friday, 'S'=Saturday, 'Su'/'U'=Sunday, 'MWF', 'TTh') or 7-digit binary mask (Mon-Sun).",
+          "examples": ["M", "T", "W", "Th", "F", "MWF", "TTh", "1000000"]
+        },
+        "startTime": {
+          "type": "string",
+          "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$|^([01][0-9]|2[0-3])[0-5][0-9]$",
+          "description": "Start time in 24-hour HH:mm format (e.g. '07:00', '08:30', '13:00') or 4-digit military format ('0700').",
+          "examples": ["07:00", "08:30", "10:00", "13:00", "15:30"]
+        },
+        "endTime": {
+          "type": "string",
+          "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$|^([01][0-9]|2[0-3])[0-5][0-9]$",
+          "description": "End time in 24-hour HH:mm format (e.g. '09:30', '11:40', '16:30') or 4-digit military format ('0930').",
+          "examples": ["09:30", "11:40", "15:00", "17:30"]
+        },
+        "level": {
+          "$ref": "#/$defs/preferenceLevel"
+        }
+      }
+    },
+    "roomPreference": {
+      "type": "object",
+      "description": "Location, building, room number, or room feature preference.",
+      "additionalProperties": false,
+      "properties": {
+        "building": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Building name or code (e.g. 'Labtek V', 'GK-1', 'Gedung A').",
+          "examples": ["Labtek V", "GK-1", "Gedung Kuliah Bersama", "Gedung Achmad Bakrie"]
+        },
+        "roomNumber": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Specific room number or code (e.g. '7601', '302', 'LAB-KOMP-1').",
+          "examples": ["7601", "7602", "301", "LAB-KOMP-1", "AUD-01"]
+        },
+        "feature": {
+          "type": "string",
+          "description": "Required room feature (e.g. 'ComputerLab', 'Projector', 'Whiteboard', 'SmartBoard', 'SoundSystem').",
+          "examples": ["ComputerLab", "Projector", "SoundSystem"]
+        },
+        "roomGroup": {
+          "type": "string",
+          "description": "Room group classification code (e.g. 'DeptRooms', 'GeneralClassrooms').",
+          "examples": ["DeptRooms", "GeneralAuditoriums"]
+        },
+        "level": {
+          "$ref": "#/$defs/preferenceLevel"
+        }
+      }
+    },
+    "preferenceLevel": {
+      "type": "string",
+      "enum": [
+        "REQUIRED",
+        "STRONGLY_PREFERRED",
+        "PREFERRED",
+        "NEUTRAL",
+        "DISCOURAGED",
+        "STRONGLY_DISCOURAGED",
+        "PROHIBITED",
+        "R",
+        "-2",
+        "-1",
+        "0",
+        "1",
+        "2",
+        "P"
+      ],
+      "default": "REQUIRED",
+      "description": "UniTime preference level designation. Standard verbose names ('REQUIRED', 'STRONGLY_PREFERRED', etc.) or UniTime prolog codes ('R', '-2', '-1', '0', '1', '2', 'P')."
+    },
+    "distributionConstraint": {
+      "type": "object",
+      "description": "Distribution relationship or constraint between multiple class sections, supporting both UniTime native reference codes (e.g. DIFF_TIME, SAME_INSTR, BTB, MEET_WITH, BTB_PRECEDENCE, NHB) and canonical descriptive aliases (e.g. CANNOT_OVERLAP, SAME_INSTRUCTOR, BACK_TO_BACK, MEET_TOGETHER, PRECEDENCE, AT_MOST_2_HOURS_APART).",
+      "required": [
+        "type",
+        "classes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "SAME_ROOM",
+            "DIFF_ROOM",
+            "SAME_DAYS",
+            "DIFF_DAYS",
+            "SAME_TIME",
+            "DIFF_TIME",
+            "CANNOT_OVERLAP",
+            "SAME_INSTR",
+            "SAME_INSTRUCTOR",
+            "DIFF_INSTR",
+            "DIFF_INSTRUCTOR",
+            "SAME_STUDENTS",
+            "BTB",
+            "BTB_TIME",
+            "BACK_TO_BACK",
+            "BTB_PRECEDENCE",
+            "PRECEDENCE",
+            "MEET_WITH",
+            "MEET_TOGETHER",
+            "SAME_START",
+            "SPREAD",
+            "SPREAD_DAYS",
+            "CAN_SHARE_ROOM",
+            "MIN_ROOM_USE",
+            "BTB_DAY",
+            "CH_NOTOVERLAP",
+            "FOLLOWING_DAY",
+            "EVERY_OTHER_DAY",
+            "SAME_D_T",
+            "SAME_D_R_T",
+            "SAME_WEEKS",
+            "NO_CONFLICT",
+            "AT_MOST_2_HOURS_APART",
+            "NHB(1)",
+            "NHB(2)",
+            "NHB(3)",
+            "NHB_LT(6)",
+            "NHB_GTE(1)"
+          ],
+          "description": "Constraint type reference matching UniTime native distribution codes (e.g. DIFF_TIME, SAME_INSTR, BTB, MEET_WITH, BTB_PRECEDENCE, NHB) and friendly aliases (CANNOT_OVERLAP, SAME_INSTRUCTOR, BACK_TO_BACK, MEET_TOGETHER, PRECEDENCE, AT_MOST_2_HOURS_APART)."
+        },
+        "level": {
+          "$ref": "#/$defs/preferenceLevel"
+        },
+        "courseNumber": {
+          "type": "string",
+          "description": "Course code if the constraint applies strictly within one course offering scope.",
+          "examples": ["IF2110", "IF3150"]
+        },
+        "classes": {
+          "type": "array",
+          "description": "Target class sections linked by this distribution constraint.",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/classReference"
+          }
+        },
+        "structure": {
+          "type": "string",
+          "enum": [
+            "AllClasses",
+            "Progressive",
+            "GroupsOfTwo",
+            "GroupsOfThree",
+            "GroupsOfFour",
+            "GroupsOfFive",
+            "Pairwise",
+            "OneOfEach"
+          ],
+          "default": "AllClasses",
+          "description": "Constraint pair grouping structure in UniTime solver."
+        },
+        "note": {
+          "type": "string",
+          "description": "Human-readable explanation of why this constraint is mandated.",
+          "examples": ["Kuliah K01 dan K02 diajar oleh dosen yang sama sehingga jadwal tidak boleh bentrok."]
+        }
+      }
+    },
+    "classReference": {
+      "type": "object",
+      "description": "Reference identifying a specific class section across courses and subparts.",
+      "required": [
+        "courseNumber",
+        "sectionName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "courseNumber": {
+          "type": "string",
+          "description": "Course code of the class (e.g. 'IF2110').",
+          "examples": ["IF2110", "IF2120", "IF3150"]
+        },
+        "subpartType": {
+          "type": "string",
+          "description": "Subpart type of the class (e.g. 'Lecture', 'Lab', 'Responsi').",
+          "examples": ["Lecture", "Lab", "Responsi"]
+        },
+        "sectionName": {
+          "type": "string",
+          "description": "Section name of the target class (e.g. 'K01', 'L01').",
+          "examples": ["K01", "K02", "L01", "L02"]
+        }
+      }
+    }
+  }
+}

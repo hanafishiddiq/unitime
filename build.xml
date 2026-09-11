@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+
+<!--
+ * Licensed to The Apereo Foundation under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work for
+ * additional information regarding copyright ownership.
+ *
+ * The Apereo Foundation licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ -->
+<project name="UniTime" basedir="." default="build">
+	<!-- Mac GWT requires -XstartOnFirstThread -->
+	<condition property="mac">
+		<os name="Mac OS X"/>
+	</condition>
+	<condition property="macJvmArgs" value="-XstartOnFirstThread" else="-Dgwt.dummy.arg1=">
+		<isset property="mac"/>
+	</condition>
+
+	<target name="load-properties">
+		<loadproperties srcFile="${basedir}/build.properties" />
+		<property environment="env"/>
+	</target>
+
+    <target name="clean" depends="load-properties">
+        <delete dir="${build.dir}" failonerror="false"/>
+    	<delete failonerror="false">
+    		<fileset dir="${dist.dir}" includes="**/*.jar"/>
+			<fileset dir="${dist.dir}" includes="**/*.war"/>
+    	</delete>
+    	<delete dir="${dist.dir}/doc" failonerror="false"/>
+    </target>
+
+    <target name="init" depends="clean, set-debug-mode, set-optimize-mode">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${temp.dir}"/>
+    	<mkdir dir="${dist.dir}"/>
+    </target>
+
+	<target name="set-debug-mode" unless="java.debug">
+		<property name="java.debug" value="false"/>
+	</target>
+
+	<target name="set-optimize-mode" unless="java.optimize">
+		<property name="java.optimize" value="true"/>
+	</target>
+
+    <target name="prepare" depends="init">
+        <buildnumber/>
+        <echo message="Build number: ${build.number}${build.tag}"/>
+        <tstamp>
+            <format property="build.date" pattern="EEE, d MMM yyyy" locale="en"/>
+        </tstamp>
+        <echo message="Build date: ${build.date}"/>
+        <propertyfile file="build.date" comment="Build info">
+            <entry  key="build.date" value="${build.date}"/>
+        	<entry  key="build.number" value="${build.number}${build.tag}"/>
+        </propertyfile>
+        <copy todir="${build.dir}" overwrite="Yes" preservelastmodified="Yes">
+            <fileset dir="${src.dir}" includes="**/*.java"/>
+            <fileset dir="${src.dir}" includes="**/*.gwt.xml"/>
+        	<fileset dir="${src.dir}" includes="org/unitime/localization/messages/**"/>
+            <fileset dir="${src.dir}" includes="org/unitime/timetable/gwt/resources/**/*.*"/>
+            <fileset dir="${src.dir}" includes="org/unitime/timetable/gwt/mobile/resources/**/*.*"/>
+        </copy>
+        <replace file="${build.dir}/org/unitime/timetable/util/Constants.java">
+            <replacetoken>${build.number}</replacetoken>
+            <replacevalue>@build.number@</replacevalue>
+        </replace>
+        <replace file="${build.dir}/org/unitime/timetable/util/Constants.java">
+            <replacetoken>${build.date}</replacetoken>
+            <replacevalue>@build.date@</replacevalue>
+        </replace>
+        <replace file="${build.dir}/org/unitime/timetable/util/Constants.java" propertyFile="build.date">
+            <replacefilter token="@build.date@" property="build.date"/>
+            <replacefilter token="@build.number@" property="build.number"/>
+        </replace>
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+            	<include name="*.jar"/>
+            </fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+				<include name="sources/validation-api-*-sources.jar" />
+			</fileset>
+        </path>
+    </target>
+
+	<target name="compile-java" depends="prepare">
+		<javac debug="${java.debug}" optimize="${java.optimize}" destdir="${build.dir}" includeantruntime="false" encoding="utf-8" source="17" target="17">
+			<compilerarg value="-XDignore.symbol.file"/>
+			<src path="${build.dir}" />
+			<classpath refid="build.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-gwt" depends="compile-java">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler" dir="${temp.dir}">
+			<classpath refid="build.classpath" />
+			<classpath path="${build.dir}"/>
+			<jvmarg value="-Xmx2g"/>
+			<jvmarg value="${macJvmArgs}"/>
+			<jvmarg value="-Dgwt.persistentunitcache=false"/>
+			<jvmarg value="-Duser.language=en"/>
+			<arg value="org.unitime.timetable.gwt.UniTime"/>
+			<arg value="-localWorkers"/>
+			<arg value="4"/>
+		</java>
+	</target>
+
+	<target name="timetable-jar" depends="compile-java">
+		<jar destfile="${dist.dir}/timetable.jar">
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="*.xml" />
+				<include name="*.dtd" />
+				<include name="**/*.properties" />
+				<include name="**/*.ftl" />
+				<include name="**/*.png" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.unitime.timetable.solver.jgroups.SolverServerImplementation" />
+				<attribute name="Class-Path" value="angus-activation-2.0.3.jar antlr4-runtime-4.13.0.jar biweekly-0.6.8.jar byte-buddy-1.17.5.jar c3p0-0.12.0.jar classmate-1.5.1.jar
+					commons-lang3-3.20.0.jar commons-logging-1.3.5.jar commons-text-1.15.0.jar cpsolver-1.4.91.jar dom4j-2.1.5.jar freemarker-2.3.34.jar gson-2.13.2.jar
+					gwt-servlet-jakarta-2.13.0.jar hibernate-c3p0-6.6.46.Final.jar hibernate-commons-annotations-7.0.3.Final.jar hibernate-core-6.6.46.Final.jar istack-commons-runtime-4.1.1.jar
+					itext-2.1.7.jar jackson-core-2.22.1.jar jakarta.activation-api-2.1.4.jar jakarta.mail-2.0.5.jar jakarta.mail-api-2.1.5.jar jakarta.persistence-api-3.1.0.jar
+					jakarta.transaction-api-2.0.1.jar jakarta.xml.bind-api-4.0.0.jar javassist-3.30.2-GA.jar jakarta.servlet-api-6.0.0.jar jakarta.servlet.jsp-api-3.1.1.jar
+					jaxb-core-4.0.2.jar jaxb-runtime-4.0.2.jar jboss-logging-3.6.3.Final.jar jbossjta-4.16.6.Final.jar jgroups-5.4.11.Final.jar joda-time-2.14.1.jar log4j-api-2.25.4.jar
+					log4j-core-2.25.4.jar log4j-jcl-2.25.4.jar log4j-slf4j-impl-2.25.4.jar mchange-commons-java-0.4.0.jar org.restlet-2.4.4.jar protobuf-java-4.34.1.jar
+					slf4j-api-1.7.36.jar spring-beans-6.2.19.jar spring-context-6.2.19.jar spring-core-6.2.19.jar spring-security-core-6.5.11.jar spring-web-6.2.19.jar
+					vinnie-2.0.2.jar mysql-connector-java.jar ojdbc8.jar ojdbc8-23.2.0.0.jar mysql-connector-j-8.0.33.jar hibernate-community-dialects-6.6.46.Final.jar"/>
+				<attribute name="Timetabling-Version" value="4.9_bld${build.number}"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="copy-libs" depends="init">
+		<copy todir="${war.dir}/WEB-INF/lib" overwrite="Yes" preservelastmodified="Yes">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${war.dir}/WEB-INF" overwrite="Yes" preservelastmodified="Yes">
+			<fileset dir="${jsp.dir}/WEB-INF">
+				<include name="**/*.xml" />
+				<include name="**/*.tld" />
+				<include name="**/*.xsd" />
+				<include name="**/*.dtd" />
+				<exclude name="classes/**/*.*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-jsp" depends="init, compile-java">
+		<copy todir="${war.dir}" overwrite="Yes" preservelastmodified="Yes">
+			<fileset dir="${jsp.dir}">
+				<include name="**/*.js" />
+				<include name="**/*.js.map" />
+				<include name="**/*.jsp" />
+				<include name="**/*.jspf" />
+				<include name="**/*.htm" />
+				<include name="**/*.html" />
+				<include name="**/*.css" />
+				<include name="**/images/*.jpg" />
+				<include name="**/images/*.png" />
+				<include name="**/images/*.gif" />
+				<include name="**/images/*.ico" />
+				<include name="solver/*.jar" />
+				<include name="solver/*.jnlp" />
+				<include name="help/**/*.*" />
+				<include name="scripts/**/*.gif" />
+				<exclude name="WEB-INF/classes/**/*.*" />
+				<exclude name="unitime/**/*.*" />
+				<exclude name="test/**/*.*" />
+			</fileset>
+		</copy>
+        <replace file="${war.dir}/help/Release-Notes.xml">
+            <replacetoken>${build.number}</replacetoken>
+            <replacevalue>@build.number@</replacevalue>
+        </replace>
+        <replace file="${war.dir}/help/Release-Notes.xml">
+            <replacetoken>${build.date}</replacetoken>
+            <replacevalue>@build.date@</replacevalue>
+        </replace>
+        <replace file="${war.dir}/help/Release-Notes.xml" propertyFile="build.date">
+            <replacefilter token="@build.date@" property="build.date"/>
+            <replacefilter token="@build.number@" property="build.number"/>
+        </replace>
+		<copy todir="${dist.dir}" file="${war.dir}/help/Release-Notes.xml"/>
+		<copy todir="${dist.dir}" file="${war.dir}/help/Release-Notes.css"/>
+	</target>
+
+	<target name="copy-gwt" depends="init, compile-gwt">
+		<copy todir="${war.dir}" overwrite="Yes" preservelastmodified="Yes">
+			<fileset dir="${temp.dir}/war"/>
+		</copy>
+	</target>
+
+	<target name="compile-war" depends="timetable-jar,compile-gwt,copy-libs,copy-jsp,copy-gwt">
+		<copy todir="${war.dir}/WEB-INF/lib" file="${dist.dir}/timetable.jar"/>
+		<jar destfile="${dist.dir}/UniTime.war">
+			<fileset dir="${war.dir}">
+				<include name="**/*.*" />
+			</fileset>
+			<manifest>
+				<attribute name="Timetabling-Version" value="4.9_bld${build.number}"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="done">
+		<delete dir="${temp.dir}" />
+		<delete file="build.date" failonerror="false" />
+	</target>
+
+	<target name="validate">
+		<xmlvalidate failonerror="no">
+		  <fileset dir="Documentation/Interfaces/Examples" includes="**/*.xml"/>
+		</xmlvalidate>
+	</target>
+
+    <target name="doc" depends="load-properties">
+        <delete dir="${dist.dir}/doc" failonerror="false"/>
+        <mkdir dir="${dist.dir}/doc"/>
+    	<javadoc destdir="${dist.dir}/doc" author="true" version="true" use="true" windowtitle="UniTime API Documentation" source="17" linksource="false" breakiterator="true" useexternalfile="yes">
+    		<doctitle><![CDATA[
+    		<table border='0' style='font-size: 11pt;font-weight: normal;'><tr><td align='left'>
+    			Licensed to The Apereo Foundation under one or more contributor license<br>
+    			agreements. See the NOTICE file distributed with this work for<br>
+    			additional information regarding copyright ownership.<br>
+    			<br>
+    			The Apereo Foundation licenses this file to you under the Apache License,<br>
+    			Version 2.0 (the "License"); you may not use this file except in<br>
+    			compliance with the License. You may obtain a copy of the License at:<br>
+    			<br>
+    			<a href='http://www.apache.org/licenses/LICENSE-2.0'>http://www.apache.org/licenses/LICENSE-2.0</a><br>
+    			<br>
+    			Unless required by applicable law or agreed to in writing, software<br>
+    			distributed under the License is distributed on an "AS IS" BASIS,<br>
+    			WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br>
+    			<br>
+    			See the License for the specific language governing permissions and<br>
+    			limitations under the License.
+    		</td></tr></table>
+   			]]></doctitle>
+	 	   	<group title="UniTime Common Classes" packages="org.unitime.commons*"/>
+	   	   	<group title="University Course Timetabling" packages="org.unitime.timetable*"/>
+	 	   	<link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+			<fileset dir="${src.dir}"/>
+			<classpath>
+	            <fileset dir="${lib.dir}">
+	            	<include name="*.jar"/>
+	            </fileset>
+				<fileset dir="${3rd_party.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+    	</javadoc>
+    	<replace dir="${dist.dir}/doc">
+    		<include name="**/*.html"/>
+    		<replacetoken>Tomas Muller</replacetoken>
+    		<replacevalue>Tom&#225;&#353; M&#252;ller</replacevalue>
+		</replace>
+    </target>
+
+	<target name="build-dist" depends="compile-war">
+		<tar destfile="${dist.dir}/unitime-4.9_bld${build.number}.tar">
+			<tarfileset dir="${basedir}" includes="LICENSE" fullpath="doc/license.txt"/>
+			<tarfileset dir="${basedir}" includes="NOTICE" fullpath="doc/notice.txt"/>
+			<tarfileset dir="${basedir}" includes="README.md" fullpath="doc/readme.txt"/>
+			<tarfileset dir="${basedir}/Documentation/Interfaces" includes="*.dtd" prefix="doc/dtd"/>
+			<tarfileset dir="${basedir}/Documentation/Interfaces/Examples" includes="*.xml" prefix="doc/dtd"/>
+			<tarfileset dir="${basedir}/Documentation/Database/MySQL" includes="*.sql" prefix="doc/mysql"/>
+			<tarfileset dir="${basedir}/Documentation/Database/Oracle" includes="*.sql" prefix="doc/oracle"/>
+			<tarfileset dir="${basedir}/Documentation/Docker" includes="*.*" prefix="docker"/>
+			<tarfileset dir="${dist.dir}" includes="*.war" prefix="web"/>
+			<tarfileset dir="${dist.dir}" includes="timetable.jar" prefix="solver"/>
+			<tarfileset dir="${lib.dir}" prefix="solver">
+				<include name="commons-logging-1.3.5.jar"/>
+				<include name="cpsolver-1.4.91.jar"/>
+				<include name="dom4j-2.1.5.jar"/>
+				<include name="gwt-servlet-jakarta-2.13.0.jar"/>
+				<include name="javassist-3.30.2-GA.jar"/>
+				<include name="jboss-logging-3.6.3.Final.jar"/>
+				<include name="jgroups-5.4.11.Final.jar"/>
+				<include name="log4j-api-2.25.4.jar"/>
+				<include name="log4j-core-2.25.4.jar"/>
+				<include name="log4j-jcl-2.25.4.jar"/>
+				<include name="jakarta.mail-api-2.1.5.jar"/>
+				<include name="jakarta.mail-2.0.5.jar"/>
+				<include name="protobuf-java-4.34.1.jar"/>
+				<include name="slf4j-api-1.7.36.jar"/>
+				<include name="log4j-slf4j-impl-2.25.4.jar"/>
+				<include name="spring-security-core-6.5.11.jar"/>
+				<include name="jbossjta-4.16.6.Final.jar"/>
+				<include name="org.restlet-2.4.4.jar"/>
+				<include name="gson-2.13.2.jar"/>
+				<include name="joda-time-2.14.1.jar"/>
+				<include name="spring-core-6.2.19.jar"/>
+				<include name="spring-web-6.2.19.jar"/>
+				<include name="freemarker-2.3.34.jar"/>
+				<include name="biweekly-0.6.8.jar"/>
+				<include name="vinnie-2.0.2.jar"/>
+				<include name="jackson-core-2.22.1.jar"/>
+				<include name="commons-lang3-3.20.0.jar"/>
+				<include name="commons-text-1.15.0.jar"/>
+				<include name="itext-2.1.7.jar"/>
+				<include name="angus-activation-2.0.3.jar"/>
+				<include name="byte-buddy-1.17.5.jar"/>
+				<include name="c3p0-0.12.0.jar"/>
+				<include name="classmate-1.5.1.jar"/>
+				<include name="hibernate-c3p0-6.6.46.Final.jar"/>
+				<include name="hibernate-commons-annotations-7.0.3.Final.jar"/>
+				<include name="hibernate-core-6.6.46.Final.jar"/>
+				<include name="hibernate-community-dialects-6.6.46.Final.jar"/>
+				<include name="istack-commons-runtime-4.1.1.jar"/>
+				<include name="jaxb-core-4.0.2.jar"/>
+				<include name="jaxb-runtime-4.0.2.jar"/>
+				<include name="mchange-commons-java-0.4.0.jar"/>
+				<include name="spring-context-6.2.19.jar"/>
+				<include name="spring-beans-6.2.19.jar"/>
+				<include name="jakarta.activation-api-2.1.4.jar"/>
+				<include name="jakarta.persistence-api-3.1.0.jar"/>
+				<include name="jakarta.transaction-api-2.0.1.jar"/>
+				<include name="jakarta.xml.bind-api-4.0.0.jar"/>
+				<include name="antlr4-runtime-4.13.0.jar"/>
+			</tarfileset>
+			<tarfileset dir="${3rd_party.dir}" prefix="solver">
+				<include name="jakarta.servlet.jsp-api-3.1.1.jar"/>
+				<include name="jakarta.servlet-api-6.0.0.jar"/>
+			</tarfileset>
+		</tar>
+		<gzip zipfile="${dist.dir}/unitime-4.9_bld${build.number}.tar.gz" src="${dist.dir}/unitime-4.9_bld${build.number}.tar"/>
+		<delete file="${dist.dir}/unitime-4.9_bld${build.number}.tar"/>
+		<zip destfile="${dist.dir}/unitime-4.9_bld${build.number}.zip">
+			<tarfileset dir="${basedir}" includes="LICENSE" fullpath="doc/license.txt"/>
+			<tarfileset dir="${basedir}" includes="NOTICE" fullpath="doc/notice.txt"/>
+			<tarfileset dir="${basedir}" includes="README.md" fullpath="doc/readme.txt"/>
+			<zipfileset dir="${basedir}/Documentation/Interfaces" includes="*.dtd" prefix="doc/dtd"/>
+			<zipfileset dir="${basedir}/Documentation/Interfaces/Examples" includes="*.xml" prefix="doc/dtd"/>
+			<zipfileset dir="${basedir}/Documentation/Database/MySQL" includes="*.sql" prefix="doc/mysql"/>
+			<zipfileset dir="${basedir}/Documentation/Database/Oracle" includes="*.sql" prefix="doc/oracle"/>
+			<zipfileset dir="${basedir}/Documentation/Docker" includes="*.*" prefix="docker"/>
+			<zipfileset dir="${dist.dir}" includes="*.war" prefix="web"/>
+			<zipfileset dir="${dist.dir}" includes="timetable.jar" prefix="solver"/>
+			<zipfileset dir="${lib.dir}" prefix="solver">
+				<include name="commons-logging-1.3.5.jar"/>
+				<include name="cpsolver-1.4.91.jar"/>
+				<include name="dom4j-2.1.5.jar"/>
+				<include name="gwt-servlet-jakarta-2.13.0.jar"/>
+				<include name="javassist-3.30.2-GA.jar"/>
+				<include name="jboss-logging-3.6.3.Final.jar"/>
+				<include name="jgroups-5.4.11.Final.jar"/>
+				<include name="log4j-api-2.25.4.jar"/>
+				<include name="log4j-core-2.25.4.jar"/>
+				<include name="log4j-jcl-2.25.4.jar"/>
+				<include name="jakarta.mail-api-2.1.5.jar"/>
+				<include name="jakarta.mail-2.0.5.jar"/>
+				<include name="protobuf-java-4.34.1.jar"/>
+				<include name="slf4j-api-1.7.36.jar"/>
+				<include name="log4j-slf4j-impl-2.25.4.jar"/>
+				<include name="spring-security-core-6.5.11.jar"/>
+				<include name="jbossjta-4.16.6.Final.jar"/>
+				<include name="org.restlet-2.4.4.jar"/>
+				<include name="gson-2.13.2.jar"/>
+				<include name="joda-time-2.14.1.jar"/>
+				<include name="spring-core-6.2.19.jar"/>
+				<include name="spring-web-6.2.19.jar"/>
+				<include name="freemarker-2.3.34.jar"/>
+				<include name="biweekly-0.6.8.jar"/>
+				<include name="vinnie-2.0.2.jar"/>
+				<include name="jackson-core-2.22.1.jar"/>
+				<include name="commons-lang3-3.20.0.jar"/>
+				<include name="commons-text-1.15.0.jar"/>
+				<include name="itext-2.1.7.jar"/>
+				<include name="angus-activation-2.0.3.jar"/>
+				<include name="byte-buddy-1.17.5.jar"/>
+				<include name="c3p0-0.12.0.jar"/>
+				<include name="classmate-1.5.1.jar"/>
+				<include name="hibernate-c3p0-6.6.46.Final.jar"/>
+				<include name="hibernate-commons-annotations-7.0.3.Final.jar"/>
+				<include name="hibernate-core-6.6.46.Final.jar"/>
+				<include name="hibernate-community-dialects-6.6.46.Final.jar"/>
+				<include name="istack-commons-runtime-4.1.1.jar"/>
+				<include name="jaxb-core-4.0.2.jar"/>
+				<include name="jaxb-runtime-4.0.2.jar"/>
+				<include name="mchange-commons-java-0.4.0.jar"/>
+				<include name="spring-context-6.2.19.jar"/>
+				<include name="spring-beans-6.2.19.jar"/>
+				<include name="jakarta.activation-api-2.1.4.jar"/>
+				<include name="jakarta.persistence-api-3.1.0.jar"/>
+				<include name="jakarta.transaction-api-2.0.1.jar"/>
+				<include name="jakarta.xml.bind-api-4.0.0.jar"/>
+				<include name="antlr4-runtime-4.13.0.jar"/>
+			</zipfileset>
+			<zipfileset dir="${3rd_party.dir}" prefix="solver">
+				<include name="jakarta.servlet.jsp-api-3.1.1.jar"/>
+				<include name="jakarta.servlet-api-6.0.0.jar"/>
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="check-tomcat-home" depends="load-properties" unless="env.TOMCAT_HOME">
+		<fail>
+			Environment variable TOMCAT_HOME is not defined.
+		</fail>
+	</target>
+
+	<target name="deploy" depends="check-tomcat-home">
+		<copy file="${dist.dir}/UniTime.war" todir="${env.TOMCAT_HOME}/webapps"
+			overwrite="Yes" preservelastmodified="No" verbose="Yes" />
+	</target>
+
+
+	<target name="redeploy-gwt" depends="check-tomcat-home,load-properties">
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+            	<include name="*.jar"/>
+            </fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+				<include name="sources/validation-api-*-sources.jar" />
+			</fileset>
+        </path>
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+			<classpath refid="build.classpath" />
+			<classpath path="JavaSource"/>
+			<classpath path="${env.TOMCAT_HOME}/webapps/UniTime/WEB-INF/classes"/>
+			<jvmarg value="-Xmx2g"/>
+			<jvmarg value="${macJvmArgs}"/>
+			<jvmarg value="-Duser.language=en"/>
+			<arg value="-war"/>
+			<arg value="${env.TOMCAT_HOME}/webapps/UniTime"/>
+			<arg value="org.unitime.timetable.gwt.UniTime"/>
+			<arg value="-localWorkers"/>
+			<arg value="4"/>
+		</java>
+		<touch file="${env.TOMCAT_HOME}/webapps/UniTime/unitime/unitime.nocache.js"/>
+	</target>
+
+	<target name="redeploy-gwtdev" depends="check-tomcat-home,load-properties">
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+            	<include name="*.jar"/>
+            </fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+				<include name="sources/validation-api-*-sources.jar" />
+			</fileset>
+        </path>
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler" dir="JavaSource">
+			<classpath refid="build.classpath" />
+			<classpath path="JavaSource"/>
+			<classpath path="${env.TOMCAT_HOME}/webapps/UniTime/WEB-INF/classes"/>
+			<jvmarg value="-Xmx2g"/>
+			<jvmarg value="${macJvmArgs}"/>
+			<jvmarg value="-Duser.language=en"/>
+			<arg value="-war"/>
+			<arg value="${env.TOMCAT_HOME}/webapps/UniTime"/>
+			<arg value="-draftCompile"/>
+			<arg value="org.unitime.timetable.gwt.UniTimeDev"/>
+			<arg value="-style"/>
+			<arg value="DETAILED"/>
+			<arg value="-localWorkers"/>
+			<arg value="4"/>
+			<arg value="-Xnamespace"/>
+			<arg value="NONE"/>
+		</java>
+		<touch file="${env.TOMCAT_HOME}/webapps/UniTime/unitime/unitime.nocache.js"/>
+	</target>
+
+	<target name="check-java-opts-def" depends="load-properties" if="env.JAVA_OPTS">
+		<property name="java.opts" value="${env.JAVA_OPTS}"/>
+	</target>
+
+	<target name="check-java-opts-nodef" depends="load-properties" unless="env.JAVA_OPTS">
+		<property name="java.opts" value=""/>
+	</target>
+
+	<target name="check-java-opts" depends="check-java-opts-def,check-java-opts-nodef"/>
+
+	<target name="start" depends="check-tomcat-home,check-java-opts">
+		<java jar="${env.TOMCAT_HOME}/bin/bootstrap.jar" fork="true" maxmemory="1024m" taskname="tomcat">
+			<arg value="start"/>
+			<sysproperty key="java.util.logging.manager" value="org.apache.juli.ClassLoaderLogManager"/>
+			<sysproperty key="java.util.logging.config.file" value="${env.TOMCAT_HOME}/conf/logging.properties"/>
+			<sysproperty key="java.endorsed.dirs" value="${env.TOMCAT_HOME}/endorsed"/>
+			<sysproperty key="catalina.base" value="${env.TOMCAT_HOME}"/>
+			<sysproperty key="catalina.home" value="${env.TOMCAT_HOME}"/>
+			<sysproperty key="java.io.tmpdir" value="${env.TOMCAT_HOME}/temp"/>
+			<jvmarg line="${java.opts}"/>
+		</java>
+	</target>
+
+	<target name="stop" depends="check-tomcat-home,check-java-opts">
+		<java jar="${env.TOMCAT_HOME}/bin/bootstrap.jar" fork="true" maxmemory="1024m" taskname="tomcat">
+			<arg value="stop"/>
+			<sysproperty key="java.util.logging.manager" value="org.apache.juli.ClassLoaderLogManager"/>
+			<sysproperty key="java.util.logging.config.file" value="${env.TOMCAT_HOME}/conf/logging.properties"/>
+			<sysproperty key="java.endorsed.dirs" value="${env.TOMCAT_HOME}/endorsed"/>
+			<sysproperty key="catalina.base" value="${env.TOMCAT_HOME}"/>
+			<sysproperty key="catalina.home" value="${env.TOMCAT_HOME}"/>
+			<sysproperty key="java.io.tmpdir" value="${env.TOMCAT_HOME}/temp"/>
+			<jvmarg line="${java.opts}"/>
+		</java>
+	</target>
+
+	<target name="check-jsp" depends="init,check-tomcat-home">
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+            	<include name="*.jar"/>
+            </fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+			</fileset>
+        </path>
+		<javac destdir="${build.dir}" debug="true" includeantruntime="false" encoding="utf-8">
+			<src path="${src.dir}" />
+			<classpath refid="build.classpath"/>
+		</javac>
+		<taskdef classname="org.apache.jasper.JspC" name="jasper">
+			<classpath refid="build.classpath"/>
+			<classpath path="${build.dir}"/>
+			<classpath path="${src.dir}"/>
+		</taskdef>
+		<jasper
+			validatexml="false"
+			uriroot="${jsp.dir}"
+			outputDir="${temp.dir}/jsp"
+			webxmlfragment="${temp.dir}/jsp/generated_web.xml"
+			/>
+		<javac destdir="${temp.dir}/jsp" debug="true" includeantruntime="false" encoding="utf-8">
+			<src path="${temp.dir}/jsp" />
+			<classpath refid="build.classpath"/>
+			<classpath path="${build.dir}"/>
+		</javac>
+	</target>
+
+	<target name="create-model" depends="init">
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+            	<include name="*.jar"/>
+            </fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+			</fileset>
+        </path>
+		<javac destdir="${build.dir}" includes="org/unitime/commons/ant/CreateBaseModelFromXml.java" debug="true" encoding="utf-8">
+			<src path="${src.dir}" />
+			<classpath refid="build.classpath"/>
+		</javac>
+		<taskdef name="create-model" classname="org.unitime.commons.ant.CreateBaseModelFromXml">
+			<classpath refid="build.classpath"/>
+			<classpath path="${build.dir}"/>
+		</taskdef>
+		<create-model config="hibernate.cfg.xml" source="${src.dir}"/>
+        <delete dir="${build.dir}" failonerror="false"/>
+		<delete dir="${temp.dir}" failonerror="false"/>
+	</target>
+
+	<target name="ldap-test" depends="init">
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+            	<include name="*.jar"/>
+            </fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+			</fileset>
+        </path>
+		<javac destdir="${build.dir}" includes="org/unitime/timetable/authenticate/jaas/LdapTest.java" debug="true" encoding="utf-8">
+			<src path="${src.dir}" />
+			<classpath refid="build.classpath"/>
+		</javac>
+		<jar destfile="${dist.dir}/ldap-test.jar">
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.unitime.timetable.authenticate.jaas.LdapTest" />
+			</manifest>
+		</jar>
+        <delete dir="${build.dir}" failonerror="false"/>
+		<delete dir="${temp.dir}" failonerror="false"/>
+	</target>
+
+	<target name="export-translations" depends="init">
+		<echo message="Exporting translations for ${locale} ..."/>
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+            	<include name="*.jar"/>
+            </fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+			</fileset>
+        </path>
+		<javac destdir="${build.dir}" debug="true" encoding="utf-8" includeantruntime="false">
+			<src path="${src.dir}" />
+			<classpath refid="build.classpath"/>
+			<include name="org/unitime/localization/impl/ExportTranslations.java"/>
+			<include name="org/unitime/localization/messages/**"/>
+			<include name="org/unitime/timetable/gwt/resources/**"/>
+		</javac>
+		<taskdef name="export-translations" classname="org.unitime.localization.impl.ExportTranslations">
+			<classpath refid="build.classpath"/>
+			<classpath path="${build.dir}"/>
+		</taskdef>
+		<export-translations source="${src.dir}" generatePageNames="false">
+			<locale value="${locale}"/>
+		</export-translations>
+        <delete dir="${build.dir}" failonerror="false"/>
+		<delete dir="${temp.dir}" failonerror="false"/>
+	</target>
+
+	<target name="import-translations" depends="init">
+		<echo message="Importing translations for ${locale} ..."/>
+        <path id="build.classpath">
+            <fileset dir="${lib.dir}">
+            	<include name="*.jar"/>
+            </fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+			</fileset>
+        </path>
+		<javac destdir="${build.dir}" debug="true" encoding="utf-8" includeantruntime="false">
+			<src path="${src.dir}" />
+			<classpath refid="build.classpath"/>
+			<include name="org/unitime/localization/impl/ImportTranslations.java"/>
+			<include name="org/unitime/localization/messages/**"/>
+			<include name="org/unitime/timetable/gwt/resources/**"/>
+		</javac>
+		<taskdef name="import-translations" classname="org.unitime.localization.impl.ImportTranslations">
+			<classpath refid="build.classpath"/>
+			<classpath path="${build.dir}"/>
+		</taskdef>
+		<import-translations source="${src.dir}" generatePageNames="false" download="${download}" token="b191dd443ab1800fc1e09ef23e50cdb0">
+			<locale value="${locale}"/>
+		</import-translations>
+        <delete dir="${build.dir}" failonerror="false"/>
+		<delete dir="${temp.dir}" failonerror="false"/>
+	</target>
+	
+	<target name="deepl-translator" depends="init">
+		<echo message="Translating ${locale} ..."/>
+		<path id="build.classpath">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${3rd_party.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<javac destdir="${build.dir}" debug="true" encoding="utf-8" includeantruntime="false">
+			<src path="${src.dir}" />
+			<classpath refid="build.classpath"/>
+			<include name="org/unitime/localization/impl/DeepLTranslator.java"/>
+		</javac>
+		<taskdef name="translate" classname="org.unitime.localization.impl.DeepLTranslator">
+			<classpath refid="build.classpath"/>
+			<classpath path="${build.dir}"/>
+		</taskdef>
+		<translate token="${token}">
+			<locale value="${locale}"/>
+		</translate>
+		<delete dir="${build.dir}" failonerror="false"/>
+		<delete dir="${temp.dir}" failonerror="false"/>
+	</target>
+
+	<target name="build" depends="load-properties,compile-war,done" />
+	<target name="dist" depends="load-properties,compile-war,build-dist,done" />
+</project>
