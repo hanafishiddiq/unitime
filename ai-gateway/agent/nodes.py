@@ -13,6 +13,7 @@ Implements all node execution logic for the curriculum ingestion pipeline:
 
 from __future__ import annotations
 
+import copy
 import datetime
 import logging
 import os
@@ -524,7 +525,7 @@ def apply_feedback_node(state: IngestAgentState) -> Dict[str, Any]:
     memory_ctx = state.get("memory_context") or {}
     db_path = memory_ctx.get("memory_db_path")
 
-    unified = state.get("unified_payload") or {}
+    unified = copy.deepcopy(state.get("unified_payload") or {})
     dept_code = (
         unified.get("department", {}).get("code")
         or unified.get("subjectArea", {}).get("departmentCode")

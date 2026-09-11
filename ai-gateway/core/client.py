@@ -11,11 +11,14 @@ import os
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+from dotenv import load_dotenv
 import httpx
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_UNITIME_URL = "http://localhost:8080/unitime/api/smart-ingest"
+DEFAULT_UNITIME_URL = "http://localhost:8888/api/smart-ingest"
 
 
 class UniTimeClientError(Exception):

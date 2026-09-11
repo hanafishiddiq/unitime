@@ -47,6 +47,7 @@ import org.unitime.timetable.api.JsonApiHelper;
 import org.unitime.timetable.dataexchange.DataExchangeHelper;
 import org.unitime.timetable.model.DistributionPref;
 import org.unitime.timetable.model.Session;
+import org.unitime.timetable.model.dao.SessionDAO;
 import org.unitime.timetable.security.rights.Right;
 
 import com.google.gson.JsonArray;
@@ -147,8 +148,6 @@ public class SmartIngestConnector extends ApiConnector {
 		String errorMessage = null;
 		JsonObject rootJson = null;
 
-		org.hibernate.Session hibSession = new org.unitime.timetable.model.dao._RootDAO().getSession();
-		org.hibernate.Transaction tx = null;
 		try {
 			rootJson = helper.getRequest(JsonObject.class);
 			if (rootJson == null || rootJson.isJsonNull()) {
@@ -170,8 +169,6 @@ public class SmartIngestConnector extends ApiConnector {
 
 			String userId = helper.getSessionContext().isAuthenticated() ? helper.getSessionContext().getUser().getExternalUserId() : null;
 
-			tx = hibSession.beginTransaction();
-
 			Document offeringsDoc = buildOfferingsDocument(rootJson);
 			Document prefDoc = buildPreferencesDocument(rootJson);
 
@@ -179,13 +176,14 @@ public class SmartIngestConnector extends ApiConnector {
 			DataExchangeHelper.importDocument(offeringsDoc, userId, log);
 			offeringsImportSuccess = true;
 
+			SessionDAO.getInstance().getSession().flush();
+			SessionDAO.getInstance().getSession().clear();
+
 			if (prefDoc != null && hasPreferencesContent(prefDoc)) {
 				log.info("Importing Distribution & Preference constraints...");
 				DataExchangeHelper.importDocument(prefDoc, userId, log);
 				preferencesImportSuccess = true;
 			}
-			
-			tx.commit();
 			
 			IngestResponse response = buildResponse(rootJson, offeringsImportSuccess, preferencesImportSuccess, errorCount.get(), warnCount.get(), errorMessage, logEntries);
 			helper.setResponse(response);
@@ -199,10 +197,6 @@ public class SmartIngestConnector extends ApiConnector {
 				helper.setResponse(response);
 			} else {
 				helper.sendError(HttpServletResponse.SC_BAD_REQUEST, e);
-			}
-		} finally {
-			if (tx != null && tx.isActive()) {
-				try { tx.rollback(); } catch (Exception ignored) {}
 			}
 		}
 	}
@@ -317,8 +311,8 @@ public class SmartIngestConnector extends ApiConnector {
 				Element creditEl = courseEl.addElement("courseCredit");
 
 				String format = safeGetString(creditObj, "format", "fixedUnit");
-				String creditType = safeGetString(creditObj, "creditType", "collegiate");
-				String creditUnitType = safeGetString(creditObj, "creditUnitType", "sks");
+				String creditType = translateCreditType(safeGetString(creditObj, "creditType", "collegiate"));
+				String creditUnitType = translateCreditUnitType(safeGetString(creditObj, "creditUnitType", "semesterHours"));
 
 				creditEl.addAttribute("creditFormat", format);
 				creditEl.addAttribute("creditType", creditType);
@@ -823,16 +817,55 @@ public class SmartIngestConnector extends ApiConnector {
 
 	
 	protected static String translateInstructionalType(String type) {
-		if (type == null || type.trim().isEmpty()) return "Lecture";
+		if (type == null || type.trim().isEmpty()) return "Lec";
 		String upper = type.trim().toUpperCase();
 		switch (upper) {
-			case "KULIAH": return "Lecture";
-			case "PRAKTIKUM": return "Laboratory";
-			case "RESPONSI": return "Recitation";
-			case "TUTORIAL": return "Tutorial";
-			case "SEMINAR": return "Seminar";
+			case "KULIAH":
+			case "TEORI":
+			case "LEC":
+			case "LECTURE": return "Lec";
+			case "PRAKTIKUM":
+			case "LAB":
+			case "LABORATORY": return "Lab";
+			case "RESPONSI":
+			case "REC":
+			case "RECITATION":
+			case "TUTORIAL": return "Rec";
+			case "SEMINAR":
+			case "PRESENTATION": return "Prsn";
+			case "STUDIO": return "Stdo";
+			case "PRAKTEK":
+			case "PRACTICE": return "Pso";
+			case "SKRIPSI":
+			case "TA":
+			case "TUGAS AKHIR":
+			case "RESEARCH": return "Res";
+			case "MANDIRI":
+			case "INDEPENDENT":
+			case "INDEPENDENTSTUDY": return "Ind";
 			default: return type.trim();
 		}
+	}
+
+	protected static String translateCreditUnitType(String unitType) {
+		if (unitType == null || unitType.trim().isEmpty()) return "semesterHours";
+		String lower = unitType.trim().toLowerCase();
+		if ("sks".equals(lower) || "semesterhours".equals(lower) || "semester".equals(lower) || "credits".equals(lower)) {
+			return "semesterHours";
+		}
+		if ("quarterhours".equals(lower) || "quarter".equals(lower)) {
+			return "quarterHours";
+		}
+		return unitType.trim();
+	}
+
+	protected static String translateCreditType(String creditType) {
+		if (creditType == null || creditType.trim().isEmpty()) return "collegiate";
+		String lower = creditType.trim().toLowerCase();
+		if ("collegiate".equals(lower) || "sks".equals(lower) || "kuliah".equals(lower) || "standard".equals(lower)) {
+			return "collegiate";
+		}
+		return creditType.trim();
 	}
 
 	protected static String normalizeDays(String input) {

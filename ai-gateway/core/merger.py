@@ -327,9 +327,15 @@ class Merger:
         if not isinstance(inc_subparts, list) or not inc_subparts:
             return
 
+        def _get_subpart_key(sp: Dict[str, Any]) -> str:
+            sp_type = sp.get("type", "").strip().lower()
+            sp_suffix = sp.get("suffix", "").strip().lower()
+            sp_parent = sp.get("parentSubpartType", "").strip().lower()
+            return f"{sp_type}::{sp_suffix}::{sp_parent}"
+
         target_subparts: List[Dict[str, Any]] = target_cfg.setdefault("subparts", [])
         subpart_map: Dict[str, Dict[str, Any]] = {
-            sp.get("type", "").strip().lower(): sp
+            _get_subpart_key(sp): sp
             for sp in target_subparts
             if isinstance(sp, dict) and sp.get("type")
         }
@@ -337,9 +343,9 @@ class Merger:
         for inc_sp in inc_subparts:
             if not isinstance(inc_sp, dict):
                 continue
-            sp_type_key = inc_sp.get("type", "").strip().lower()
-            if not sp_type_key:
+            if not inc_sp.get("type"):
                 continue
+            sp_type_key = _get_subpart_key(inc_sp)
 
             if sp_type_key in subpart_map:
                 cur_sp = subpart_map[sp_type_key]
