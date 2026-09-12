@@ -193,7 +193,7 @@ export function getApiBaseUrl(): string {
     }
   }
 
-  return "https://unitime-api.hanavy.online";
+  return "https://tencent-vps.hanavy.online/unitime-api";
 }
 
 // Helper for unified fetch and JSON error handling
