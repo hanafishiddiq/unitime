@@ -1,0 +1,229 @@
+INSTITUT TEKNOLOGI BANDUNG
+SEKOLAH TEKNIK ELEKTRO DAN INFORMATIKA & FAKULTAS TEKNOLOGI INDUSTRI
+Jalan Ganesha Nomor 10 Bandung 40132 | Jalan Letjen Purn. Dr. (HC) Mashudi No. 1 Jatinangor 45363
+Telepon: +62-22-2508135 | Laman Resmi: https://stei.itb.ac.id | https://fti.itb.ac.id
+
+MEMORANDUM: Arahan Kebijakan Penjadwalan Perkuliahan Semester Ganjil 2024/2025 Multi-Kampus
+NOMOR: 0428/IT1.C01/PP.00/2024
+FAKULTAS: Sekolah Teknik Elektro dan Informatika (STEI) dan Fakultas Teknologi Industri (FTI)
+PROGRAM STUDI: Teknik Informatika, Sistem Informasi, Teknik Elektro, Teknik Industri, dan Tahap Bersama
+PERIHAL: Pedoman Penetapan Preferensi Ruang, Batasan Waktu Dosen, Konektivitas Multi-Kampus, dan Distribusi Jadwal
+TANGGAL: 15 Agustus 2024
+
+Kepada Yth.,
+1. Para Ketua Program Studi di Lingkungan STEI dan FTI ITB
+2. Para Ketua Kelompok Keahlian (KK) / Laboratorium
+3. Seluruh Dosen Pengampu Mata Kuliah Semester Ganjil 2024/2025
+4. Tim Timetabling & Academic Scheduling Administrator
+
+Dengan hormat,
+Dalam rangka mempersiapkan pelaksanaan kegiatan pembelajaran tatap muka Semester Ganjil Tahun Akademik 2024/2025 secara tertib, efisien, dan berbasis sistem cerdas UniTime AI Ingestion Gateway, Pimpinan STEI dan FTI ITB menetapkan arahan kebijakan operasional penjadwalan multi-kampus sebagaimana tertuang dalam butir-butir ketentuan di bawah ini.
+
+BAB I KETENTUAN UMUM DAN PRINSIP OPERASIONAL MULTI-KAMPUS
+1. Lingkup Operasional Akademik:
+   Perkuliahan Semester Ganjil 2024/2025 diselenggarakan secara simultan di dua kampus utama:
+   a. Kampus ITB Ganesha (Kota Bandung) sebagai sentra utama prodi Teknik Informatika (IF), Teknik Elektro (EL), dan Teknik Industri (TI).
+   b. Kampus ITB Jatinangor (Kabupaten Sumedang) sebagai sentra operasional prodi Sistem Informasi (SI), sarana laboratorium terpadu, dan sebagian rombongan belajar Tahap Bersama (TPB).
+   Total kurikulum aktif mencakup tepat 28 mata kuliah dengan sebaran 4 mata kuliah TPB umum, 6 mata kuliah Informatika, 6 mata kuliah Sistem Informasi, 6 mata kuliah Teknik Elektro, dan 6 mata kuliah Teknik Industri.
+
+2. Satuan Kredit Semester (SKS) dan Beban Jam Kontak Mingguan:
+   Sesuai Peraturan Standar Nasional Pendidikan Tinggi (SN-Dikti) dan Pedoman Akademik ITB:
+   a. 1 SKS Perkuliahan Teori (Lecture) ekuivalen dengan 50 menit pembelajaran tatap muka per minggu.
+   b. 1 SKS Praktikum Laboratorium (Lab) ekuivalen dengan 100 hingga 170 menit tatap muka terstruktur per minggu.
+   c. 1 SKS Responsi / Tutorial tatap muka ekuivalen dengan 50 hingga 100 menit per minggu.
+   Setiap subpart wajib mematuhi parameter menit per minggu (minPerWeek) yang terdaftar pada katalog kurikulum.
+
+BAB II BATASAN WAKTU MENGAJAR DAN HARI LIBUR DOSEN
+1. Hari dan Jendela Waktu Bebas Mengajar (Hard Day-Off Exclusion):
+   a. Rapat Senat Akademik ITB dan Rapat Pleno Fakultas:
+      Setiap hari Jumat pukul 09.00 s.d. 11.30 WIB dialokasikan secara wajib untuk rapat institusional Senat Akademik ITB dan koordinasi pimpinan fakultas. Seluruh dosen dilarang dijadwalkan mengajar pada jendela waktu tersebut tanpa terkecuali.
+   b. Jeda Ibadah Sholat Jumat:
+      Setiap hari Jumat pukul 11.30 s.d. 13.00 WIB dikosongkan secara total dari seluruh aktivitas akademik perkuliahan, tutorial, maupun praktikum laboratorium di seluruh kampus.
+
+2. Preferensi Sesi Pagi Hari (Morning-Only Preferences) Dosen Senior dan Guru Besar:
+   Berdasarkan pertimbangan tugas tridharma dan komitmen institusional, ditetapkan preferensi waktu mengajar pagi bagi dosen senior sebagai berikut:
+   a. Prof. Dr. Ir. Rinaldi Munir, M.T. (NIP: 196608141992031002, Pengampu IF2110 dan IF2120): hanya bersedia mengajar sesi pagi (07.00 - 10.00 WIB).
+   b. Prof. Dr. Ir. Kadarsah Suryadi, DEA (NIP: 196202221986011001, Pengampu TI2101 dan TI3101): sesi pagi (07.00 - 09.30 WIB).
+   c. Prof. Dr. Ir. Bambang Riyanto Trilaksono (NIP: 196205261987031002, Pengampu EL2101 dan EL3102): sesi pagi (07.30 - 10.00 WIB).
+   d. Prof. Dr. Ir. Jaka Sembiring, M.Eng. (NIP: 196402171989031002, Pengampu SI2101 dan SI3101): sesi pagi (08.00 - 10.30 WIB).
+   e. Koordinator Dosen TPB (Dr. Warsoma Djohan, Prof. Hendra Gunawan, Dr. Alamta Singarimbun, Dr. Sparisoma Viridi): memprioritaskan sesi pagi (07.00 - 09.00 WIB) untuk kelas besar MA1101 Kalkulus I dan FI1101 Fisika Dasar I.
+
+3. Batasan Beban Kerja Dosen (BKD) dan Skema Tim Pengajar (Team-Teaching):
+   a. Dari 32 orang dosen yang terdaftar dalam roster fakultas, beban mengajar kumulatif dibatasi maksimum 12.0 s.d. 16.0 SKS tertimbang per semester.
+   b. Setiap kelas yang diampu oleh tim pengajar (multi-instructor) wajib menetapkan tepat 1 orang Dosen Penanggung Jawab / Koordinator (isLead: true).
+   c. Pembagian persentase beban mengajar wajib berjumlah persis 100% mengikuti formula deterministik: 50:50 (2 dosen), 70:30 (tim asimetris), 34:33:33 (3 dosen), atau 100% (dosen tunggal).
+
+BAB III KONEKTIVITAS DAN JADWAL PERPINDAHAN ANTAR KAMPUS GANESHA - JATINANGOR
+1. Parameter Geografis dan Waktu Tempuh:
+   a. Jarak geodetik WGS84 garis lurus antar pusat koordinat Kampus Ganesha (-6.8915, 107.6107) dan Kampus Jatinangor (-6.9312, 107.7725) tercatat 18.41 km, atau setara dengan 27 hingga 32 kilometer rute darat melalui Tol Pasteur - Cisumdawu.
+   b. Waktu tempuh perjalanan darat dalam kondisi operasional normal dengan mempertimbangkan jadwal keberangkatan Shuttle Bus Resmi ITB membutuhkan waktu berkisar 50 hingga 75 menit.
+
+2. Kebijakan Jeda Minimum Lintas Kampus (Inter-Campus Transfer Travel Window):
+   a. Waktu jeda minimum (minimum travel buffer) yang diwajibkan antara kelas di Kampus Ganesha dan Kampus Jatinangor adalah 60 menit.
+   b. DILARANG KERAS menjadwalkan kelas berurutan (back-to-back) pada hari yang sama di dua kampus berbeda bagi dosen yang mengajar di kedua kampus maupun mahasiswa yang mengambil mata kuliah lintas program studi tanpa jeda perjalanan minimum 60 menit.
+
+3. Kebijakan Hari Klaster Kampus (Campus Day Clustering):
+   Program studi diinstruksikan untuk menerapkan pengelompokan jadwal berbasis hari utuh (misal: Senin-Rabu di Ganesha, Selasa-Kamis di Jatinangor) guna meminimalisasi kebutuhan mobilisasi lintas kota pada hari yang sama.
+
+BAB IV PREFERENSI ALOKASI RUANG DAN LABORATORIUM KHUSUS
+1. Alokasi Ruang Kuliah Teori Kampus Ganesha:
+   a. Gedung Labtek V Benny Subianto (LTV):
+      - Ruang 7601 (kapasitas 50 kursi) dan Ruang 7602 (kapasitas 45 kursi) diprioritaskan untuk kelas paralel Teknik Informatika (IF2110 K01/K02, IF2120 K01/K02, IF3130 K01/K02, IF3150 K01/K02).
+      - Ruang 7603 (kapasitas 20 kursi) dialokasikan sebagai ruang seminar dan kelas khusus tingkat lanjut.
+   b. Gedung Labtek VIII Achmad Bakrie (LTVIII):
+      - Ruang 8201 (kapasitas 45 kursi) dan Ruang 8202 (kapasitas 50 kursi) dialokasikan untuk kuliah teori Teknik Elektro (EL2101 K01/K02, EL2102 K01/K02, EL3102 K01/K02, EL3103 K01/K02).
+   c. Gedung Labtek III Matthias Aroef (LTIII):
+      - Ruang 3101 (kapasitas 60 kursi) dan Ruang 3102 (kapasitas 45 kursi) dialokasikan untuk kuliah teori Teknik Industri (TI2101 K01/K02, TI2102 K01/K02, TI3101 K01/K02, TI3102 K01/K02).
+
+2. Laboratorium Khusus dan Komputasi Berkinerja Tinggi (High-Performance GPU Labs):
+   a. Labtek V Lab-1 (Lab Komputer AI):
+      Dilengkapi dengan 30 unit GPU Workstations berpendingin presisi tinggi. Ruangan ini dialokasikan khusus untuk praktikum komputasi intensif:
+      - Praktikum IF2110 Algoritma dan Pemrograman (L01)
+      - Praktikum IF3110 Pengembangan Berbasis Platform (L01)
+      Diberlakukan konstrain distribusi SAME_ROOM untuk pemanfaatan GPU Workstations antara IF2110 L01 dan IF3110 L01.
+   b. Labtek VIII Lab-El (Lab Elektronika & Hardware):
+      Dilengkapi dengan 28 unit Hardware Stations (logic analyzer, oscilloscope, FPGA board). Ruangan ini dialokasikan khusus untuk:
+      - Praktikum IF2130 Arsitektur Komputer (L01)
+      - Praktikum EL3101 Sistem Tertanam (L01)
+      - Praktikum EL2103 Elektronika I (L01)
+      Diberlakukan konstrain distribusi SAME_ROOM antara IF2130 L01 dan EL3101 L01.
+
+3. Fasilitas Ruang Kuliah Umum dan Amphitheatre Kampus Ganesha:
+   Gedung Kuliah Umum Barat (GKUB):
+   - Ruang 9001 (Auditorium, kapasitas 150 kursi, Audio System, Projector).
+   - Ruang 9002 (Amphitheatre, kapasitas 200 kursi, Audio System, Projector).
+   Kedua ruangan ini dialokasikan khusus untuk mata kuliah gabungan Tahap Bersama (TPB) lintas fakultas (KU1011 Pengantar Rekayasa & Desain, MA1101 Kalkulus I, FI1101 Fisika Dasar I, KU1102 Berpikir Komputasional).
+
+4. Alokasi Fasilitas Akademik Kampus Jatinangor:
+   a. Gedung KOICA:
+      - Ruang 201 dan Ruang 202 (kapasitas masing-masing 40 komputer desktop) dialokasikan sebagai Laboratorium Komputer Sistem Informasi (SI2101, SI2102, SI2103, SI3101, SI3102, SI3103).
+   b. Gedung Kuliah Umum 1 Jatinangor (GKU1J):
+      - Ruang 101 (kapasitas 60 kursi) dan Ruang 102 (kapasitas 50 kursi) untuk perkuliahan teori program studi Sistem Informasi dan rombongan belajar Jatinangor.
+   c. Lab Terpadu Jatinangor (LABTJ):
+      - Ruang Lab-01 (kapasitas 30 hardware stations) dan Ruang Lab-02 (kapasitas 32 workstations) untuk praktikum terpadu komputasi dan elektronika.
+      - Ruang 301, 302, dan 303 untuk perkuliahan pendukung di Kampus Jatinangor.
+
+BAB V BATASAN DISTRIBUSI DAN PRESEDENSI PEDAGOGIS (DISTRIBUTION CONSTRAINTS)
+Tim penjadwalan wajib mengonfigurasi dan mematuhi 5 ragam batasan distribusi berikut:
+1. Presedensi Pedagogis (PRECEDENCE):
+   Sesi perkuliahan teori (Lecture) harus dijadwalkan mendahului sesi praktikum (Lab) dalam siklus mingguan yang sama. Larangan keras bagi mahasiswa melaksanakan praktikum sebelum materi konsep dasar diajarkan.
+   Daftar kelas dengan aturan PRECEDENCE mutlak:
+   a. IF2110 K01 (Kuliah Teori) mendahului IF2110 L01 (Praktikum Lab).
+   b. FI1101 K01 (Kuliah Fisika) mendahului FI1101 L01 (Praktikum Fisika).
+   c. EL2103 K01 (Kuliah Elektronika) mendahului EL2103 L01 (Praktikum Elektronika).
+   d. TI2103 K01 (Kuliah Ergonomi) mendahului TI2103 L01 (Praktikum Ergonomi).
+   e. KU1102 K01 (Kuliah Berpikir Komputasional) mendahului KU1102 L01 (Praktikum Komputasi).
+
+2. Kuliah dan Responsi Berurutan (BACK_TO_BACK / BTB):
+   Sesi perkuliahan teori dan sesi responsi/tutorial harus dijadwalkan bersambung tanpa jeda waktu kosong pada hari yang sama:
+   a. IF3150 K01 (Manajemen Proyek Perangkat Lunak) dan IF3150 R01 (Responsi).
+   b. SI3102 K01 (Manajemen Layanan TI) dan SI3102 R01 (Responsi).
+   c. TI2101 K01 (Penelitian Operasional I) dan TI2101 R01 (Responsi pada hari Senin).
+
+3. Larangan Bentrok Waktu Mata Kuliah Wajib Seangkatan (DIFF_TIME):
+   Mata kuliah wajib semester 3 pada program studi yang sama dilarang dijadwalkan pada slot waktu yang tumpang-tindih:
+   a. Teknik Informatika Semester 3: IF2110 K01 dan IF2120 K01 tidak boleh bentrok waktu.
+   b. Sistem Informasi Semester 3: SI2101 K01 dan SI2102 K01 tidak boleh bentrok waktu.
+   c. Teknik Elektro Semester 3: EL2101 K01 dan EL2102 K01 tidak boleh bentrok waktu.
+   d. Teknik Industri Semester 3: TI2101 K01 dan TI2102 K01 tidak boleh bentrok waktu.
+
+4. Alokasi Fasilitas Khusus pada Ruang yang Sama (SAME_ROOM):
+   a. IF2110 L01 dan IF3110 L01 wajib menggunakan ruang Labtek V Lab-1 (GPU Workstations).
+   b. IF2130 L01 dan EL3101 L01 wajib menggunakan ruang Labtek VIII Lab-El (Hardware Stations).
+
+5. Perkuliahan Gabungan Paralel (MEET_WITH / MEET_TOGETHER):
+   a. KU1011 Pengantar Rekayasa & Desain (K01 dan K02) dijadwalkan bersamaan di Amphitheatre GKUB 9002.
+   b. MA1101 Kalkulus I (K01 dan K02) sesi kuliah tamu gabungan dijadwalkan bersamaan di Auditorium GKUB 9001.
+
+BAB VI KETENTUAN AMANDEMEN DAN PENYESUAIAN JADWAL
+1. Prosedur Permohonan Amandemen:
+   Perubahan jadwal perkuliahan setelah penetapan versi rilis (baseline) hanya dapat diajukan oleh Dosen Koordinator Mata Kuliah melalui persetujuan tertulis Ketua Program Studi dan Wakil Dekan Bidang Akademik.
+2. Batas Waktu Amandemen:
+   Pengajuan perubahan jadwal dapat diproses selambat-lambatnya 1 (satu) pekan sebelum perkuliahan hari pertama Semester Ganjil dimulai.
+3. Kepatuhan Validasi Sistem:
+   Seluruh penyesuaian jadwal harus divalidasi melalui sistem UniTime AI Ingestion Gateway dan tidak diperkenankan menghasilkan konflik kapasitas maupun pelanggaran aturan distribusi.
+
+Demikian memorandum arahan operasional ini diterbitkan untuk dipedomani dan dilaksanakan dengan penuh tanggung jawab demi kelancaran tridharma perguruan tinggi di Institut Teknologi Bandung.
+
+Ditetapkan di: Bandung
+Pada tanggal: 15 Agustus 2024
+
+Dekan Sekolah Teknik Elektro dan Informatika
+Institut Teknologi Bandung
+
+ttd.
+
+Prof. Dr. Ir. Jaka Sembiring, M.Eng.
+NIP. 196402171989031002
+
+Dekan Fakultas Teknologi Industri
+Institut Teknologi Bandung
+
+ttd.
+
+Prof. Dr. Ir. Kadarsah Suryadi, DEA
+NIP. 196202221986011001
+
+LAMPIRAN I DAFTAR RUANGAN DAN FASILITAS MULTI-KAMPUS ITB
+Tabel Inventaris Ruang Kuliah dan Laboratorium Terpadu (20 Ruang):
+------------------------------------------------------------------------------------------------------------------------
+No | Kampus     | Gedung                    | Ruangan | Kapasitas | Klasifikasi    | Fasilitas / Fitur Unggulan
+------------------------------------------------------------------------------------------------------------------------
+01 | Ganesha    | Labtek V Benny Subianto   | 7601    | 45        | classroom      | SmartBoard, Projector
+02 | Ganesha    | Labtek V Benny Subianto   | 7602    | 45        | classroom      | SmartBoard, Projector
+03 | Ganesha    | Labtek V Benny Subianto   | Lab-1   | 30        | computingLab   | GPU Workstations, Audio System, ComputerLab
+04 | Ganesha    | Labtek V Benny Subianto   | 7603    | 20        | seminar        | SmartBoard, Projector
+05 | Ganesha    | Labtek VIII Achmad Bakrie | 8201    | 50        | classroom      | Projector, Audio System
+06 | Ganesha    | Labtek VIII Achmad Bakrie | Lab-El  | 28        | specialLab     | Hardware Stations, Projector
+07 | Ganesha    | Labtek VIII Achmad Bakrie | 8202    | 50        | classroom      | Projector
+08 | Ganesha    | Labtek III Matthias Aroef | 3101    | 60        | classroom      | Projector, Audio System
+09 | Ganesha    | Labtek III Matthias Aroef | 3102    | 60        | classroom      | Projector
+10 | Ganesha    | Gedung Kuliah Umum Barat  | 9001    | 150       | auditorium     | Projector, Audio System
+11 | Ganesha    | Gedung Kuliah Umum Barat  | 9002    | 200       | auditorium     | Projector, Audio System
+12 | Jatinangor | Gedung Kuliah Umum 1 Jatinangor | 101     | 60        | classroom      | Projector, Audio System
+13 | Jatinangor | Gedung Kuliah Umum 1 Jatinangor | 102     | 50        | classroom      | Projector
+14 | Jatinangor | Gedung KOICA              | 201     | 40        | computingLab   | ComputerLab, Projector
+15 | Jatinangor | Gedung KOICA              | 202     | 40        | computingLab   | ComputerLab, Projector
+16 | Jatinangor | Lab Terpadu Jatinangor    | Lab-01  | 30        | computingLab   | Hardware Stations, ComputerLab
+17 | Jatinangor | Lab Terpadu Jatinangor    | Lab-02  | 32        | computingLab   | ComputerLab, Projector
+18 | Jatinangor | Lab Terpadu Jatinangor    | 301     | 40        | classroom      | Projector
+19 | Jatinangor | Lab Terpadu Jatinangor    | 302     | 40        | classroom      | Projector
+20 | Jatinangor | Lab Terpadu Jatinangor    | 303     | 50        | classroom      | Projector
+------------------------------------------------------------------------------------------------------------------------
+
+LAMPIRAN II REKAPITULASI 28 MATA KULIAH KURIKULUM ITB
+Daftar Sebaran 28 Mata Kuliah Terpadu STEI & FTI ITB:
+------------------------------------------------------------------------------------------------------------------------
+No | Kode MK | Nama Mata Kuliah                        | SKS | Subparts               | Target Ruang Preferensi
+------------------------------------------------------------------------------------------------------------------------
+01 | MA1101  | Kalkulus I                              | 4.0 | Lecture+Tutorial       | GKU 9001, GKU 9101
+02 | FI1101  | Fisika Dasar I                          | 4.0 | Lab+Lecture            | GKU 9001, Lab Lab-01
+03 | KU1011  | Pengantar Rekayasa dan Desain           | 2.0 | Lecture                | GKU 9002
+04 | KU1102  | Berpikir Komputasional                  | 2.0 | Lab+Lecture            | GKU 9102, Gedung 201
+05 | IF2110  | Algoritma dan Struktur Data             | 4.0 | Lab+Lecture            | Labtek 7601, Labtek Lab-1
+06 | IF2120  | Matematika Diskrit                      | 3.0 | Lecture                | Labtek 7601, Labtek 7602
+07 | IF2130  | Organisasi dan Arsitektur Komputer      | 3.0 | Lab+Lecture            | Labtek 7601, Labtek Lab-El
+08 | IF3110  | Pengembangan Berbasis Platform          | 3.0 | Lab+Lecture            | Labtek 7602, Labtek Lab-1
+09 | IF3150  | Manajemen Proyek Perangkat Lunak        | 3.0 | Lecture+Responsi       | Labtek 7601
+10 | IF3170  | Inteligensi Buatan                      | 3.0 | Lecture                | Labtek 7601
+11 | SI2101  | Analisis dan Perancangan Sistem Informasi | 3.0 | Lecture                | Labtek 7602
+12 | SI2102  | Manajemen Basis Data                    | 4.0 | Lab+Lecture            | Gedung 201, Labtek 7603
+13 | SI2103  | Rekayasa Proses Bisnis                  | 3.0 | Lecture                | Labtek 7603
+14 | SI3101  | Arsitektur Enterprise                   | 3.0 | Lecture                | Labtek 7603
+15 | SI3102  | Manajemen Layanan TI                    | 3.0 | Lecture+Responsi       | Labtek 7602
+16 | SI3103  | Tata Kelola dan Audit TI                | 3.0 | Lecture                | Labtek 7601, Labtek 7602
+17 | EL2101  | Rangkaian Elektrik                      | 3.0 | Lecture                | Labtek 8201
+18 | EL2102  | Medan Elektromagnetik                   | 3.0 | Lecture                | Labtek 8201
+19 | EL2103  | Elektronika I                           | 4.0 | Lab+Lecture            | Labtek 8201, Labtek Lab-El
+20 | EL2104  | Sinyal dan Sistem                       | 3.0 | Lecture                | Labtek 8201
+21 | EL3101  | Sistem Tertanam dan Mikroprosesor       | 4.0 | Lab+Lecture            | Labtek 8202, Labtek Lab-El
+22 | EL3102  | Sistem Telekomunikasi                   | 3.0 | Lecture                | Labtek 8202
+23 | TI2101  | Penelitian Operasional I                | 3.0 | Lecture+Responsi       | Labtek 3101
+24 | TI2102  | Pengendalian dan Penjaminan Mutu        | 3.0 | Lecture                | Labtek 3101
+25 | TI2103  | Ergonomi Industri                       | 4.0 | Lab+Lecture            | Lab Lab-02, Labtek 3101
+26 | TI3101  | Perancangan Sistem Kerja                | 3.0 | Lab+Lecture            | Lab Lab-02, Labtek 3102
+27 | TI3102  | Manajemen Rantai Pasok                  | 3.0 | Lecture                | Labtek 3102
+28 | TI3103  | Ekonomi Teknik                          | 3.0 | Lecture                | Labtek 3101, Labtek 3102
+------------------------------------------------------------------------------------------------------------------------
+
+--- AKHIR DOKUMEN MEMORANDUM RESMI ---

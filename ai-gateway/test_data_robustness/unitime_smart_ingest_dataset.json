@@ -1,0 +1,3978 @@
+{
+  "ingestControl": {
+    "mode": "incremental",
+    "actionOnDuplicate": "upsert",
+    "sourceDocumentName": "unitime_smart_ingest_dataset.json",
+    "validationStrictness": "strict",
+    "extractedAt": "2024-08-15T08:00:00Z"
+  },
+  "academicSession": {
+    "year": "2024-2025",
+    "term": "Ganjil",
+    "campus": "Kampus Ganesha"
+  },
+  "department": {
+    "code": "STEI",
+    "name": "Sekolah Teknik Elektro dan Informatika"
+  },
+  "subjectArea": {
+    "abbreviation": "STEI",
+    "title": "Teknologi Elektro dan Informatika"
+  },
+  "courses": [
+    {
+      "courseNumber": "MA1101",
+      "title": "Kalkulus I",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 4.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Tutorial",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196802141993031002",
+                      "name": "Dr. Warsoma Djohan, M.Si.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "warsoma@math.itb.ac.id"
+                    },
+                    {
+                      "id": "196412151989031003",
+                      "name": "Prof. Dr. Hendra Gunawan",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "hgunawan@math.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "MW",
+                      "startTime": "07:00",
+                      "endTime": "08:15",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9001",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196412151989031003",
+                      "name": "Prof. Dr. Hendra Gunawan",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "hgunawan@math.itb.ac.id"
+                    },
+                    {
+                      "id": "196802141993031002",
+                      "name": "Dr. Warsoma Djohan, M.Si.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "warsoma@math.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "TTh",
+                      "startTime": "07:00",
+                      "endTime": "08:15",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9001",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Tutorial",
+              "minPerWeek": 50,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "T01",
+                  "parentClassSection": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196802141993031002",
+                      "name": "Dr. Warsoma Djohan, M.Si.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "warsoma@math.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "07:00",
+                      "endTime": "07:50",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "T02",
+                  "parentClassSection": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196412151989031003",
+                      "name": "Prof. Dr. Hendra Gunawan",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "hgunawan@math.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "08:00",
+                      "endTime": "08:50",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "FI1101",
+      "title": "Fisika Dasar I",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 4.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196109251987031002",
+                      "name": "Dr. Eng. Alamta Singarimbun, M.Si.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "alamta@fi.itb.ac.id"
+                    },
+                    {
+                      "id": "197412111999031001",
+                      "name": "Dr. rer. nat. Sparisoma Viridi, S.Si., M.Si.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "dudung@fi.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "MW",
+                      "startTime": "08:30",
+                      "endTime": "09:45",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9001",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "197412111999031001",
+                      "name": "Dr. rer. nat. Sparisoma Viridi, S.Si., M.Si.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "dudung@fi.itb.ac.id"
+                    },
+                    {
+                      "id": "196109251987031002",
+                      "name": "Dr. Eng. Alamta Singarimbun, M.Si.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "alamta@fi.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "TTh",
+                      "startTime": "08:30",
+                      "endTime": "09:45",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9001",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 150,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 25,
+                  "instructors": [
+                    {
+                      "id": "196109251987031002",
+                      "name": "Dr. Eng. Alamta Singarimbun, M.Si.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "alamta@fi.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Lab Terpadu Jatinangor",
+                      "roomNumber": "Lab-01",
+                      "feature": "Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 25,
+                  "instructors": [
+                    {
+                      "id": "197412111999031001",
+                      "name": "Dr. rer. nat. Sparisoma Viridi, S.Si., M.Si.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "dudung@fi.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "13:30",
+                      "endTime": "16:00",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Lab Terpadu Jatinangor",
+                      "roomNumber": "Lab-01",
+                      "feature": "Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "KU1011",
+      "title": "Pengantar Rekayasa dan Desain",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 2.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 100,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196205261987031002",
+                      "name": "Prof. Dr. Ir. Bambang Riyanto Trilaksono",
+                      "isLead": true,
+                      "sharePercentage": 34,
+                      "email": "bambang@lskk.ee.itb.ac.id"
+                    },
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 33,
+                      "email": "ayu@informatika.org"
+                    },
+                    {
+                      "id": "196509151992031003",
+                      "name": "Dr. Ir. Sukoyo, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 33,
+                      "email": "sukoyo@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "10:00",
+                      "endTime": "11:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9002",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196202221986011001",
+                      "name": "Prof. Dr. Ir. Kadarsah Suryadi, DEA",
+                      "isLead": true,
+                      "sharePercentage": 34,
+                      "email": "kadarsah@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "197808292008122001",
+                      "name": "Dr. Masayu Leylia Khodra, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 33,
+                      "email": "masayu@informatika.org"
+                    },
+                    {
+                      "id": "197105151996011001",
+                      "name": "Dr. Tutun Juhana, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 33,
+                      "email": "tutun@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9002",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "KU1102",
+      "title": "Berpikir Komputasional",
+      "projectedDemand": 80,
+      "controlling": true,
+      "credit": {
+        "units": 2.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 50,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 40,
+                  "instructors": [
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "ayu@informatika.org"
+                    },
+                    {
+                      "id": "197405081999031002",
+                      "name": "Dr. techn. Saiful Akbar, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "saiful@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "10:00",
+                      "endTime": "10:50",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9102",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 40,
+                  "instructors": [
+                    {
+                      "id": "197405081999031002",
+                      "name": "Dr. techn. Saiful Akbar, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "saiful@informatika.org"
+                    },
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "ayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "10:00",
+                      "endTime": "10:50",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "GKU Barat (GK-1)",
+                      "roomNumber": "9102",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 100,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "ayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Gedung KOICA",
+                      "roomNumber": "201",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "197405081999031002",
+                      "name": "Dr. techn. Saiful Akbar, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "saiful@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Gedung KOICA",
+                      "roomNumber": "201",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "IF2110",
+      "title": "Algoritma dan Struktur Data",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 4.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "ayu@informatika.org"
+                    },
+                    {
+                      "id": "DOSEN_DWI_HENDRAWAN",
+                      "name": "Dwi Hendrawan, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "dwi.hendrawan@staff.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_DWI_HENDRAWAN",
+                      "name": "Dwi Hendrawan, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "dwi.hendrawan@staff.itb.ac.id"
+                    },
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "ayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 150,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_DWI_HENDRAWAN",
+                      "name": "Dwi Hendrawan, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "dwi.hendrawan@staff.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "Lab-1",
+                      "feature": "GPU Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "ayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "Lab-1",
+                      "feature": "GPU Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "IF2120",
+      "title": "Matematika Diskrit",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196608141992031002",
+                      "name": "Prof. Dr. Ir. Rinaldi Munir, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "rinaldi@informatika.org"
+                    },
+                    {
+                      "id": "197808292008122001",
+                      "name": "Dr. Masayu Leylia Khodra, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "masayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197808292008122001",
+                      "name": "Dr. Masayu Leylia Khodra, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "masayu@informatika.org"
+                    },
+                    {
+                      "id": "196608141992031002",
+                      "name": "Prof. Dr. Ir. Rinaldi Munir, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "rinaldi@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "IF2130",
+      "title": "Organisasi dan Arsitektur Komputer",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 100,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "195804101984031002",
+                      "name": "Dr. Ir. Judhi Santoso, M.Sc.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "judhi@informatika.org"
+                    },
+                    {
+                      "id": "197210151998021001",
+                      "name": "Achmad Imam Kistijantoro, S.T., M.Sc., Ph.D.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "imam@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "10:00",
+                      "endTime": "11:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197210151998021001",
+                      "name": "Achmad Imam Kistijantoro, S.T., M.Sc., Ph.D.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "imam@informatika.org"
+                    },
+                    {
+                      "id": "195804101984031002",
+                      "name": "Dr. Ir. Judhi Santoso, M.Sc.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "judhi@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "10:00",
+                      "endTime": "11:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 100,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 28,
+                  "instructors": [
+                    {
+                      "id": "195804101984031002",
+                      "name": "Dr. Ir. Judhi Santoso, M.Sc.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "judhi@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "Lab-El",
+                      "feature": "Hardware Stations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 28,
+                  "instructors": [
+                    {
+                      "id": "197210151998021001",
+                      "name": "Achmad Imam Kistijantoro, S.T., M.Sc., Ph.D.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "imam@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "13:30",
+                      "endTime": "15:10",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "Lab-El",
+                      "feature": "Hardware Stations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "IF3110",
+      "title": "Pengembangan Berbasis Platform",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 100,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197210151998021001",
+                      "name": "Achmad Imam Kistijantoro, S.T., M.Sc., Ph.D.",
+                      "isLead": true,
+                      "sharePercentage": 34,
+                      "email": "imam@informatika.org"
+                    },
+                    {
+                      "id": "DOSEN_DWI_HENDRAWAN",
+                      "name": "Dwi Hendrawan, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 33,
+                      "email": "dwi.hendrawan@staff.itb.ac.id"
+                    },
+                    {
+                      "id": "199003152019031008",
+                      "name": "Rizky Ramadhan, S.Kom., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 33
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "199003152019031008",
+                      "name": "Rizky Ramadhan, S.Kom., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50
+                    },
+                    {
+                      "id": "197210151998021001",
+                      "name": "Achmad Imam Kistijantoro, S.T., M.Sc., Ph.D.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "imam@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 100,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_DWI_HENDRAWAN",
+                      "name": "Dwi Hendrawan, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "dwi.hendrawan@staff.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "15:00",
+                      "endTime": "16:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "Lab-1",
+                      "feature": "GPU Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "199003152019031008",
+                      "name": "Rizky Ramadhan, S.Kom., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "15:00",
+                      "endTime": "16:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "Lab-1",
+                      "feature": "GPU Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "IF3150",
+      "title": "Manajemen Proyek Perangkat Lunak",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Responsi",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 100,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197808292008122001",
+                      "name": "Dr. Masayu Leylia Khodra, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "masayu@informatika.org"
+                    },
+                    {
+                      "id": "199003152019031008",
+                      "name": "Rizky Ramadhan, S.Kom., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "199003152019031008",
+                      "name": "Rizky Ramadhan, S.Kom., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70
+                    },
+                    {
+                      "id": "197808292008122001",
+                      "name": "Dr. Masayu Leylia Khodra, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "masayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Responsi",
+              "minPerWeek": 50,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "R01",
+                  "parentClassSection": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197808292008122001",
+                      "name": "Dr. Masayu Leylia Khodra, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "masayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "14:50",
+                      "endTime": "15:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "R02",
+                  "parentClassSection": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "199003152019031008",
+                      "name": "Rizky Ramadhan, S.Kom., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "14:50",
+                      "endTime": "15:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "IF3170",
+      "title": "Inteligensi Buatan",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "ayu@informatika.org"
+                    },
+                    {
+                      "id": "197808292008122001",
+                      "name": "Dr. Masayu Leylia Khodra, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "masayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197808292008122001",
+                      "name": "Dr. Masayu Leylia Khodra, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "masayu@informatika.org"
+                    },
+                    {
+                      "id": "197505232001122001",
+                      "name": "Dr. Ayu Purwarianti, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "ayu@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "08:00",
+                      "endTime": "10:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "SI2101",
+      "title": "Analisis dan Perancangan Sistem Informasi",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196402171989031002",
+                      "name": "Prof. Dr. Ir. Jaka Sembiring, M.Eng.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "jaka@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "197405081999031002",
+                      "name": "Dr. techn. Saiful Akbar, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "saiful@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197405081999031002",
+                      "name": "Dr. techn. Saiful Akbar, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "saiful@informatika.org"
+                    },
+                    {
+                      "id": "196402171989031002",
+                      "name": "Prof. Dr. Ir. Jaka Sembiring, M.Eng.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "jaka@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "SI2102",
+      "title": "Manajemen Basis Data",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 4.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197405081999031002",
+                      "name": "Dr. techn. Saiful Akbar, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "saiful@informatika.org"
+                    },
+                    {
+                      "id": "DOSEN_SITI_AMINAH",
+                      "name": "Siti Aminah, S.Kom., M.Kom.",
+                      "isLead": false,
+                      "sharePercentage": 30
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7603",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_SITI_AMINAH",
+                      "name": "Siti Aminah, S.Kom., M.Kom.",
+                      "isLead": true,
+                      "sharePercentage": 70
+                    },
+                    {
+                      "id": "197405081999031002",
+                      "name": "Dr. techn. Saiful Akbar, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "saiful@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7603",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 150,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_SITI_AMINAH",
+                      "name": "Siti Aminah, S.Kom., M.Kom.",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Gedung KOICA",
+                      "roomNumber": "201",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "197405081999031002",
+                      "name": "Dr. techn. Saiful Akbar, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "saiful@informatika.org"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "13:30",
+                      "endTime": "16:00",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Gedung KOICA",
+                      "roomNumber": "201",
+                      "feature": "ComputerLab",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "SI2103",
+      "title": "Rekayasa Proses Bisnis",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197107121997022001",
+                      "name": "Dr. Rajesri Govindaraju, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "rajesri@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "198302142010122003",
+                      "name": "Hira Laksmiwati, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "hira@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7603",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "198302142010122003",
+                      "name": "Hira Laksmiwati, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "hira@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "197107121997022001",
+                      "name": "Dr. Rajesri Govindaraju, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "rajesri@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7603",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "SI3101",
+      "title": "Arsitektur Enterprise",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196711281993031001",
+                      "name": "Dr. Ir. Arry Akhmad Arman, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "arry@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "198807202015041003",
+                      "name": "Fajar Prasetyo, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7603",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "198807202015041003",
+                      "name": "Fajar Prasetyo, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70
+                    },
+                    {
+                      "id": "196711281993031001",
+                      "name": "Dr. Ir. Arry Akhmad Arman, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "arry@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7603",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "SI3102",
+      "title": "Manajemen Layanan TI",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Responsi",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 100,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "198302142010122003",
+                      "name": "Hira Laksmiwati, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "hira@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "196402171989031002",
+                      "name": "Prof. Dr. Ir. Jaka Sembiring, M.Eng.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "jaka@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196402171989031002",
+                      "name": "Prof. Dr. Ir. Jaka Sembiring, M.Eng.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "jaka@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "198302142010122003",
+                      "name": "Hira Laksmiwati, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "hira@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Responsi",
+              "minPerWeek": 50,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "R01",
+                  "parentClassSection": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "198302142010122003",
+                      "name": "Hira Laksmiwati, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "hira@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "14:50",
+                      "endTime": "15:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "R02",
+                  "parentClassSection": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196402171989031002",
+                      "name": "Prof. Dr. Ir. Jaka Sembiring, M.Eng.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "jaka@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "14:50",
+                      "endTime": "15:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "SI3103",
+      "title": "Tata Kelola dan Audit TI",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196711281993031001",
+                      "name": "Dr. Ir. Arry Akhmad Arman, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "arry@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "198807202015041003",
+                      "name": "Fajar Prasetyo, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7601",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "198807202015041003",
+                      "name": "Fajar Prasetyo, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50
+                    },
+                    {
+                      "id": "196711281993031001",
+                      "name": "Dr. Ir. Arry Akhmad Arman, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "arry@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "08:00",
+                      "endTime": "10:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek V Benny Subianto",
+                      "roomNumber": "7602",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "EL2101",
+      "title": "Rangkaian Elektrik",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196205261987031002",
+                      "name": "Prof. Dr. Ir. Bambang Riyanto Trilaksono",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "bambang@lskk.ee.itb.ac.id"
+                    },
+                    {
+                      "id": "DOSEN_HENDRA_GUNAWAN",
+                      "name": "Hendra Gunawan, S.T., M.Eng.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "hendra.gunawan@el.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8201",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_HENDRA_GUNAWAN",
+                      "name": "Hendra Gunawan, S.T., M.Eng.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "hendra.gunawan@el.itb.ac.id"
+                    },
+                    {
+                      "id": "196205261987031002",
+                      "name": "Prof. Dr. Ir. Bambang Riyanto Trilaksono",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "bambang@lskk.ee.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8201",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "EL2102",
+      "title": "Medan Elektromagnetik",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197304221998022001",
+                      "name": "Dr. Effrina Yanti Hamid, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "effrina@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "197105151996011001",
+                      "name": "Dr. Tutun Juhana, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "tutun@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8201",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197105151996011001",
+                      "name": "Dr. Tutun Juhana, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "tutun@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "197304221998022001",
+                      "name": "Dr. Effrina Yanti Hamid, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "effrina@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8201",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "EL2103",
+      "title": "Elektronika I",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 4.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196603121991032001",
+                      "name": "Dr. Ir. Aciek Ida Wuryandari, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "aciek@lskk.ee.itb.ac.id"
+                    },
+                    {
+                      "id": "DOSEN_HENDRA_GUNAWAN",
+                      "name": "Hendra Gunawan, S.T., M.Eng.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "hendra.gunawan@el.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8201",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_HENDRA_GUNAWAN",
+                      "name": "Hendra Gunawan, S.T., M.Eng.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "hendra.gunawan@el.itb.ac.id"
+                    },
+                    {
+                      "id": "196603121991032001",
+                      "name": "Dr. Ir. Aciek Ida Wuryandari, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "aciek@lskk.ee.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8201",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 150,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 28,
+                  "instructors": [
+                    {
+                      "id": "196603121991032001",
+                      "name": "Dr. Ir. Aciek Ida Wuryandari, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "aciek@lskk.ee.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "Lab-El",
+                      "feature": "Hardware Stations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 28,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_HENDRA_GUNAWAN",
+                      "name": "Hendra Gunawan, S.T., M.Eng.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "hendra.gunawan@el.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "13:30",
+                      "endTime": "16:00",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "Lab-El",
+                      "feature": "Hardware Stations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "EL2104",
+      "title": "Sinyal dan Sistem",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197411082000031001",
+                      "name": "Dr. Waskita Adijarto, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "waskita@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "197304221998022001",
+                      "name": "Dr. Effrina Yanti Hamid, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "effrina@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8201",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197304221998022001",
+                      "name": "Dr. Effrina Yanti Hamid, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "effrina@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "197411082000031001",
+                      "name": "Dr. Waskita Adijarto, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "waskita@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "08:00",
+                      "endTime": "10:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8201",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "EL3101",
+      "title": "Sistem Tertanam dan Mikroprosesor",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 4.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197411082000031001",
+                      "name": "Dr. Waskita Adijarto, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "waskita@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "196603121991032001",
+                      "name": "Dr. Ir. Aciek Ida Wuryandari, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "aciek@lskk.ee.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8202",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "196603121991032001",
+                      "name": "Dr. Ir. Aciek Ida Wuryandari, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "aciek@lskk.ee.itb.ac.id"
+                    },
+                    {
+                      "id": "197411082000031001",
+                      "name": "Dr. Waskita Adijarto, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "waskita@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8202",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 150,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 28,
+                  "instructors": [
+                    {
+                      "id": "197411082000031001",
+                      "name": "Dr. Waskita Adijarto, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "waskita@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "Lab-El",
+                      "feature": "Hardware Stations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 28,
+                  "instructors": [
+                    {
+                      "id": "196603121991032001",
+                      "name": "Dr. Ir. Aciek Ida Wuryandari, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "aciek@lskk.ee.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "15:30",
+                      "endTime": "18:00",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "Lab-El",
+                      "feature": "Hardware Stations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "EL3102",
+      "title": "Sistem Telekomunikasi",
+      "projectedDemand": 90,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "197105151996011001",
+                      "name": "Dr. Tutun Juhana, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "tutun@stei.itb.ac.id"
+                    },
+                    {
+                      "id": "198909182018012002",
+                      "name": "Yulia Setiawati, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8202",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 45,
+                  "instructors": [
+                    {
+                      "id": "198909182018012002",
+                      "name": "Yulia Setiawati, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50
+                    },
+                    {
+                      "id": "197105151996011001",
+                      "name": "Dr. Tutun Juhana, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "tutun@stei.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek VIII Achmad Bakrie",
+                      "roomNumber": "8202",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "TI2101",
+      "title": "Penelitian Operasional I",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Responsi",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 100,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196202221986011001",
+                      "name": "Prof. Dr. Ir. Kadarsah Suryadi, DEA",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "kadarsah@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "196509151992031003",
+                      "name": "Dr. Ir. Sukoyo, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "sukoyo@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "07:00",
+                      "endTime": "08:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196509151992031003",
+                      "name": "Dr. Ir. Sukoyo, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 70,
+                      "email": "sukoyo@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "196202221986011001",
+                      "name": "Prof. Dr. Ir. Kadarsah Suryadi, DEA",
+                      "isLead": false,
+                      "sharePercentage": 30,
+                      "email": "kadarsah@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "07:00",
+                      "endTime": "08:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Responsi",
+              "minPerWeek": 50,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "R01",
+                  "parentClassSection": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196202221986011001",
+                      "name": "Prof. Dr. Ir. Kadarsah Suryadi, DEA",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "kadarsah@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "08:50",
+                      "endTime": "09:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "R02",
+                  "parentClassSection": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196509151992031003",
+                      "name": "Dr. Ir. Sukoyo, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "sukoyo@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "08:50",
+                      "endTime": "09:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "TI2102",
+      "title": "Pengendalian dan Penjaminan Mutu",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "195707131983031003",
+                      "name": "Prof. Ir. Bermawi Priyatna Iskandar, M.Sc., Ph.D.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "bermawi@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "196803271994031002",
+                      "name": "Dr. Ir. Anas Ma'ruf, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "anas@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196803271994031002",
+                      "name": "Dr. Ir. Anas Ma'ruf, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "anas@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "195707131983031003",
+                      "name": "Prof. Ir. Bermawi Priyatna Iskandar, M.Sc., Ph.D.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "bermawi@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "07:00",
+                      "endTime": "09:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "TI2103",
+      "title": "Ergonomi Industri",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 4.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "195908021986031001",
+                      "name": "Prof. Dr. Ir. Iwan Inrawan Wiratmadja",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "iwan@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "DOSEN_BAGUS_ARIF",
+                      "name": "Bagus Arif Wibowo, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_BAGUS_ARIF",
+                      "name": "Bagus Arif Wibowo, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50
+                    },
+                    {
+                      "id": "195908021986031001",
+                      "name": "Prof. Dr. Ir. Iwan Inrawan Wiratmadja",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "iwan@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 150,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_BAGUS_ARIF",
+                      "name": "Bagus Arif Wibowo, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Lab Terpadu Jatinangor",
+                      "roomNumber": "Lab-02",
+                      "feature": "Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "195908021986031001",
+                      "name": "Prof. Dr. Ir. Iwan Inrawan Wiratmadja",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "iwan@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "13:30",
+                      "endTime": "16:00",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Lab Terpadu Jatinangor",
+                      "roomNumber": "Lab-02",
+                      "feature": "Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "TI3101",
+      "title": "Perancangan Sistem Kerja",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah + Praktikum",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 100,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "195908021986031001",
+                      "name": "Prof. Dr. Ir. Iwan Inrawan Wiratmadja",
+                      "isLead": true,
+                      "sharePercentage": 34,
+                      "email": "iwan@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "196803271994031002",
+                      "name": "Dr. Ir. Anas Ma'ruf, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 33,
+                      "email": "anas@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "DOSEN_BAGUS_ARIF",
+                      "name": "Bagus Arif Wibowo, S.T., M.T.",
+                      "isLead": false,
+                      "sharePercentage": 33
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "T",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3102",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196803271994031002",
+                      "name": "Dr. Ir. Anas Ma'ruf, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "anas@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "195908021986031001",
+                      "name": "Prof. Dr. Ir. Iwan Inrawan Wiratmadja",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "iwan@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "13:00",
+                      "endTime": "14:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3102",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Lab",
+              "minPerWeek": 100,
+              "parentSubpartType": "Lecture",
+              "classes": [
+                {
+                  "sectionName": "L01",
+                  "parentClassSection": "K01",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "DOSEN_BAGUS_ARIF",
+                      "name": "Bagus Arif Wibowo, S.T., M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "15:00",
+                      "endTime": "16:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Lab Terpadu Jatinangor",
+                      "roomNumber": "Lab-02",
+                      "feature": "Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "L02",
+                  "parentClassSection": "K02",
+                  "capacity": 30,
+                  "instructors": [
+                    {
+                      "id": "196803271994031002",
+                      "name": "Dr. Ir. Anas Ma'ruf, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 100,
+                      "email": "anas@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "08:00",
+                      "endTime": "09:40",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Lab Terpadu Jatinangor",
+                      "roomNumber": "Lab-02",
+                      "feature": "Workstations",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "TI3102",
+      "title": "Manajemen Rantai Pasok",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196509151992031003",
+                      "name": "Dr. Ir. Sukoyo, M.T.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "sukoyo@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "196202221986011001",
+                      "name": "Prof. Dr. Ir. Kadarsah Suryadi, DEA",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "kadarsah@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "W",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3102",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196202221986011001",
+                      "name": "Prof. Dr. Ir. Kadarsah Suryadi, DEA",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "kadarsah@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "196509151992031003",
+                      "name": "Dr. Ir. Sukoyo, M.T.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "sukoyo@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "Th",
+                      "startTime": "10:00",
+                      "endTime": "12:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3102",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "courseNumber": "TI3103",
+      "title": "Ekonomi Teknik",
+      "projectedDemand": 100,
+      "controlling": true,
+      "credit": {
+        "units": 3.0,
+        "creditType": "collegiate",
+        "creditUnitType": "sks",
+        "format": "fixedUnit"
+      },
+      "configurations": [
+        {
+          "name": "Kuliah",
+          "durationType": "MIN_PER_WEEK",
+          "instructionalMethod": "Standard",
+          "subparts": [
+            {
+              "type": "Lecture",
+              "minPerWeek": 150,
+              "classes": [
+                {
+                  "sectionName": "K01",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "196005121986012001",
+                      "name": "Dr. Ir. Lucia Diawati",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "lucia@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "195707131983031003",
+                      "name": "Prof. Ir. Bermawi Priyatna Iskandar, M.Sc., Ph.D.",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "bermawi@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "M",
+                      "startTime": "13:00",
+                      "endTime": "15:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3102",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                },
+                {
+                  "sectionName": "K02",
+                  "capacity": 50,
+                  "instructors": [
+                    {
+                      "id": "195707131983031003",
+                      "name": "Prof. Ir. Bermawi Priyatna Iskandar, M.Sc., Ph.D.",
+                      "isLead": true,
+                      "sharePercentage": 50,
+                      "email": "bermawi@ti.itb.ac.id"
+                    },
+                    {
+                      "id": "196005121986012001",
+                      "name": "Dr. Ir. Lucia Diawati",
+                      "isLead": false,
+                      "sharePercentage": 50,
+                      "email": "lucia@ti.itb.ac.id"
+                    }
+                  ],
+                  "timePreferences": [
+                    {
+                      "days": "F",
+                      "startTime": "08:00",
+                      "endTime": "10:30",
+                      "level": "REQUIRED"
+                    }
+                  ],
+                  "roomPreferences": [
+                    {
+                      "building": "Labtek III Matthias Aroef",
+                      "roomNumber": "3101",
+                      "level": "REQUIRED"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "distributionConstraints": [
+    {
+      "type": "DIFF_TIME",
+      "level": "REQUIRED",
+      "structure": "AllClasses",
+      "classes": [
+        {
+          "courseNumber": "IF2110",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "IF2120",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        }
+      ],
+      "note": "Mata kuliah wajib IF Semester 3 K01 (Algoritma dan Matematika Diskrit) tidak boleh bentrok waktu."
+    },
+    {
+      "type": "DIFF_TIME",
+      "level": "REQUIRED",
+      "structure": "AllClasses",
+      "classes": [
+        {
+          "courseNumber": "SI2101",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "SI2102",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        }
+      ],
+      "note": "Mata kuliah wajib SI Semester 3 K01 (APSI dan Manajemen Basis Data) tidak boleh bentrok waktu."
+    },
+    {
+      "type": "DIFF_TIME",
+      "level": "REQUIRED",
+      "structure": "AllClasses",
+      "classes": [
+        {
+          "courseNumber": "EL2101",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "EL2102",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        }
+      ],
+      "note": "Mata kuliah wajib EL Semester 3 K01 (Rangkaian Elektrik dan Medan Elektromagnetik) tidak boleh bentrok waktu."
+    },
+    {
+      "type": "DIFF_TIME",
+      "level": "REQUIRED",
+      "structure": "AllClasses",
+      "classes": [
+        {
+          "courseNumber": "TI2101",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "TI2102",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        }
+      ],
+      "note": "Mata kuliah wajib TI Semester 3 K01 (Penelitian Operasional I dan Pengendalian Mutu) tidak boleh bentrok waktu."
+    },
+    {
+      "type": "SAME_ROOM",
+      "level": "REQUIRED",
+      "structure": "AllClasses",
+      "classes": [
+        {
+          "courseNumber": "IF2130",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        },
+        {
+          "courseNumber": "EL3101",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        }
+      ],
+      "note": "Praktikum Arsitektur Komputer dan Sistem Tertanam wajib menggunakan ruangan Lab Hardware yang sama (Labtek VIII Lab-El)."
+    },
+    {
+      "type": "SAME_ROOM",
+      "level": "REQUIRED",
+      "structure": "AllClasses",
+      "classes": [
+        {
+          "courseNumber": "IF2110",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        },
+        {
+          "courseNumber": "IF3110",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        }
+      ],
+      "note": "Praktikum Algoritma dan Pemrograman Platform wajib menggunakan workstation GPU di Labtek V Lab-1."
+    },
+    {
+      "courseNumber": "IF3150",
+      "type": "BTB",
+      "level": "REQUIRED",
+      "structure": "Progressive",
+      "classes": [
+        {
+          "courseNumber": "IF3150",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "IF3150",
+          "sectionName": "R01",
+          "subpartType": "Responsi"
+        }
+      ],
+      "note": "Kuliah Manajemen Proyek Perangkat Lunak K01 dan Responsi R01 harus dijadwalkan berurutan tanpa jeda (back-to-back)."
+    },
+    {
+      "courseNumber": "SI3102",
+      "type": "BACK_TO_BACK",
+      "level": "REQUIRED",
+      "structure": "Progressive",
+      "classes": [
+        {
+          "courseNumber": "SI3102",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "SI3102",
+          "sectionName": "R01",
+          "subpartType": "Responsi"
+        }
+      ],
+      "note": "Kuliah Manajemen Layanan TI K01 dan Responsi R01 dijadwalkan berurutan tanpa jeda."
+    },
+    {
+      "courseNumber": "TI2101",
+      "type": "BTB",
+      "level": "REQUIRED",
+      "structure": "Progressive",
+      "classes": [
+        {
+          "courseNumber": "TI2101",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "TI2101",
+          "sectionName": "R01",
+          "subpartType": "Responsi"
+        }
+      ],
+      "note": "Kuliah Penelitian Operasional I K01 dan Responsi R01 harus dijadwalkan berurutan pada hari Senin."
+    },
+    {
+      "courseNumber": "IF2110",
+      "type": "PRECEDENCE",
+      "level": "REQUIRED",
+      "structure": "Progressive",
+      "classes": [
+        {
+          "courseNumber": "IF2110",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "IF2110",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        }
+      ],
+      "note": "Kuliah teori IF2110 K01 wajib mendahului sesi praktikum L01 dalam siklus mingguan."
+    },
+    {
+      "courseNumber": "FI1101",
+      "type": "PRECEDENCE",
+      "level": "REQUIRED",
+      "structure": "Progressive",
+      "classes": [
+        {
+          "courseNumber": "FI1101",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "FI1101",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        }
+      ],
+      "note": "Kuliah teori Fisika Dasar I K01 wajib mendahului sesi praktikum lab L01."
+    },
+    {
+      "courseNumber": "EL2103",
+      "type": "PRECEDENCE",
+      "level": "REQUIRED",
+      "structure": "Progressive",
+      "classes": [
+        {
+          "courseNumber": "EL2103",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "EL2103",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        }
+      ],
+      "note": "Kuliah Elektronika I K01 wajib mendahului praktikum lab L01."
+    },
+    {
+      "courseNumber": "TI2103",
+      "type": "PRECEDENCE",
+      "level": "REQUIRED",
+      "structure": "Progressive",
+      "classes": [
+        {
+          "courseNumber": "TI2103",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "TI2103",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        }
+      ],
+      "note": "Kuliah Ergonomi Industri K01 wajib mendahului praktikum L01."
+    },
+    {
+      "courseNumber": "KU1102",
+      "type": "PRECEDENCE",
+      "level": "REQUIRED",
+      "structure": "Progressive",
+      "classes": [
+        {
+          "courseNumber": "KU1102",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "KU1102",
+          "sectionName": "L01",
+          "subpartType": "Lab"
+        }
+      ],
+      "note": "Kuliah teori Berpikir Komputasional K01 mendahului praktikum lab L01."
+    },
+    {
+      "courseNumber": "KU1011",
+      "type": "MEET_WITH",
+      "level": "REQUIRED",
+      "structure": "AllClasses",
+      "classes": [
+        {
+          "courseNumber": "KU1011",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "KU1011",
+          "sectionName": "K02",
+          "subpartType": "Lecture"
+        }
+      ],
+      "note": "Sesi kuliah gabungan Pengantar Rekayasa & Desain K01 dan K02 diadakan bersamaan di Amphitheatre GKU Barat (9002)."
+    },
+    {
+      "courseNumber": "MA1101",
+      "type": "MEET_TOGETHER",
+      "level": "PREFERRED",
+      "structure": "AllClasses",
+      "classes": [
+        {
+          "courseNumber": "MA1101",
+          "sectionName": "K01",
+          "subpartType": "Lecture"
+        },
+        {
+          "courseNumber": "MA1101",
+          "sectionName": "K02",
+          "subpartType": "Lecture"
+        }
+      ],
+      "note": "Kuliah tamu bersama Kalkulus I K01 dan K02."
+    }
+  ]
+}

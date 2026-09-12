@@ -65,3 +65,28 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy-unitime-web:
+    name: Deploy UniTime Web to Tencent VPS
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Update UniTime Web container on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -e
+            echo "📥 Pulling latest UniTime Web image from GHCR..."
+            cd /home/ubuntu/unitime
+            docker compose -f docker-compose.prod.yml pull unitime-web
+            docker compose -f docker-compose.prod.yml up -d unitime-web
+            echo "⏳ Verifying container status..."
+            docker ps --filter name=unitime-web --format "table {{.Names}}\t{{.Status}}"
+            echo "✅ UniTime Web successfully updated!"

@@ -39,6 +39,37 @@ class TableSlicer:
     SUPPORTED_EXCEL_XLRD: Set[str] = {".xls"}
     SUPPORTED_CSV: Set[str] = {".csv", ".tsv", ".txt"}
 
+    ACADEMIC_HEADER_KEYWORDS: Set[str] = {
+        "kode",
+        "mata kuliah",
+        "matakuliah",
+        "mk",
+        "sks",
+        "komponen",
+        "kelas",
+        "kapasitas",
+        "hari",
+        "waktu",
+        "jam",
+        "gedung",
+        "ruang",
+        "dosen",
+        "pengampu",
+        "course",
+        "subject",
+        "time",
+        "room",
+        "instructor",
+        "section",
+        "capacity",
+        "day",
+        "building",
+        "title",
+        "crn",
+        "credits",
+        "type",
+    }
+
     def __init__(
         self,
         batch_size: int = 50,
@@ -153,6 +184,7 @@ class TableSlicer:
                     csv_content=csv_str,
                     source_file=path,
                     metadata={
+                        "sheet_name": sheet_name,
                         "header_row_index": detected_header_idx,
                         "is_empty": True,
                     },
@@ -174,6 +206,7 @@ class TableSlicer:
                 excel_row_end = detected_header_idx + 1 + end
 
                 metadata: Dict[str, Any] = {
+                    "sheet_name": sheet_name,
                     "header_row_index": detected_header_idx,
                     "excel_header_row": detected_header_idx + 1,
                     "excel_data_row_start": excel_row_start,
@@ -347,8 +380,9 @@ class TableSlicer:
         """
         Identify header row and separate data rows.
 
-        Handles common academic spreadsheets with preamble title lines by finding
-        the most populated candidate header row within max_header_scan_rows.
+        Handles common academic spreadsheets with preamble title lines and merged
+        banner titles by detecting uniform/merged banner rows and scoring candidate
+        rows against academic domain keywords and column diversity.
         """
         if not raw_rows:
             return [], [], -1
@@ -361,20 +395,62 @@ class TableSlicer:
                     f"Specified header_row_index {header_idx} out of range (0..{len(raw_rows)-1})"
                 )
         else:
-            # Smart detection: scan first N rows for the row with highest non-empty columns
             scan_limit = min(len(raw_rows), self.max_header_scan_rows)
+            max_cols = max(len(r) for r in raw_rows) if raw_rows else 0
             best_idx = 0
+            best_score = -1.0
             max_non_empty = 0
 
             for idx in range(scan_limit):
-                if idx == len(raw_rows) - 1 and len(raw_rows) > 1 and max_non_empty > 0:
+                if idx == len(raw_rows) - 1 and len(raw_rows) > 1 and best_score > 0:
                     continue
+
                 row = raw_rows[idx]
-                non_empty_count = sum(1 for cell in row if cell is not None and str(cell).strip() != "")
+                non_empty_cells = [
+                    str(cell).strip()
+                    for cell in row
+                    if cell is not None and str(cell).strip() != ""
+                ]
+                non_empty_count = len(non_empty_cells)
                 if non_empty_count > max_non_empty:
-                    if max_non_empty <= 1 or non_empty_count > max_non_empty * 2:
-                        max_non_empty = non_empty_count
+                    max_non_empty = non_empty_count
+
+                if not non_empty_cells:
+                    continue
+
+                unique_vals = set(non_empty_cells)
+
+                # Full-width title banner / uniform row check:
+                # Rows with <= 1 unique value across multiple columns are merged title banners,
+                # NOT table headers.
+                if max_cols > 1 and len(unique_vals) <= 1:
+                    continue
+
+                # Count matches with domain-specific academic header keywords
+                academic_matches = sum(
+                    1
+                    for val in unique_vals
+                    if any(kw in val.lower() for kw in self.ACADEMIC_HEADER_KEYWORDS)
+                )
+
+                # Scoring heuristic:
+                # - Academic keyword matches carry high priority (10.0 points each)
+                # - Number of distinct columns carries base weight (1.0 point each)
+                score = (academic_matches * 10.0) + float(len(unique_vals))
+
+                if score > best_score:
+                    best_score = score
+                    best_idx = idx
+
+            # Fallback if no candidate scored above 0 (e.g. non-academic general tables)
+            if best_score <= 0:
+                best_idx = 0
+                for idx in range(scan_limit):
+                    row = raw_rows[idx]
+                    count = sum(1 for c in row if c is not None and str(c).strip() != "")
+                    if count == max_non_empty and count > 0:
                         best_idx = idx
+                        break
 
             header_idx = best_idx
 

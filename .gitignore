@@ -11,6 +11,7 @@
 /gwt-unitCache
 /WebContent/unitime
 /WebContent/WEB-INF/deploy
+.agents/
 
 # Python artifacts
 __pycache__/

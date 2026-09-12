@@ -1,0 +1,53 @@
+name: Deploy AI Gateway to Tencent VPS
+
+'on':
+  push:
+    branches:
+      - main
+    paths:
+      - 'ai-gateway/**'
+      - 'docker-compose.prod.yml'
+      - 'docker-compose.yml'
+      - 'docker/**'
+      - 'Documentation/ai-integration/**'
+      - '.github/workflows/deploy-vps.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vps-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-ai-gateway:
+    name: Deploy to Tencent VPS
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Deploy to Tencent VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -e
+            echo "🚀 Starting automated deployment on VPS..."
+            cd /home/ubuntu/unitime
+
+            echo "📥 Pulling latest commits from main..."
+            git pull origin main
+
+            echo "🔨 Rebuilding and restarting unitime-ai-gateway..."
+            docker compose -f docker-compose.prod.yml up -d --build unitime-ai-gateway
+
+            echo "⏳ Waiting for service warmup..."
+            sleep 5
+
+            echo "🔍 Verifying AI Gateway health..."
+            docker ps --filter name=unitime-ai-gateway --format "table {{.Names}}\t{{.Status}}"
+            curl -fsS http://localhost:8005/api/health
+
+            echo "✅ AI Gateway successfully updated and healthy!"

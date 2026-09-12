@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE buildingsRooms PUBLIC "-//UniTime//DTD University Course Timetabling/EN" "http://www.unitime.org/interface/BuildingRoom.dtd">
+<!--
+  ITB Multi-Campus Spatial & Facility Topology
+  Campuses: Kampus Ganesha & Kampus Jatinangor
+  Total Buildings: 7 | Total Rooms: 20
+  Coordinate Distribution:
+    - Tier 1 (Room-Level): 8 rooms (40.0%)
+    - Tier 2 (Building-Level Inherited): 7 rooms (35.0%)
+    - Tier 3 (Completely Missing/Null): 5 rooms (25.0%)
+-->
+<buildingsRooms campus="ITB Multi-Campus" term="Ganjil" year="2024">
+
+  <!-- ==================================================================== -->
+  <!-- KAMPUS GANESHA BUILDINGS                                            -->
+  <!-- ==================================================================== -->
+
+  <!-- Building 1: Labtek V Benny Subianto (LTV) -->
+  <building externalId="BLD_GANESHA_LTV" abbreviation="LTV" locationX="107.61030" locationY="-6.89040" name="Labtek V Benny Subianto">
+    <!-- Room 1: 7601 (Tier 1 - Room Coords) -->
+    <room externalId="RM_LTV_7601" locationX="107.61028" locationY="-6.89038" roomNumber="7601" displayName="Labtek V - 7601" roomClassification="classroom" capacity="45" examCapacity="25" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="IF" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="SmartBoard" value="Interactive Digital Whiteboard"/>
+        <roomFeature feature="Projector" value="Dual Laser Projector"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 2: 7602 (Tier 1 - Room Coords) -->
+    <room externalId="RM_LTV_7602" locationX="107.61035" locationY="-6.89042" roomNumber="7602" displayName="Labtek V - 7602" roomClassification="classroom" capacity="45" examCapacity="25" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="IF" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="SmartBoard" value="Interactive Digital Whiteboard"/>
+        <roomFeature feature="Projector" value="Dual Laser Projector"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 3: Lab-1 (Tier 1 - Room Coords) -->
+    <room externalId="RM_LTV_LAB1" locationX="107.61025" locationY="-6.89045" roomNumber="Lab-1" displayName="Labtek V - Lab Komputer AI (Lab-1)" roomClassification="computingLab" capacity="30" examCapacity="30" instructional="True" scheduledRoomType="computingLab">
+      <roomDepartments>
+        <assigned departmentNumber="IF" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="GPU Workstations" value="NVIDIA RTX Workstations"/>
+        <roomFeature feature="Audio System" value="Microphone &amp; Speaker System"/>
+        <roomFeature feature="ComputerLab" value="30 Client PCs"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 4: 7603 (Tier 2 - Inherits Building Coords) -->
+    <room externalId="RM_LTV_7603" roomNumber="7603" displayName="Labtek V - 7603 (Ruang Seminar)" roomClassification="seminar" capacity="20" examCapacity="15" instructional="True" scheduledRoomType="departmental">
+      <roomDepartments>
+        <assigned departmentNumber="IF" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="SmartBoard" value="Interactive Digital Whiteboard"/>
+        <roomFeature feature="Projector" value="Ceiling Mounted Projector"/>
+      </roomFeatures>
+    </room>
+  </building>
+
+  <!-- Building 2: Labtek VIII Achmad Bakrie (LTVIII) -->
+  <building externalId="BLD_GANESHA_LTVIII" abbreviation="LTVIII" locationX="107.60980" locationY="-6.89060" name="Labtek VIII Achmad Bakrie">
+    <!-- Room 5: 8201 (Tier 1 - Room Coords) -->
+    <room externalId="RM_LTVIII_8201" locationX="107.60982" locationY="-6.89058" roomNumber="8201" displayName="Labtek VIII - 8201" roomClassification="classroom" capacity="50" examCapacity="30" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="EL" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Standard High-Lumen Projector"/>
+        <roomFeature feature="Audio System" value="Wireless Lapel Mic &amp; Audio"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 6: Lab-El (Tier 1 - Room Coords) -->
+    <room externalId="RM_LTVIII_LABEL" locationX="107.60975" locationY="-6.89065" roomNumber="Lab-El" displayName="Labtek VIII - Lab Elektronika (Lab-El)" roomClassification="specialLab" capacity="28" examCapacity="28" instructional="True" scheduledRoomType="departmental">
+      <roomDepartments>
+        <assigned departmentNumber="EL" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Hardware Stations" value="Oscilloscopes &amp; FPGA Boards"/>
+        <roomFeature feature="Projector" value="Overhead Projector"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 7: 8202 (Tier 2 - Inherits Building Coords) -->
+    <room externalId="RM_LTVIII_8202" roomNumber="8202" displayName="Labtek VIII - 8202" roomClassification="classroom" capacity="50" examCapacity="30" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="EL" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Standard Laser Projector"/>
+      </roomFeatures>
+    </room>
+  </building>
+
+  <!-- Building 3: Labtek III Matthias Aroef (LTIII) -->
+  <building externalId="BLD_GANESHA_LTIII" abbreviation="LTIII" locationX="107.60950" locationY="-6.88980" name="Labtek III Matthias Aroef">
+    <!-- Room 8: 3101 (Tier 1 - Room Coords) -->
+    <room externalId="RM_LTIII_3101" locationX="107.60952" locationY="-6.88978" roomNumber="3101" displayName="Labtek III - 3101" roomClassification="classroom" capacity="60" examCapacity="35" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="TI" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Standard High-Lumen Projector"/>
+        <roomFeature feature="Audio System" value="Hall Sound Amplifier"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 9: 3102 (Tier 2 - Inherits Building Coords) -->
+    <room externalId="RM_LTIII_3102" roomNumber="3102" displayName="Labtek III - 3102" roomClassification="classroom" capacity="60" examCapacity="35" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="TI" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Standard Laser Projector"/>
+      </roomFeatures>
+    </room>
+  </building>
+
+  <!-- Building 4: Gedung Kuliah Umum Barat (GKUB) -->
+  <building externalId="BLD_GANESHA_GKUB" abbreviation="GKUB" locationX="107.60990" locationY="-6.89180" name="Gedung Kuliah Umum Barat">
+    <!-- Room 10: 9001 (Tier 1 - Room Coords) -->
+    <room externalId="RM_GKUB_9001" locationX="107.60988" locationY="-6.89175" roomNumber="9001" displayName="GKU Barat - 9001 (Auditorium)" roomClassification="auditorium" capacity="150" examCapacity="80" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="TPB" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Dual 8000-Lumen Stage Projectors"/>
+        <roomFeature feature="Audio System" value="Surround Sound Audio System"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 11: 9002 (Tier 1 - Room Coords) -->
+    <room externalId="RM_GKUB_9002" locationX="107.60995" locationY="-6.89182" roomNumber="9002" displayName="GKU Barat - 9002 (Amphitheatre)" roomClassification="auditorium" capacity="200" examCapacity="110" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="TPB" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Dual 10000-Lumen Projectors"/>
+        <roomFeature feature="Audio System" value="Professional Amphitheatre PA System"/>
+      </roomFeatures>
+    </room>
+  </building>
+
+  <!-- ==================================================================== -->
+  <!-- KAMPUS JATINANGOR BUILDINGS                                         -->
+  <!-- ==================================================================== -->
+
+  <!-- Building 5: Gedung Kuliah Umum 1 Jatinangor (GKU1J) -->
+  <building externalId="BLD_JATINANGOR_GKU1J" abbreviation="GKU1J" locationX="107.77280" locationY="-6.93150" name="Gedung Kuliah Umum 1 Jatinangor">
+    <!-- Room 12: 101 (Tier 2 - Inherits Building Coords) -->
+    <room externalId="RM_GKU1J_101" roomNumber="101" displayName="GKU 1 Jatinangor - 101" roomClassification="classroom" capacity="60" examCapacity="35" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="TPB" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Ceiling Laser Projector"/>
+        <roomFeature feature="Audio System" value="Wireless Classroom Audio"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 13: 102 (Tier 2 - Inherits Building Coords) -->
+    <room externalId="RM_GKU1J_102" roomNumber="102" displayName="GKU 1 Jatinangor - 102" roomClassification="classroom" capacity="50" examCapacity="30" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="TPB" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Standard Projector"/>
+      </roomFeatures>
+    </room>
+  </building>
+
+  <!-- Building 6: Gedung KOICA (KOICA) -->
+  <building externalId="BLD_JATINANGOR_KOICA" abbreviation="KOICA" locationX="107.77350" locationY="-6.93220" name="Gedung KOICA">
+    <!-- Room 14: 201 (Tier 2 - Inherits Building Coords) -->
+    <room externalId="RM_KOICA_201" roomNumber="201" displayName="Gedung KOICA - 201 (Lab Komputer SI)" roomClassification="computingLab" capacity="40" examCapacity="25" instructional="True" scheduledRoomType="computingLab">
+      <roomDepartments>
+        <assigned departmentNumber="SI" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="ComputerLab" value="40 Desktop Workstations"/>
+        <roomFeature feature="Projector" value="Laser Display Projector"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 15: 202 (Tier 2 - Inherits Building Coords) -->
+    <room externalId="RM_KOICA_202" roomNumber="202" displayName="Gedung KOICA - 202 (Lab Komputer)" roomClassification="computingLab" capacity="40" examCapacity="25" instructional="True" scheduledRoomType="computingLab">
+      <roomDepartments>
+        <assigned departmentNumber="SI" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="ComputerLab" value="40 Desktop Workstations"/>
+        <roomFeature feature="Projector" value="Laser Display Projector"/>
+      </roomFeatures>
+    </room>
+  </building>
+
+  <!-- Building 7: Lab Terpadu Jatinangor (LABTJ) (Tier 3 - Completely Null Coords) -->
+  <building externalId="BLD_JATINANGOR_LABTJ" abbreviation="LABTJ" name="Lab Terpadu Jatinangor">
+    <!-- Room 16: Lab-01 (Tier 3 - Null Coords) -->
+    <room externalId="RM_LABTJ_LAB01" roomNumber="Lab-01" displayName="Lab Terpadu - Lab Perangkat Keras (Lab-01)" roomClassification="computingLab" capacity="30" examCapacity="30" instructional="True" scheduledRoomType="computingLab">
+      <roomDepartments>
+        <assigned departmentNumber="EL" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Hardware Stations" value="Microcontroller Benches"/>
+        <roomFeature feature="ComputerLab" value="Lab PC Terminals"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 17: Lab-02 (Tier 3 - Null Coords) -->
+    <room externalId="RM_LABTJ_LAB02" roomNumber="Lab-02" displayName="Lab Terpadu - Lab Komputasi Terapan (Lab-02)" roomClassification="computingLab" capacity="32" examCapacity="32" instructional="True" scheduledRoomType="computingLab">
+      <roomDepartments>
+        <assigned departmentNumber="IF" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="ComputerLab" value="General Student PCs"/>
+        <roomFeature feature="Projector" value="Standard Projector"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 18: 301 (Tier 3 - Null Coords) -->
+    <room externalId="RM_LABTJ_301" roomNumber="301" displayName="Lab Terpadu - 301" roomClassification="classroom" capacity="40" examCapacity="25" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="TI" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Standard Projector"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 19: 302 (Tier 3 - Null Coords) -->
+    <room externalId="RM_LABTJ_302" roomNumber="302" displayName="Lab Terpadu - 302" roomClassification="classroom" capacity="40" examCapacity="25" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="TI" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Standard Projector"/>
+      </roomFeatures>
+    </room>
+
+    <!-- Room 20: 303 (Tier 3 - Null Coords) -->
+    <room externalId="RM_LABTJ_303" roomNumber="303" displayName="Lab Terpadu - 303" roomClassification="classroom" capacity="50" examCapacity="30" instructional="True" scheduledRoomType="genClassroom">
+      <roomDepartments>
+        <assigned departmentNumber="SI" percent="100"/>
+      </roomDepartments>
+      <roomFeatures>
+        <roomFeature feature="Projector" value="Standard Projector"/>
+      </roomFeatures>
+    </room>
+  </building>
+
+</buildingsRooms>

@@ -117,6 +117,44 @@ def repair_and_parse_json(raw_text: str) -> Dict[str, Any]:
         ) from exc
 
 
+def _build_vision_user_prompt(
+    base_prompt: str, context: Optional[Dict[str, Any]] = None
+) -> str:
+    """Include document filename and page/chunk metadata into vision prompt."""
+    if not context:
+        return base_prompt
+
+    doc_name = (
+        context.get("sourceDocumentName")
+        or context.get("document_name")
+        or context.get("filename")
+    )
+    page = context.get("page")
+    total_pages = context.get("total_pages")
+    chunk_id = context.get("chunk_id")
+    total_chunks = context.get("total_chunks")
+
+    context_parts: List[str] = []
+    if doc_name:
+        context_parts.append(f"Source Document: {doc_name}")
+
+    if page is not None:
+        if total_pages:
+            context_parts.append(f"Page: {page}/{total_pages}")
+        else:
+            context_parts.append(f"Page: {page}")
+    elif chunk_id is not None:
+        if total_chunks:
+            context_parts.append(f"Chunk/Page: {chunk_id}/{total_chunks}")
+        else:
+            context_parts.append(f"Chunk/Page: {chunk_id}")
+
+    if context_parts:
+        header = " | ".join(context_parts)
+        return f"{header}\n\n{base_prompt}"
+    return base_prompt
+
+
 class BaseExtractor(ABC):
     """Abstract interface for LLM extraction providers."""
 
@@ -459,7 +497,10 @@ class GeminiExtractor(BaseExtractor):
         context: Optional[Dict[str, Any]] = None,
     ) -> ExtractionResult:
         b64_data = base64.b64encode(image_bytes).decode("utf-8")
-        user_prompt = "Extract all courses, schedules, instructors, and preferences from this document image."
+        user_prompt = _build_vision_user_prompt(
+            "Extract all courses, schedules, instructors, and preferences from this document image.",
+            context,
+        )
         body = {
             "system_instruction": {"parts": [{"text": self.system_prompt}]},
             "contents": [
@@ -556,6 +597,10 @@ class OpenAIExtractor(BaseExtractor):
     ) -> ExtractionResult:
         b64_data = base64.b64encode(image_bytes).decode("utf-8")
         data_url = f"data:{mime_type};base64,{b64_data}"
+        user_prompt = _build_vision_user_prompt(
+            "Extract all academic courses and timetables into UniTime JSON format.",
+            context,
+        )
         messages = [
             {"role": "system", "content": self.system_prompt},
             {
@@ -563,7 +608,7 @@ class OpenAIExtractor(BaseExtractor):
                 "content": [
                     {
                         "type": "text",
-                        "text": "Extract all academic courses and timetables into UniTime JSON format.",
+                        "text": user_prompt,
                     },
                     {"type": "image_url", "image_url": {"url": data_url}},
                 ],
@@ -658,6 +703,10 @@ class AnthropicExtractor(BaseExtractor):
         context: Optional[Dict[str, Any]] = None,
     ) -> ExtractionResult:
         b64_data = base64.b64encode(image_bytes).decode("utf-8")
+        user_prompt = _build_vision_user_prompt(
+            "Extract all courses, classes, instructors, and preferences into UniTime JSON format.",
+            context,
+        )
         body = {
             "model": self.model,
             "system": self.system_prompt,
@@ -677,7 +726,7 @@ class AnthropicExtractor(BaseExtractor):
                         },
                         {
                             "type": "text",
-                            "text": "Extract all courses, classes, instructors, and preferences into UniTime JSON format.",
+                            "text": user_prompt,
                         },
                     ],
                 }

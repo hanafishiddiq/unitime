@@ -99,16 +99,17 @@ class DocumentSlicer:
                 if suffix in (".xlsx", ".xlsm", ".xltx", ".xltm", ".xls", ".csv", ".tsv"):
                     table_slicer = TableSlicer(batch_size=self.excel_rows_per_chunk)
                     table_chunks = list(table_slicer.slice(path))
+                    total_table_chunks = len(table_chunks)
                     return [
                         SliceChunk(
-                            chunk_id=tc.chunk_index + 1,
-                            total_chunks=tc.total_chunks,
+                            chunk_id=idx + 1,
+                            total_chunks=total_table_chunks,
                             chunk_type="text",
                             source_filename=path.name,
-                            text_content=tc.markdown,
-                            metadata=tc.metadata,
+                            text_content=f"# Sheet: {tc.sheet_name}\n\n{tc.markdown}",
+                            metadata={**(tc.metadata or {}), "sheet_name": tc.sheet_name},
                         )
-                        for tc in table_chunks
+                        for idx, tc in enumerate(table_chunks)
                     ]
                 if suffix in (".txt", ".md", ".log"):
                     text_slicer = TextSlicer()
@@ -178,7 +179,7 @@ class DocumentSlicer:
                     text = page.get_text("text").strip()
                     if not text:
                         # Fallback to image rendering if page has no extractable text
-                        pix = page.get_pixmap()
+                        pix = page.get_pixmap(dpi=self.pdf_dpi, alpha=False)
                         img_bytes = pix.tobytes("png")
                         chunks.append(
                             SliceChunk(
@@ -233,7 +234,7 @@ class DocumentSlicer:
                 temp_chunks.append(
                     {
                         "text": f"# Sheet: {sheet}\n\n{markdown_table}",
-                        "meta": {"sheet": sheet, "rows": total_rows},
+                        "meta": {"sheet": sheet, "sheet_name": sheet, "rows": total_rows},
                     }
                 )
             else:
@@ -245,6 +246,7 @@ class DocumentSlicer:
                             "text": f"# Sheet: {sheet} (Rows {start_idx + 1}-{min(start_idx + self.excel_rows_per_chunk, total_rows)})\n\n{markdown_table}",
                             "meta": {
                                 "sheet": sheet,
+                                "sheet_name": sheet,
                                 "start_row": start_idx + 1,
                                 "end_row": min(
                                     start_idx + self.excel_rows_per_chunk, total_rows

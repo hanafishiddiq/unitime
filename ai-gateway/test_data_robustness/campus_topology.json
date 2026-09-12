@@ -1,0 +1,796 @@
+{
+  "institution": "Institut Teknologi Bandung (ITB)",
+  "academic_session": {
+    "year": "2024/2025",
+    "term": "Ganjil",
+    "campuses": [
+      "Kampus Ganesha",
+      "Kampus Jatinangor"
+    ]
+  },
+  "topology_summary": {
+    "total_campuses": 2,
+    "total_buildings": 7,
+    "total_rooms": 20,
+    "tier_distribution": {
+      "tier_1": {
+        "count": 8,
+        "percentage": 40.0,
+        "description": "Complete room-level Cartesian/GPS coordinates (X/Lon, Y/Lat)"
+      },
+      "tier_2": {
+        "count": 7,
+        "percentage": 35.0,
+        "description": "Building-level coordinates only (room coords null, inheriting from parent building)"
+      },
+      "tier_3": {
+        "count": 5,
+        "percentage": 25.0,
+        "description": "Completely missing/null coordinates for both building and room (solver fallback)"
+      }
+    },
+    "capacity_distribution": {
+      "seminar_rooms_20": {
+        "capacity_range": "20 seats",
+        "count": 1,
+        "rooms": [
+          {
+            "building": "LTV",
+            "roomNumber": "7603",
+            "capacity": 20
+          }
+        ]
+      },
+      "standard_classrooms_40_60": {
+        "capacity_range": "40-60 seats",
+        "count": 13,
+        "rooms": [
+          {
+            "building": "LTV",
+            "roomNumber": "7601",
+            "capacity": 45
+          },
+          {
+            "building": "LTV",
+            "roomNumber": "7602",
+            "capacity": 45
+          },
+          {
+            "building": "LTVIII",
+            "roomNumber": "8201",
+            "capacity": 50
+          },
+          {
+            "building": "LTVIII",
+            "roomNumber": "8202",
+            "capacity": 50
+          },
+          {
+            "building": "LTIII",
+            "roomNumber": "3101",
+            "capacity": 60
+          },
+          {
+            "building": "LTIII",
+            "roomNumber": "3102",
+            "capacity": 60
+          },
+          {
+            "building": "GKU1J",
+            "roomNumber": "101",
+            "capacity": 60
+          },
+          {
+            "building": "GKU1J",
+            "roomNumber": "102",
+            "capacity": 50
+          },
+          {
+            "building": "KOICA",
+            "roomNumber": "201",
+            "capacity": 40
+          },
+          {
+            "building": "KOICA",
+            "roomNumber": "202",
+            "capacity": 40
+          },
+          {
+            "building": "LABTJ",
+            "roomNumber": "301",
+            "capacity": 40
+          },
+          {
+            "building": "LABTJ",
+            "roomNumber": "302",
+            "capacity": 40
+          },
+          {
+            "building": "LABTJ",
+            "roomNumber": "303",
+            "capacity": 50
+          }
+        ]
+      },
+      "computer_hardware_labs_28_35": {
+        "capacity_range": "28-35 workstations",
+        "count": 4,
+        "rooms": [
+          {
+            "building": "LTV",
+            "roomNumber": "Lab-1",
+            "capacity": 30
+          },
+          {
+            "building": "LTVIII",
+            "roomNumber": "Lab-El",
+            "capacity": 28
+          },
+          {
+            "building": "LABTJ",
+            "roomNumber": "Lab-01",
+            "capacity": 30
+          },
+          {
+            "building": "LABTJ",
+            "roomNumber": "Lab-02",
+            "capacity": 32
+          }
+        ]
+      },
+      "auditoriums_amphitheatres_150_200": {
+        "capacity_range": "150-200 seats",
+        "count": 2,
+        "rooms": [
+          {
+            "building": "GKUB",
+            "roomNumber": "9001",
+            "capacity": 150
+          },
+          {
+            "building": "GKUB",
+            "roomNumber": "9002",
+            "capacity": 200
+          }
+        ]
+      }
+    },
+    "equipment_flags": [
+      "GPU Workstations",
+      "Projector",
+      "Audio System",
+      "SmartBoard",
+      "ComputerLab",
+      "Hardware Stations"
+    ]
+  },
+  "campuses": [
+    {
+      "campus_name": "Kampus Ganesha",
+      "campus_code": "GANESHA",
+      "address": "Jl. Ganesha No. 10, Lebak Siliwangi, Coblong, Kota Bandung, Jawa Barat 40132",
+      "reference_coordinates": {
+        "latitude": -6.8915,
+        "longitude": 107.6107
+      },
+      "buildings": [
+        {
+          "name": "Labtek V Benny Subianto",
+          "abbreviation": "LTV",
+          "external_id": "BLD_GANESHA_LTV",
+          "campus": "Kampus Ganesha",
+          "coordinates": {
+            "longitude": 107.6103,
+            "latitude": -6.8904
+          },
+          "rooms": [
+            {
+              "room_number": "7601",
+              "display_name": "Labtek V - 7601",
+              "external_id": "RM_LTV_7601",
+              "building": "Labtek V Benny Subianto",
+              "building_abbreviation": "LTV",
+              "campus": "Kampus Ganesha",
+              "capacity": 45,
+              "exam_capacity": 25,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 1,
+              "coordinate_tier_description": "Room-level explicit coordinates",
+              "room_coordinates": {
+                "longitude": 107.61028,
+                "latitude": -6.89038
+              },
+              "effective_coordinates": {
+                "longitude": 107.61028,
+                "latitude": -6.89038
+              },
+              "features": [
+                "SmartBoard",
+                "Projector"
+              ],
+              "department": "IF",
+              "department_name": "Teknik Informatika"
+            },
+            {
+              "room_number": "7602",
+              "display_name": "Labtek V - 7602",
+              "external_id": "RM_LTV_7602",
+              "building": "Labtek V Benny Subianto",
+              "building_abbreviation": "LTV",
+              "campus": "Kampus Ganesha",
+              "capacity": 45,
+              "exam_capacity": 25,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 1,
+              "coordinate_tier_description": "Room-level explicit coordinates",
+              "room_coordinates": {
+                "longitude": 107.61035,
+                "latitude": -6.89042
+              },
+              "effective_coordinates": {
+                "longitude": 107.61035,
+                "latitude": -6.89042
+              },
+              "features": [
+                "SmartBoard",
+                "Projector"
+              ],
+              "department": "IF",
+              "department_name": "Teknik Informatika"
+            },
+            {
+              "room_number": "Lab-1",
+              "display_name": "Labtek V - Lab Komputer AI (Lab-1)",
+              "external_id": "RM_LTV_LAB1",
+              "building": "Labtek V Benny Subianto",
+              "building_abbreviation": "LTV",
+              "campus": "Kampus Ganesha",
+              "capacity": 30,
+              "exam_capacity": 30,
+              "room_classification": "computingLab",
+              "scheduled_room_type": "computingLab",
+              "instructional": true,
+              "coordinate_tier": 1,
+              "coordinate_tier_description": "Room-level explicit coordinates",
+              "room_coordinates": {
+                "longitude": 107.61025,
+                "latitude": -6.89045
+              },
+              "effective_coordinates": {
+                "longitude": 107.61025,
+                "latitude": -6.89045
+              },
+              "features": [
+                "GPU Workstations",
+                "Audio System",
+                "ComputerLab"
+              ],
+              "department": "IF",
+              "department_name": "Teknik Informatika"
+            },
+            {
+              "room_number": "7603",
+              "display_name": "Labtek V - 7603 (Ruang Seminar)",
+              "external_id": "RM_LTV_7603",
+              "building": "Labtek V Benny Subianto",
+              "building_abbreviation": "LTV",
+              "campus": "Kampus Ganesha",
+              "capacity": 20,
+              "exam_capacity": 15,
+              "room_classification": "seminar",
+              "scheduled_room_type": "departmental",
+              "instructional": true,
+              "coordinate_tier": 2,
+              "coordinate_tier_description": "Building-level inherited coordinates (room coords null)",
+              "room_coordinates": null,
+              "effective_coordinates": {
+                "longitude": 107.6103,
+                "latitude": -6.8904
+              },
+              "features": [
+                "SmartBoard",
+                "Projector"
+              ],
+              "department": "IF",
+              "department_name": "Teknik Informatika"
+            }
+          ]
+        },
+        {
+          "name": "Labtek VIII Achmad Bakrie",
+          "abbreviation": "LTVIII",
+          "external_id": "BLD_GANESHA_LTVIII",
+          "campus": "Kampus Ganesha",
+          "coordinates": {
+            "longitude": 107.6098,
+            "latitude": -6.8906
+          },
+          "rooms": [
+            {
+              "room_number": "8201",
+              "display_name": "Labtek VIII - 8201",
+              "external_id": "RM_LTVIII_8201",
+              "building": "Labtek VIII Achmad Bakrie",
+              "building_abbreviation": "LTVIII",
+              "campus": "Kampus Ganesha",
+              "capacity": 50,
+              "exam_capacity": 30,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 1,
+              "coordinate_tier_description": "Room-level explicit coordinates",
+              "room_coordinates": {
+                "longitude": 107.60982,
+                "latitude": -6.89058
+              },
+              "effective_coordinates": {
+                "longitude": 107.60982,
+                "latitude": -6.89058
+              },
+              "features": [
+                "Projector",
+                "Audio System"
+              ],
+              "department": "EL",
+              "department_name": "Teknik Elektro"
+            },
+            {
+              "room_number": "Lab-El",
+              "display_name": "Labtek VIII - Lab Elektronika (Lab-El)",
+              "external_id": "RM_LTVIII_LABEL",
+              "building": "Labtek VIII Achmad Bakrie",
+              "building_abbreviation": "LTVIII",
+              "campus": "Kampus Ganesha",
+              "capacity": 28,
+              "exam_capacity": 28,
+              "room_classification": "specialLab",
+              "scheduled_room_type": "departmental",
+              "instructional": true,
+              "coordinate_tier": 1,
+              "coordinate_tier_description": "Room-level explicit coordinates",
+              "room_coordinates": {
+                "longitude": 107.60975,
+                "latitude": -6.89065
+              },
+              "effective_coordinates": {
+                "longitude": 107.60975,
+                "latitude": -6.89065
+              },
+              "features": [
+                "Hardware Stations",
+                "Projector"
+              ],
+              "department": "EL",
+              "department_name": "Teknik Elektro"
+            },
+            {
+              "room_number": "8202",
+              "display_name": "Labtek VIII - 8202",
+              "external_id": "RM_LTVIII_8202",
+              "building": "Labtek VIII Achmad Bakrie",
+              "building_abbreviation": "LTVIII",
+              "campus": "Kampus Ganesha",
+              "capacity": 50,
+              "exam_capacity": 30,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 2,
+              "coordinate_tier_description": "Building-level inherited coordinates (room coords null)",
+              "room_coordinates": null,
+              "effective_coordinates": {
+                "longitude": 107.6098,
+                "latitude": -6.8906
+              },
+              "features": [
+                "Projector"
+              ],
+              "department": "EL",
+              "department_name": "Teknik Elektro"
+            }
+          ]
+        },
+        {
+          "name": "Labtek III Matthias Aroef",
+          "abbreviation": "LTIII",
+          "external_id": "BLD_GANESHA_LTIII",
+          "campus": "Kampus Ganesha",
+          "coordinates": {
+            "longitude": 107.6095,
+            "latitude": -6.8898
+          },
+          "rooms": [
+            {
+              "room_number": "3101",
+              "display_name": "Labtek III - 3101",
+              "external_id": "RM_LTIII_3101",
+              "building": "Labtek III Matthias Aroef",
+              "building_abbreviation": "LTIII",
+              "campus": "Kampus Ganesha",
+              "capacity": 60,
+              "exam_capacity": 35,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 1,
+              "coordinate_tier_description": "Room-level explicit coordinates",
+              "room_coordinates": {
+                "longitude": 107.60952,
+                "latitude": -6.88978
+              },
+              "effective_coordinates": {
+                "longitude": 107.60952,
+                "latitude": -6.88978
+              },
+              "features": [
+                "Projector",
+                "Audio System"
+              ],
+              "department": "TI",
+              "department_name": "Teknik Industri"
+            },
+            {
+              "room_number": "3102",
+              "display_name": "Labtek III - 3102",
+              "external_id": "RM_LTIII_3102",
+              "building": "Labtek III Matthias Aroef",
+              "building_abbreviation": "LTIII",
+              "campus": "Kampus Ganesha",
+              "capacity": 60,
+              "exam_capacity": 35,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 2,
+              "coordinate_tier_description": "Building-level inherited coordinates (room coords null)",
+              "room_coordinates": null,
+              "effective_coordinates": {
+                "longitude": 107.6095,
+                "latitude": -6.8898
+              },
+              "features": [
+                "Projector"
+              ],
+              "department": "TI",
+              "department_name": "Teknik Industri"
+            }
+          ]
+        },
+        {
+          "name": "Gedung Kuliah Umum Barat",
+          "abbreviation": "GKUB",
+          "external_id": "BLD_GANESHA_GKUB",
+          "campus": "Kampus Ganesha",
+          "coordinates": {
+            "longitude": 107.6099,
+            "latitude": -6.8918
+          },
+          "rooms": [
+            {
+              "room_number": "9001",
+              "display_name": "GKU Barat - 9001 (Auditorium)",
+              "external_id": "RM_GKUB_9001",
+              "building": "Gedung Kuliah Umum Barat",
+              "building_abbreviation": "GKUB",
+              "campus": "Kampus Ganesha",
+              "capacity": 150,
+              "exam_capacity": 80,
+              "room_classification": "auditorium",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 1,
+              "coordinate_tier_description": "Room-level explicit coordinates",
+              "room_coordinates": {
+                "longitude": 107.60988,
+                "latitude": -6.89175
+              },
+              "effective_coordinates": {
+                "longitude": 107.60988,
+                "latitude": -6.89175
+              },
+              "features": [
+                "Projector",
+                "Audio System"
+              ],
+              "department": "TPB",
+              "department_name": "Tahap Bersama"
+            },
+            {
+              "room_number": "9002",
+              "display_name": "GKU Barat - 9002 (Amphitheatre)",
+              "external_id": "RM_GKUB_9002",
+              "building": "Gedung Kuliah Umum Barat",
+              "building_abbreviation": "GKUB",
+              "campus": "Kampus Ganesha",
+              "capacity": 200,
+              "exam_capacity": 110,
+              "room_classification": "auditorium",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 1,
+              "coordinate_tier_description": "Room-level explicit coordinates",
+              "room_coordinates": {
+                "longitude": 107.60995,
+                "latitude": -6.89182
+              },
+              "effective_coordinates": {
+                "longitude": 107.60995,
+                "latitude": -6.89182
+              },
+              "features": [
+                "Projector",
+                "Audio System"
+              ],
+              "department": "TPB",
+              "department_name": "Tahap Bersama"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "campus_name": "Kampus Jatinangor",
+      "campus_code": "JATINANGOR",
+      "address": "Jl. Letjen Purn. Dr. (HC) Mashudi No. 1, Jatinangor, Sumedang, Jawa Barat 45363",
+      "reference_coordinates": {
+        "latitude": -6.9312,
+        "longitude": 107.7725
+      },
+      "buildings": [
+        {
+          "name": "Gedung Kuliah Umum 1 Jatinangor",
+          "abbreviation": "GKU1J",
+          "external_id": "BLD_JATINANGOR_GKU1J",
+          "campus": "Kampus Jatinangor",
+          "coordinates": {
+            "longitude": 107.7728,
+            "latitude": -6.9315
+          },
+          "rooms": [
+            {
+              "room_number": "101",
+              "display_name": "GKU 1 Jatinangor - 101",
+              "external_id": "RM_GKU1J_101",
+              "building": "Gedung Kuliah Umum 1 Jatinangor",
+              "building_abbreviation": "GKU1J",
+              "campus": "Kampus Jatinangor",
+              "capacity": 60,
+              "exam_capacity": 35,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 2,
+              "coordinate_tier_description": "Building-level inherited coordinates (room coords null)",
+              "room_coordinates": null,
+              "effective_coordinates": {
+                "longitude": 107.7728,
+                "latitude": -6.9315
+              },
+              "features": [
+                "Projector",
+                "Audio System"
+              ],
+              "department": "TPB",
+              "department_name": "Tahap Bersama"
+            },
+            {
+              "room_number": "102",
+              "display_name": "GKU 1 Jatinangor - 102",
+              "external_id": "RM_GKU1J_102",
+              "building": "Gedung Kuliah Umum 1 Jatinangor",
+              "building_abbreviation": "GKU1J",
+              "campus": "Kampus Jatinangor",
+              "capacity": 50,
+              "exam_capacity": 30,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 2,
+              "coordinate_tier_description": "Building-level inherited coordinates (room coords null)",
+              "room_coordinates": null,
+              "effective_coordinates": {
+                "longitude": 107.7728,
+                "latitude": -6.9315
+              },
+              "features": [
+                "Projector"
+              ],
+              "department": "TPB",
+              "department_name": "Tahap Bersama"
+            }
+          ]
+        },
+        {
+          "name": "Gedung KOICA",
+          "abbreviation": "KOICA",
+          "external_id": "BLD_JATINANGOR_KOICA",
+          "campus": "Kampus Jatinangor",
+          "coordinates": {
+            "longitude": 107.7735,
+            "latitude": -6.9322
+          },
+          "rooms": [
+            {
+              "room_number": "201",
+              "display_name": "Gedung KOICA - 201 (Lab Komputer SI)",
+              "external_id": "RM_KOICA_201",
+              "building": "Gedung KOICA",
+              "building_abbreviation": "KOICA",
+              "campus": "Kampus Jatinangor",
+              "capacity": 40,
+              "exam_capacity": 25,
+              "room_classification": "computingLab",
+              "scheduled_room_type": "computingLab",
+              "instructional": true,
+              "coordinate_tier": 2,
+              "coordinate_tier_description": "Building-level inherited coordinates (room coords null)",
+              "room_coordinates": null,
+              "effective_coordinates": {
+                "longitude": 107.7735,
+                "latitude": -6.9322
+              },
+              "features": [
+                "ComputerLab",
+                "Projector"
+              ],
+              "department": "SI",
+              "department_name": "Sistem Informasi"
+            },
+            {
+              "room_number": "202",
+              "display_name": "Gedung KOICA - 202 (Lab Komputer)",
+              "external_id": "RM_KOICA_202",
+              "building": "Gedung KOICA",
+              "building_abbreviation": "KOICA",
+              "campus": "Kampus Jatinangor",
+              "capacity": 40,
+              "exam_capacity": 25,
+              "room_classification": "computingLab",
+              "scheduled_room_type": "computingLab",
+              "instructional": true,
+              "coordinate_tier": 2,
+              "coordinate_tier_description": "Building-level inherited coordinates (room coords null)",
+              "room_coordinates": null,
+              "effective_coordinates": {
+                "longitude": 107.7735,
+                "latitude": -6.9322
+              },
+              "features": [
+                "ComputerLab",
+                "Projector"
+              ],
+              "department": "SI",
+              "department_name": "Sistem Informasi"
+            }
+          ]
+        },
+        {
+          "name": "Lab Terpadu Jatinangor",
+          "abbreviation": "LABTJ",
+          "external_id": "BLD_JATINANGOR_LABTJ",
+          "campus": "Kampus Jatinangor",
+          "coordinates": null,
+          "rooms": [
+            {
+              "room_number": "Lab-01",
+              "display_name": "Lab Terpadu - Lab Perangkat Keras (Lab-01)",
+              "external_id": "RM_LABTJ_LAB01",
+              "building": "Lab Terpadu Jatinangor",
+              "building_abbreviation": "LABTJ",
+              "campus": "Kampus Jatinangor",
+              "capacity": 30,
+              "exam_capacity": 30,
+              "room_classification": "computingLab",
+              "scheduled_room_type": "computingLab",
+              "instructional": true,
+              "coordinate_tier": 3,
+              "coordinate_tier_description": "Completely missing/null coordinates (building and room null)",
+              "room_coordinates": null,
+              "effective_coordinates": null,
+              "features": [
+                "Hardware Stations",
+                "ComputerLab"
+              ],
+              "department": "EL",
+              "department_name": "Teknik Elektro"
+            },
+            {
+              "room_number": "Lab-02",
+              "display_name": "Lab Terpadu - Lab Komputasi Terapan (Lab-02)",
+              "external_id": "RM_LABTJ_LAB02",
+              "building": "Lab Terpadu Jatinangor",
+              "building_abbreviation": "LABTJ",
+              "campus": "Kampus Jatinangor",
+              "capacity": 32,
+              "exam_capacity": 32,
+              "room_classification": "computingLab",
+              "scheduled_room_type": "computingLab",
+              "instructional": true,
+              "coordinate_tier": 3,
+              "coordinate_tier_description": "Completely missing/null coordinates (building and room null)",
+              "room_coordinates": null,
+              "effective_coordinates": null,
+              "features": [
+                "ComputerLab",
+                "Projector"
+              ],
+              "department": "IF",
+              "department_name": "Teknik Informatika"
+            },
+            {
+              "room_number": "301",
+              "display_name": "Lab Terpadu - 301",
+              "external_id": "RM_LABTJ_301",
+              "building": "Lab Terpadu Jatinangor",
+              "building_abbreviation": "LABTJ",
+              "campus": "Kampus Jatinangor",
+              "capacity": 40,
+              "exam_capacity": 25,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 3,
+              "coordinate_tier_description": "Completely missing/null coordinates (building and room null)",
+              "room_coordinates": null,
+              "effective_coordinates": null,
+              "features": [
+                "Projector"
+              ],
+              "department": "TI",
+              "department_name": "Teknik Industri"
+            },
+            {
+              "room_number": "302",
+              "display_name": "Lab Terpadu - 302",
+              "external_id": "RM_LABTJ_302",
+              "building": "Lab Terpadu Jatinangor",
+              "building_abbreviation": "LABTJ",
+              "campus": "Kampus Jatinangor",
+              "capacity": 40,
+              "exam_capacity": 25,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 3,
+              "coordinate_tier_description": "Completely missing/null coordinates (building and room null)",
+              "room_coordinates": null,
+              "effective_coordinates": null,
+              "features": [
+                "Projector"
+              ],
+              "department": "TI",
+              "department_name": "Teknik Industri"
+            },
+            {
+              "room_number": "303",
+              "display_name": "Lab Terpadu - 303",
+              "external_id": "RM_LABTJ_303",
+              "building": "Lab Terpadu Jatinangor",
+              "building_abbreviation": "LABTJ",
+              "campus": "Kampus Jatinangor",
+              "capacity": 50,
+              "exam_capacity": 30,
+              "room_classification": "classroom",
+              "scheduled_room_type": "genClassroom",
+              "instructional": true,
+              "coordinate_tier": 3,
+              "coordinate_tier_description": "Completely missing/null coordinates (building and room null)",
+              "room_coordinates": null,
+              "effective_coordinates": null,
+              "features": [
+                "Projector"
+              ],
+              "department": "SI",
+              "department_name": "Sistem Informasi"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
