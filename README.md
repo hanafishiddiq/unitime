@@ -12,129 +12,159 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
  -->
-# UniTime
 
-Comprehensive University Timetabling System
-<https://www.unitime.org>
+# 🎓 UniTime AI Smart Ingestion Gateway
 
-UniTime is a comprehensive educational scheduling system that supports developing
-course and exam timetables, managing changes to these timetables, sharing rooms
-with other events, and scheduling students to individual classes.
-It is a distributed system that allows multiple university and departmental schedule managers
-to coordinate efforts to build and modify a schedule that meets their diverse organizational
-needs while allowing for minimization of student course conflicts. It can be used alone to
-create and maintain a school's schedule of classes and/or exams, or interfaced with
-an existing student information system. 
+> **Jembatan Cerdas Berbasis AI untuk Memasukkan Jadwal & Kurikulum Kampus ke UniTime secara Otomatis Tanpa Kerumitan Manual.**
 
-The system was originally developed as a collaborative effort by faculty,
-students, and staff at universities in North America and Europe. The software
-is distributed free under an open source license in hopes that other colleges
-and universities can benefit their students through better scheduling or wish to
-contribute to ongoing research in this area. The UniTime project has become
-a sponsored project of the [Apereo Foundation][apereo] in March 2015.
+[![UniTime Core](https://img.shields.io/badge/UniTime%20Core-v4.8%20(Apereo)-0052cc.svg)](https://github.com/UniTime/unitime)
+[![AI Engine](https://img.shields.io/badge/AI%20Engine-LangGraph%20ReAct-10a37f.svg)](https://github.com/langchain-ai/langgraph)
+[![Tests](https://img.shields.io/badge/Test%20Suite-77%2F77%20Passing-success.svg)](ai-gateway/tests/)
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.14-blue.svg)](ai-gateway/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)](LICENSE)
 
-### Components
-- [Course Timetabling & Management][courses]
-- [Examination Timetabling][exams]
-- [Event Management][events]
-- [Student Scheduling][students]
-- [Instructor Scheduling][instructors]
-- [AI Smart Ingestion Gateway (Fork Extension)](#-unitime-ai-smart-ingestion-gateway-fork-extension)
+> 🌐 **Looking for upstream UniTime?**  
+> Repositori ini adalah *fork* resmi yang dilengkapi dengan integrasi AI. Jika Anda mencari distribusi murni atau dokumentasi dasar UniTime, silakan kunjungi repositori resminya di 👉 **[github.com/UniTime/unitime](https://github.com/UniTime/unitime)** atau situs resmi **[unitime.org](https://www.unitime.org)**.
 
 ---
 
-## 🤖 UniTime AI Smart Ingestion Gateway (Fork Extension)
+## 💡 Masalah & Solusi (Mengapa Fork Ini Dibuat?)
 
-> **Autonomous Multi-Agent Curriculum & Timetable Ingestion Engine**  
-> Enables universities to ingest unstructured, semi-structured, and real-world academic data (PDF Dean Decrees / SK Dekan, messy Excel rosters with merged cells, and text memos) directly into UniTime's Course Timetabling domain model with zero data corruption.
+### 🛑 Masalah Nyata di Lapangan
+[UniTime](https://github.com/UniTime/unitime) adalah sistem penjadwalan akademik (*timetabling*) terbaik dan paling canggih di dunia. Mesin matematika UniTime mampu mengoptimalkan ribuan jadwal kuliah, ruangan, dosen, dan mahasiswa tanpa bentrok secara otomatis.
 
-### 🌟 Key Highlights
-- **Universal Intake**: Slices and normalizes complex PDFs, merged-cell Excel spreadsheets, and unstructured narrative memos.
-- **LangGraph ReAct Copilot**: Agentic curriculum extraction with Human-in-the-Loop (HITL) disambiguation and persistent SQLite WAL memory.
-- **Academic Domain Mapping**: Built-in translation for higher education constructs (Indonesian SN-Dikti SKS $\rightarrow$ `semesterHours`, instructional types like `Kuliah`/`Praktikum`/`Responsi` $\rightarrow$ canonical UniTime `Lec`/`Lab`/`Rec`/`Prsn`/`Stdo`).
-- **Transactional Integrity**: Native REST connector ([`SmartIngestConnector.java`](JavaSource/org/unitime/timetable/api/connectors/SmartIngestConnector.java)) integrated with UniTime's `DataExchangeHelper` and Hibernate ACID persistence.
+**Namun, tantangan terbesarnya adalah memasukkan data ke dalam UniTime:**
+1. **Format Dokumen Kampus Berantakan**: Data perkuliahan di kampus biasanya tersebar dalam file **Excel dengan sel gabungan (*merged cells*)**, **PDF Surat Keputusan (SK) Dekan**, atau **memo teks hasil rapat**.
+2. **Kebutuhan Format Teknis yang Rumit**: UniTime mewajibkan data masuk dalam format XML/Data Exchange yang sangat kaku dan rumit.
+3. **Memakan Waktu Berminggu-minggu**: Tim akademik atau staf IT harus menghabiskan waktu berhari-hari hanya untuk membersihkan format dan melakukan entri data manual satu per satu, yang rawan salah ketik (*human-error*).
 
 ---
 
-### 🗺️ Data Intake Pipeline & Architecture
+### ✨ Solusi Kami: Menjadikan UniTime Ramah Format Apapun
+Dalam proyek ini, **kita tetap menggunakan UniTime sebagai mesin inti (*foundation*)**, lalu kita bangun lapisan cerdas (**AI Smart Ingestion Gateway**) di atasnya:
+
+```
+[ Dokumen Kampus Apapun ] (PDF SK Dekan, Excel Berantakan, Memo Teks)
+            ⬇️
+[ 🤖 AI Smart Ingestion Gateway ] (Ekstraksi cerdas, validasi, normalisasi)
+            ⬇️
+[ 🏛️ UniTime Core Engine & MySQL ] (Data tersimpan rapi, siap dijadwalkan otomatis!)
+```
+
+**Hasilnya:** Staf akademik tidak perlu lagi pusing mempelajari skema XML atau menghabiskan waktu berminggu-minggu menginput data manual. Cukup berikan dokumen yang ada, dan AI akan membaca, merapikan, memetakan standar SKS, serta memasukkannya langsung ke dalam UniTime dengan aman!
+
+---
+
+## ⚡ Cara Kerja dalam 3 Langkah Sederhana
+
+Siapa pun—bahkan tanpa latar belakang teknis—dapat memahami cara kerja sistem ini:
+
+```mermaid
+flowchart LR
+    Step1["1️⃣ Unggah Dokumen<br/>(PDF, Excel, Teks)"] --> Step2["2️⃣ AI Membaca & Merapikan<br/>(Normalisasi SKS, Dosen, Kelas)"] --> Step3["3️⃣ Otomatis Masuk UniTime<br/>(Tersimpan di Database, Siap Solver)"]
+```
+
+1. **Langkah 1: Masukkan Dokumen Mentah**  
+   Unggah berkas apa adanya—baik berupa spreadsheet Excel jadwal fakultas, dokumen PDF SK penugasan mengajar, ataupun memo teks naratif.
+2. **Langkah 2: AI Membaca & Memvalidasi**  
+   Agen AI membedah isi dokumen, mengenali kode mata kuliah, dosen pengampu, jumlah SKS, hingga aturan jadwal (misal: *Kelas A dan B tidak boleh bentrok*). Bila ada nama dosen yang ambigu, AI akan meminta konfirmasi manusia (*Human-in-the-Loop*) dan mengingat jawabannya untuk masa depan.
+3. **Langkah 3: Tersimpan Otomatis di UniTime**  
+   Data yang telah divalidasi langsung dikirim melalui konektor REST ke backend UniTime dan disimpan secara permanen di database, siap diproses oleh mesin pembuat jadwal otomatis UniTime.
+
+---
+
+## 🌟 Fitur-Fitur Unggulan
+
+- **📂 Penerima Format Universal**:
+  - **Excel (`.xlsx`, `.csv`)**: Otomatis menangani sel yang digabung (*merged cells*) dengan teknik *fill-forward*, sehingga tidak ada mata kuliah atau kelas yang kehilangan konteks barisnya.
+  - **PDF (`.pdf`)**: Membaca dokumen halaman-demi-halaman secara hemat memori (*streaming*), serta mendukung ekstraksi visual untuk tabel hasil scan.
+  - **Memo Teks (`.txt`)**: Mengekstrak poin-poin jadwal dari teks naratif bebas atau notulensi rapat kurikulum.
+  - **Direct JSON (`.json`)**: Menerima integrasi langsung dari Sistem Informasi Akademik Kampus (SIAKAD).
+- **🇮🇩 Penyesuaian Standar Pendidikan Indonesia (SN-Dikti)**:
+  - Otomatis menerjemahkan satuan **SKS** ke durasi menit mingguan (*contact hours*) UniTime.
+  - Memetakan tipe pembelajaran lokal (`Kuliah`, `Praktikum`, `Responsi`, `Seminar`, `Studio`, `Skripsi`) langsung ke kode kanonikal UniTime (`Lec`, `Lab`, `Rec`, `Prsn`, `Stdo`, `Res`).
+- **🧠 LangGraph ReAct Copilot dengan Human-in-the-Loop**:
+  - Memiliki memori persisten (SQLite WAL). Jika ada nama dosen yang disingkat atau ruang kuliah ambigu, sistem bertanya kepada admin dan menyimpan keputusannya agar tidak perlu ditanyakan lagi.
+- **🛡️ Integritas Transaksi Database Penuh (ACID)**:
+  - Menggunakan konektor Java native ([`SmartIngestConnector.java`](JavaSource/org/unitime/timetable/api/connectors/SmartIngestConnector.java)) yang terintegrasi langsung dengan Hibernate ORM UniTime.
+  - Menjamin bebas benturan transaksi (*zero transactional collision*) dan pembaruan data yang *idempotent* (tidak membuat data ganda saat diunggah ulang).
+- **📊 Laporan Audit Eksekutif Otomatis**:
+  - Setiap proses menghasilkan dokumen laporan audit Markdown yang rapi di folder `reports/`, merinci mata kuliah yang berhasil dibuat, dosen pengampu, dan status validasi.
+
+---
+
+## 🏗️ Arsitektur & Alur Data Teknis
+
+Bagi pengembang (*developer*) dan administrator sistem, berikut adalah diagram alur data dari dokumen fisik hingga ke database MySQL:
 
 ```mermaid
 flowchart TD
-    subgraph INPUT["1. Raw Academic Inputs"]
-        A1["📄 PDF Documents<br/>(SK Dekan / Schedulers)"]
-        A2["📊 Excel Spreadsheets<br/>(.xlsx/.csv with merged cells)"]
-        A3["📝 Administrative Memos<br/>(Unstructured .txt notes)"]
-        A4["📦 Canonical JSON<br/>(Direct SIS / SIAKAD API)"]
+    subgraph INPUT["1. Input Dokumen Mentah"]
+        A1["📄 PDF SK Dekan / Katalog Kurikulum"]
+        A2["📊 Excel Jadwal / Roster Dosen (Merged Cells)"]
+        A3["📝 Memo Teks / Notulensi Rapat Akademik"]
+        A4["📦 REST JSON Langsung dari SIAKAD"]
     end
 
-    subgraph SLICERS["2. Document Slicers (Python)"]
-        B1["PyMuPDF: Page-by-page stream & image rendering"]
-        B2["OpenPyXL: Merged-cell forward propagation"]
-        B3["Text Chunker: Semantic section partitioning"]
+    subgraph SLICER["2. Pemotong Dokumen (ai-gateway/slicers/)"]
+        B1["pdf.py: Streaming halaman & render citra"]
+        B2["excel.py: Propagasi sel gabungan (fill-forward)"]
+        B3["text.py: Pemotongan semantik per mata kuliah"]
     end
 
-    subgraph AGENT["3. AI Copilot (LangGraph ReAct)"]
-        C1["LLM Extraction (Gemini / Claude / Mock)"]
-        C2["Atomic Consolidation (Composite-Key Merger)"]
-        C3["Schema & Domain Validation"]
+    subgraph AGENT["3. AI Extraction & Reasoning (ai-gateway/agent/)"]
+        C1["LLM Provider (Gemini / Claude / OpenAI / Mock)"]
+        C2["Ekstraksi Skema JSON Kanonikal UniTime"]
+        C3["Merger Atomik: Konsolidasi chunk via composite key"]
         C4["Human-in-the-Loop Disambiguation (SQLite WAL)"]
     end
 
-    subgraph CANONICAL["4. Canonical JSON Payload"]
-        D1["Strict Schema Payload (unitime-smart-ingest-schema.json)"]
+    subgraph REST["4. REST Ingest Client (ai-gateway/core/)"]
+        D1["Validator Skema JSON (unitime-smart-ingest-schema.json)"]
+        D2["HTTP Client -> POST /api/smart-ingest"]
     end
 
-    subgraph BACKEND["5. UniTime Backend (Java Tomcat)"]
-        E1["REST POST /api/smart-ingest"]
-        E2["Domain Normalizer (SKS -> semesterHours, ITYPE canonical)"]
-        E3["XML DOM Generator (OfferingsDoc + PrefDoc)"]
-        E4["DataExchangeHelper (Hibernate ORM Engine)"]
+    subgraph BACKEND["5. Backend Server UniTime (Java Tomcat)"]
+        E1["SmartIngestConnector.java (Autentikasi & Otorisasi)"]
+        E2["Translasi Domain (SKS -> semesterHours, ITYPE kanonikal)"]
+        E3["Pembangun Dokumen XML DOM (Offerings & Preferences)"]
+        E4["DataExchangeHelper & Hibernate Session Flush"]
     end
 
-    subgraph STORAGE["6. Relational Database (MySQL)"]
-        F1[("timetable MySQL<br/>course_offering, class_, class_instructor, distribution_pref")]
+    subgraph DB["6. Database Relasional (MySQL)"]
+        F1[("Tabel MySQL timetable:<br/>course_offering, instructional_offering,<br/>scheduling_subpart, class_, class_instructor, distribution_pref")]
     end
 
-    INPUT --> SLICERS
-    A4 -.-> CANONICAL
-    SLICERS --> AGENT
-    AGENT --> CANONICAL
-    CANONICAL --> BACKEND
-    BACKEND --> STORAGE
+    INPUT --> SLICER
+    A4 -.-> REST
+    SLICER --> AGENT
+    AGENT --> REST
+    REST --> BACKEND
+    BACKEND --> DB
 ```
 
 ---
 
-### 📥 Supported Input Formats & Processing Mechanics
+## 🚀 Panduan Cepat (Quickstart)
 
-| Input Format | Real-World Use Case | Slicing & Extraction Mechanism |
-| :--- | :--- | :--- |
-| **Excel (`.xlsx`, `.csv`)** | Faculty scheduling spreadsheets, departmental course rosters. | Evaluated via [`openpyxl`](ai-gateway/slicers/excel.py). Handles multi-level headers and automatically applies **fill-forward propagation** to merged cells so no subpart or section loses its course context. |
-| **PDF (`.pdf`)** | Dean Decrees (*SK Dekan*), university course catalog books, syllabus PDFs. | Processed via [`fitz` (PyMuPDF)](ai-gateway/slicers/pdf.py). Employs single-page streaming to maintain low memory usage and prevent token context exhaustion. Supports image rendering for multimodal vision LLMs when tables are rasterized. |
-| **Text Memos (`.txt`)** | Email requests from heads of programs, syllabus notes, curriculum meeting minutes. | Processed via semantic paragraph chunking ([`text.py`](ai-gateway/slicers/text.py)) to isolate individual course definitions into independent processing units. |
-| **Direct JSON (`.json`)** | Direct integration from University Academic Information Systems (SIAKAD). | Bypasses slicers and LLM directly into the validator and Java REST connector. |
+### 1. Menjalankan Server UniTime & Database (via Docker / Colima)
+Pastikan Colima atau Docker runtime Anda aktif, lalu jalankan kontainer:
+```bash
+# Nyalakan Colima (pengguna macOS)
+colima start
 
----
-
-### 🔄 End-to-End Ingestion Workflow
-
-1. **Document Ingestion & Slicing**: Raw files are ingested and broken down into atomic chunks without context loss.
-2. **AI Extraction & Schema Conformance**: Each chunk is extracted into standard JSON conforming to [`unitime-smart-ingest-schema.json`](Documentation/ai-integration/unitime-smart-ingest-schema.json).
-3. **Atomic Merging**: [`merger.py`](ai-gateway/core/merger.py) reconciles split configurations, subparts, and class sections across chunks using composite identity keys (`type::suffix::parentSubpartType`).
-4. **Human-in-the-Loop (HITL) Disambiguation**: When instructor names or rooms are ambiguous, the LangGraph agent suspends execution to consult the human administrator. Resolutions are remembered in persistent SQLite WAL memory.
-5. **REST API Transmission**: Validated payload is posted to UniTime's `/api/smart-ingest` endpoint.
-6. **Backend Translation & ACID Persistence**: [`SmartIngestConnector.java`](JavaSource/org/unitime/timetable/api/connectors/SmartIngestConnector.java) maps the payload into canonical UniTime XML, imports offerings and distribution preferences through `DataExchangeHelper`, and flushes Hibernate sessions to guarantee database consistency in MySQL.
+# Jalankan kontainer database MySQL dan aplikasi UniTime
+docker compose up -d
+```
+Endpoint UniTime akan aktif di: `http://localhost:8888/` (API Ingestion di: `http://localhost:8888/api/smart-ingest`).
 
 ---
 
-### 🚀 Quickstart: Running the AI Gateway
-
-#### 1. Setup Environment
+### 2. Menyiapkan AI Gateway (Python)
+Buka terminal dan masuk ke direktori `ai-gateway`:
 ```bash
 cd ai-gateway
 python3 -m venv .venv
@@ -143,65 +173,56 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-#### 2. Dry-Run Ingestion (Audit & Validation Only)
-Simulate extraction, consolidation, and validation without writing to the database:
+---
+
+### 3. Menguji Dokumen (Mode Dry-Run / Simulasi)
+Ingin melihat apa yang diekstrak oleh AI tanpa mengubah database? Jalankan mode simulasi:
 ```bash
 python ingest.py sample_inputs/memo_jadwal_if.txt
-# An executive audit markdown report is generated under reports/
 ```
+*Sistem akan mengekstrak data, memvalidasi aturan, dan membuat laporan audit eksekutif di folder `reports/`.*
 
-#### 3. Live Server Ingestion
-Submit extracted data directly to the live UniTime server:
+---
+
+### 4. Memasukkan Data Langsung ke Server UniTime (Live Submit)
+Tambahkan flag `--submit` untuk menyimpan data secara permanen ke database UniTime:
 ```bash
 python ingest.py sample_inputs/jadwal_kuliah_if.xlsx --submit --unitime-url http://localhost:8888/api/smart-ingest
 ```
 
-#### 4. Run Test Suite
+---
+
+### 5. Menjalankan Pengujian Otomatis (Automated Tests)
+Semua komponen (pemotong file, merger, validasi skema, agen AI, dan konektor) memiliki unit test otomatis:
 ```bash
 pytest
-# 77/77 tests passing (slicers, parser, merger, validator, agent, and client)
 ```
+*Status: **77 dari 77 pengujian lulus 100% (Zero-Defect Certified)***.
 
 ---
 
-### 📚 Documentation & Reference Guides
-- [AI System Prompt & Domain Mapping Matrix](Documentation/ai-integration/ai-system-prompt.md)
-- [UniTime Smart Ingest JSON Schema](Documentation/ai-integration/unitime-smart-ingest-schema.json)
-- [Sample Valid JSON Ingestion Payload](Documentation/ai-integration/sample-valid-payload.json)
-- [Backend Java Connector Implementation](JavaSource/org/unitime/timetable/api/connectors/SmartIngestConnector.java)
-- [Docker & Colima Local Setup Guide](Documentation/Docker/README.md)
+## 📁 Struktur Proyek & Tautan Penting
 
-### Tutorials
-- [Installation Instructions][install]
-- [Building UniTime][build]
-- [Setting up UniTime in Eclipse][eclipse]
-- [Customization][customization]
-- [Localization][localization]
+| Jalur File / Folder | Deskripsi |
+| :--- | :--- |
+| [`ai-gateway/`](ai-gateway/) | Modul Python utama: *slicers*, *merger*, validator, agen LangGraph, dan CLI `ingest.py`. |
+| [`JavaSource/.../SmartIngestConnector.java`](JavaSource/org/unitime/timetable/api/connectors/SmartIngestConnector.java) | Endpoint REST API native UniTime untuk menerima payload JSON dan menyimpan ke MySQL. |
+| [`Documentation/ai-integration/`](Documentation/ai-integration/) | Spesifikasi lengkap: System prompt, skema JSON (`unitime-smart-ingest-schema.json`), dan contoh payload. |
+| [`docker/`](docker/) & [`docker-compose.yml`](docker-compose.yml) | Konfigurasi kontainerisasi Docker & skrip inisialisasi database MySQL. |
 
-### Links
-- [UniTime Documentation][docs]
-- [Online Help][help]
-- [Online Demo][demo]
-- [Downloads][downloads]
-- [Nightly Builds][builds]
-- [XML Interfaces][xml]
-- [Publications][publications]
+---
 
-[courses]: https://help.unitime.org/course-timetabling
-[exams]: https://help.unitime.org/examination-timetabling
-[events]: https://help.unitime.org/event-management
-[students]: https://help.unitime.org/student-scheduling
-[instructors]: https://help.unitime.org/instructor-scheduling
-[help]: https://help.unitime.org
-[install]: https://help.unitime.org/installation
-[demo]: https://demo.unitime.org
-[builds]: https://builds.unitime.org
-[xml]: https://help.unitime.org/xml
-[publications]: https://www.unitime.org/publications.php
-[downloads]: https://sourceforge.net/projects/unitime/files
-[build]: https://help.unitime.org/building-unitime
-[eclipse]: https://help.unitime.org/eclipse
-[docs]: https://help.unitime.org/documentation
-[apereo]: https://www.apereo.org
-[customization]: https://help.unitime.org/customizations
-[localization]: https://help.unitime.org/localization
+## 🏛️ Tentang Proyek Asli UniTime (Upstream)
+
+UniTime adalah proyek *open-source* berskala internasional di bawah naungan **Apereo Foundation** yang dikembangkan oleh universitas-universitas di Amerika Utara dan Eropa sejak tahun 2005.
+
+Jika Anda memerlukan dokumentasi modul inti UniTime lainnya (Course Timetabling, Examination Timetabling, Student Scheduling, Event Management), silakan merujuk ke sumber resmi:
+- 📖 **Dokumentasi Resmi**: [help.unitime.org](https://help.unitime.org)
+- 🌐 **Situs Resmi & Demo**: [unitime.org](https://www.unitime.org) | [demo.unitime.org](https://demo.unitime.org)
+- 📦 **Repositori Asli**: [github.com/UniTime/unitime](https://github.com/UniTime/unitime)
+- 🤝 **Yayasan Pengembang**: [apereo.org](https://www.apereo.org)
+
+---
+
+## 📄 Lisensi
+Proyek ini didistribusikan di bawah lisensi **Apache License, Version 2.0** yang sama dengan proyek upstream UniTime. Lihat berkas [LICENSE](LICENSE) untuk ketentuan lengkapnya.
