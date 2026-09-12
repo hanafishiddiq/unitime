@@ -5,13 +5,10 @@ import { toast } from "sonner";
 import {
   Sparkles,
   RotateCcw,
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  FileText,
-  Clock,
-  Layers,
-  Info,
+  Bot,
+  BrainCircuit,
+  Calendar,
+  FileCode2,
 } from "lucide-react";
 
 import {
@@ -19,21 +16,29 @@ import {
   getStatus,
   resolveDisambiguation,
   submitToUniTime,
+  checkAuthStatus,
   JobStatusResponse,
-  UploadOptions,
   SubmitResponse,
   ApiError,
 } from "@/lib/api";
 
 import { Header } from "@/components/Header";
-import { FileUploadDropzone } from "@/components/FileUploadDropzone";
-import { ProgressLogStream } from "@/components/ProgressLogStream";
-import { DisambiguationCard } from "@/components/DisambiguationCard";
-import { CurriculumOfferingsTable } from "@/components/CurriculumOfferingsTable";
-import { CommitSection } from "@/components/CommitSection";
-import { AuditReportsModal } from "@/components/AuditReportsModal";
+import { ChatInterface, ChatMessage } from "@/components/ChatInterface";
+import { ReasoningStreamTab } from "@/components/ReasoningStreamTab";
+import { VisualTimetableTab } from "@/components/VisualTimetableTab";
+import { AuditReportJsonTab } from "@/components/AuditReportJsonTab";
+import { AdminAccessModal } from "@/components/AdminAccessModal";
+
+type RightPanelTab = "reasoning" | "timetable" | "reports";
 
 export default function DashboardPage() {
+  // Authentication State
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [isAuthVerified, setIsAuthVerified] = useState(true);
+
+  // Active Tab in Right Panel
+  const [activeTab, setActiveTab] = useState<RightPanelTab>("reasoning");
+
   // Primary Job State
   const [jobId, setJobId] = useState<string | null>(null);
   const [jobStatus, setJobStatus] = useState<JobStatusResponse | null>(null);
@@ -47,14 +52,35 @@ export default function DashboardPage() {
   const [submitResult, setSubmitResult] = useState<SubmitResponse | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Modal State
-  const [isReportsModalOpen, setIsReportsModalOpen] = useState(false);
-  const [activeReportFilename, setActiveReportFilename] = useState<string | null>(
-    null
-  );
+  // Conversational Chat Messages
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: "msg_welcome",
+      sender: "assistant",
+      text: "Halo! Saya Asisten AI Penjadwalan UniTime. Silakan unggah dokumen jadwal (PDF, Excel, Word, Teks, atau JSON) atau ketik instruksi di bawah untuk memulai.",
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    },
+  ]);
 
   // Polling ref to prevent concurrent overlapping polls
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Verify auth on mount
+  useEffect(() => {
+    checkAuthStatus()
+      .then((res) => {
+        if (res.required && !res.authenticated) {
+          setIsAuthVerified(false);
+          setIsAdminModalOpen(true);
+        } else {
+          setIsAuthVerified(true);
+        }
+      })
+      .catch(() => {
+        // If auth endpoint unreachable, fail open or proceed
+        setIsAuthVerified(true);
+      });
+  }, []);
 
   // Stop polling helper
   const stopPolling = useCallback(() => {
@@ -73,17 +99,48 @@ export default function DashboardPage() {
 
         if (status.state === "completed") {
           stopPolling();
-          toast.success("Extraction and validation completed successfully!");
+          toast.success("Ekstraksi dan validasi jadwal berhasil!");
+
+          // Auto-switch to visual timetable tab if courses extracted
+          const totalCourses = status.course_summary?.total_courses || 0;
+          if (totalCourses > 0) {
+            setActiveTab("timetable");
+          }
+
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `msg_done_${Date.now()}`,
+              sender: "assistant",
+              text: `✅ Ekstraksi selesai dan lolos validasi skema (${totalCourses} mata kuliah terdeteksi). Anda dapat melihat jadwal visual di tab **Visual Timetable** atau menekan **Commit to UniTime Server** pada tab Reasoning.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            },
+          ]);
         } else if (status.state === "failed") {
           stopPolling();
-          toast.error(
-            `Pipeline failed: ${status.error || "Unknown validation error"}`
-          );
+          toast.error(`Proses gagal: ${status.error || "Terjadi kesalahan pada validasi"}`);
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `msg_err_${Date.now()}`,
+              sender: "assistant",
+              text: `❌ Ekstraksi gagal: ${status.error || "Gagal memproses dokumen"}. Silakan periksa kembali format dokumen Anda.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            },
+          ]);
         } else if (status.state === "waiting_disambiguation") {
           stopPolling();
-          toast.warning(
-            `Paused: ${status.ambiguities.length} conflict(s) require administrative review.`
-          );
+          setActiveTab("reasoning");
+          toast.warning(`Memerlukan keputusan: ${status.ambiguities.length} ambiguitas terdeteksi.`);
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `msg_hitl_${Date.now()}`,
+              sender: "assistant",
+              text: `⚠️ Ditemukan ${status.ambiguities.length} benturan/ambiguitas jadwal yang membutuhkan keputusan Anda. Silakan pilih opsi resolusi di tab **Reasoning Steps**.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            },
+          ]);
         }
       } catch (err) {
         console.error("Polling error:", err);
@@ -96,226 +153,330 @@ export default function DashboardPage() {
   const startPolling = useCallback(
     (id: string) => {
       stopPolling();
-      // Immediate first poll
       pollStatus(id);
       pollingRef.current = setInterval(() => {
         pollStatus(id);
-      }, 2000);
+      }, 1500);
     },
     [pollStatus, stopPolling]
   );
 
-  // Cleanup polling on unmount
+  // Clean up polling on unmount
   useEffect(() => {
-    return () => {
-      stopPolling();
-    };
+    return () => stopPolling();
   }, [stopPolling]);
 
   // Handle File Upload
-  const handleStartUpload = async (file: File, options: UploadOptions) => {
+  const handleUploadFile = async (file: File) => {
     setIsUploading(true);
     setSubmitResult(null);
     setSubmitError(null);
-    setJobStatus(null);
+    setActiveTab("reasoning");
+
+    // Add user upload message to chat
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `msg_upload_${Date.now()}`,
+        sender: "user",
+        text: `Mengunggah dokumen jadwal: ${file.name}`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        attachment: {
+          name: file.name,
+          size: file.size,
+          type: file.type || "document",
+        },
+      },
+      {
+        id: `msg_start_${Date.now()}`,
+        sender: "assistant",
+        text: `Dokumen "${file.name}" diterima. Memulai parsing dokumen dan ekstraksi AI... Perhatikan langkah reasoning di panel samping.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
 
     try {
-      toast.info(`Uploading "${file.name}" to AI Ingestion Gateway...`);
-      const res = await uploadFile(file, options);
-      setJobId(res.job_id);
-      toast.success(res.message || "Ingestion pipeline initialized.");
+      const response = await uploadFile(file, {
+        provider: "gemini",
+        strict: true,
+        dryRun: false,
+      });
 
-      // Begin polling
-      startPolling(res.job_id);
+      setJobId(response.job_id);
+      toast.info("Pipeline ekstraksi AI dimulai...");
+      startPolling(response.job_id);
     } catch (err) {
-      const msg = err instanceof ApiError ? err.detail : (err as Error).message;
-      toast.error(`Upload failed: ${msg}`);
+      const apiErr = err as ApiError;
+      toast.error(`Gagal mengunggah file: ${apiErr.detail || apiErr.message}`);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `msg_up_err_${Date.now()}`,
+          sender: "assistant",
+          text: `Gagal mengunggah dokumen: ${apiErr.detail || apiErr.message}`,
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+      ]);
     } finally {
       setIsUploading(false);
     }
   };
 
-  // Handle Human-in-the-Loop Disambiguation
+  // Handle Chat Message Send
+  const handleSendMessage = (text: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `msg_user_${Date.now()}`,
+        sender: "user",
+        text,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
+
+    // Conversational smart guidance response
+    setTimeout(() => {
+      let replyText =
+        "Saya siap membantu memproses jadwal kurikulum Anda. Silakan lampirkan file dokumen (PDF/Excel) menggunakan ikon klip kertas di bawah agar saya dapat mengekstrak dan menyusunnya ke kalender UniTime.";
+
+      const lower = text.toLowerCase();
+      if (lower.includes("unggah") || lower.includes("upload") || lower.includes("jadwal")) {
+        replyText =
+          "Silakan klik ikon klip kertas atau drag-and-drop file jadwal kurikulum (Excel atau PDF) ke area obrolan ini.";
+      } else if (lower.includes("status") || lower.includes("cek") || lower.includes("unitime")) {
+        replyText =
+          "Koneksi ke backend UniTime di Tencent VPS terpantau UP dan aktif 24/7. Anda dapat melihat status server pada indikator hijau di header atas.";
+      } else if (lower.includes("terima kasih") || lower.includes("makasih")) {
+        replyText = "Sama-sama! Senang dapat membantu proses penjadwalan akademik Anda.";
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `msg_bot_${Date.now()}`,
+          sender: "assistant",
+          text: replyText,
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+      ]);
+    }, 500);
+  };
+
+  // Handle HITL Ambiguity Resolution
   const handleResolveAmbiguities = async (resolutions: Record<string, string>) => {
     if (!jobId) return;
     setIsResolving(true);
-
     try {
-      toast.info("Submitting disambiguation resolutions...");
-      const res = await resolveDisambiguation(jobId, resolutions);
-      toast.success(res.message || "Resolutions accepted. Resuming pipeline.");
-
-      // Resume polling
+      await resolveDisambiguation(jobId, resolutions);
+      toast.success("Keputusan administratif tersimpan. Melanjutkan ekstraksi...");
       startPolling(jobId);
     } catch (err) {
-      const msg = err instanceof ApiError ? err.detail : (err as Error).message;
-      toast.error(`Failed to resolve conflicts: ${msg}`);
+      const apiErr = err as ApiError;
+      toast.error(`Gagal menyimpan resolusi: ${apiErr.detail || apiErr.message}`);
     } finally {
       setIsResolving(false);
     }
   };
 
-  // Handle UniTime Database Submission
+  // Handle Commit to UniTime Server
   const handleCommitToUniTime = async () => {
     if (!jobId) return;
     setIsSubmitting(true);
     setSubmitError(null);
-
     try {
-      toast.info("Transmitting canonical payload to UniTime REST API...");
       const res = await submitToUniTime(jobId);
       setSubmitResult(res);
-
       if (res.is_success) {
-        toast.success(res.summary || "Synchronized with UniTime server!");
+        toast.success("Berhasil di-commit ke UniTime Server!");
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `msg_committed_${Date.now()}`,
+            sender: "assistant",
+            text: `🎉 Jadwal telah berhasil di-commit secara permanen ke UniTime Tomcat & MySQL Database di Tencent VPS!`,
+            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          },
+        ]);
       } else {
-        toast.error(`UniTime responded with status: ${res.status}`);
+        toast.warning("Transaksi UniTime selesai dengan catatan atau peringatan.");
       }
     } catch (err) {
-      const msg = err instanceof ApiError ? err.detail : (err as Error).message;
+      const apiErr = err as ApiError;
+      const msg = apiErr.detail || apiErr.message;
       setSubmitError(msg);
-      toast.error(`Submission failed: ${msg}`);
+      toast.error(`Commit gagal: ${msg}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Reset / New Ingestion
+  // Reset Session
   const handleReset = () => {
     stopPolling();
     setJobId(null);
     setJobStatus(null);
     setSubmitResult(null);
     setSubmitError(null);
+    setActiveTab("reasoning");
+    setMessages([
+      {
+        id: "msg_welcome_reset",
+        sender: "assistant",
+        text: "Sesi telah direset. Silakan unggah file jadwal kurikulum baru untuk memulai proses berikutnya.",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
+    toast.info("Sesi telah direset.");
   };
 
-  const isCompleted = jobStatus?.state === "completed";
-  const isWaitingDisambiguation = jobStatus?.state === "waiting_disambiguation";
-  const hasCourseSummary = Boolean(
-    jobStatus?.course_summary &&
-      jobStatus.course_summary.courses &&
-      jobStatus.course_summary.courses.length > 0
-  );
-
   return (
-    <div className="flex-1 flex flex-col">
-      {/* Header */}
+    <div className="min-h-screen bg-background text-foreground flex flex-col antialiased">
+      {/* Top Application Header */}
       <Header
-        onOpenReports={() => {
-          setActiveReportFilename(null);
-          setIsReportsModalOpen(true);
-        }}
+        onOpenReports={() => setActiveTab("reports")}
+        isAdminRequired={!isAuthVerified}
+        isAuthenticated={isAuthVerified}
+        onOpenAdminModal={() => setIsAdminModalOpen(true)}
       />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Hero Introduction */}
-        {!jobId && (
-          <div className="text-center max-w-3xl mx-auto pt-4 pb-2 space-y-3 animate-in fade-in duration-300">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Multi-Agent Timetabling Pipeline</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-              Autonomous Academic Curriculum Ingestion
+      {/* Main Split-View Workspace */}
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-4">
+        {/* Workspace Toolbar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-1 border-b border-border/60">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-emerald-500" />
+              Smart Curriculum & Timetable Ingestion
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Upload unstructured course memos, semester distribution spreadsheets,
-              or syllabus PDFs. The agent reasons through instructional constraints,
-              solves capacity ambiguities, and synchronizes directly with UniTime.
+            <p className="text-xs text-muted-foreground">
+              Ekstraksi jadwal berbasis AI multimodal dengan verifikasi transparan dan sinkronisasi otomatis ke UniTime 4.9.
             </p>
           </div>
-        )}
 
-        {/* Section 1: Upload Dropzone */}
-        {!jobId ? (
-          <FileUploadDropzone
-            onStartUpload={handleStartUpload}
-            isUploading={isUploading}
-          />
-        ) : (
-          /* Active Job Header with Reset */
-          <div className="flex items-center justify-between p-4 rounded-xl bg-card border border-border">
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
-                AI
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-foreground">
-                  Active Ingestion: {jobStatus?.filename || "Processing..."}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  ID: <span className="font-mono">{jobId}</span>
-                </p>
+          <div className="flex items-center gap-2">
+            {jobId && (
+              <button
+                type="button"
+                onClick={handleReset}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground border border-border hover:bg-muted/50 transition-colors"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Reset Sesi
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Dual-Pane Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* ============================================================ */}
+          {/* LEFT PANE: Conversational Chatbot & Document Upload (5 Cols)  */}
+          {/* ============================================================ */}
+          <div className="lg:col-span-5 h-[720px] flex flex-col">
+            <ChatInterface
+              messages={messages}
+              onSendMessage={handleSendMessage}
+              onUploadFile={handleUploadFile}
+              isUploading={isUploading}
+              jobStatus={jobStatus}
+              onSelectPrompt={handleSendMessage}
+            />
+          </div>
+
+          {/* ============================================================ */}
+          {/* RIGHT PANE: Reasoning Steps & Visual Timetable Tabs (7 Cols)  */}
+          {/* ============================================================ */}
+          <div className="lg:col-span-7 h-[720px] flex flex-col space-y-3">
+            {/* Elegant Tab Switcher */}
+            <div className="flex items-center justify-between p-1.5 rounded-xl bg-card border border-border shadow-2xs">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("reasoning")}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeTab === "reasoning"
+                      ? "bg-emerald-500 text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  }`}
+                >
+                  <BrainCircuit className="h-3.5 w-3.5" />
+                  Reasoning Steps
+                  {jobStatus?.state === "waiting_disambiguation" && (
+                    <span className="h-2 w-2 rounded-full bg-amber-400 animate-ping" />
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("timetable")}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeTab === "timetable"
+                      ? "bg-emerald-500 text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  }`}
+                >
+                  <Calendar className="h-3.5 w-3.5" />
+                  Visual Timetable
+                  {(jobStatus?.course_summary?.total_courses || 0) > 0 && (
+                    <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-background/20 font-bold">
+                      {jobStatus?.course_summary?.total_courses}
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("reports")}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeTab === "reports"
+                      ? "bg-emerald-500 text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  }`}
+                >
+                  <FileCode2 className="h-3.5 w-3.5" />
+                  Audit & JSON
+                </button>
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border hover:bg-muted text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              <span>New Ingestion</span>
-            </button>
+            {/* Tab Contents Area */}
+            <div className="flex-1 overflow-y-auto pr-1">
+              {activeTab === "reasoning" && (
+                <ReasoningStreamTab
+                  jobStatus={jobStatus}
+                  onResolveAmbiguities={handleResolveAmbiguities}
+                  isResolving={isResolving}
+                  onCommitToUniTime={handleCommitToUniTime}
+                  isSubmitting={isSubmitting}
+                  submitResult={submitResult}
+                  submitError={submitError}
+                  onOpenReport={() => setActiveTab("reports")}
+                />
+              )}
+
+              {activeTab === "timetable" && (
+                <VisualTimetableTab
+                  summary={jobStatus?.course_summary || null}
+                  validationResult={jobStatus?.validation_result}
+                />
+              )}
+
+              {activeTab === "reports" && (
+                <AuditReportJsonTab jobStatus={jobStatus} />
+              )}
+            </div>
           </div>
-        )}
-
-        {/* Section 2: Real-time Ingestion Progress & Log Stream */}
-        {jobStatus && <ProgressLogStream status={jobStatus} />}
-
-        {/* Section 3: Human-in-the-Loop Disambiguation Component */}
-        {isWaitingDisambiguation && jobStatus && jobStatus.ambiguities.length > 0 && (
-          <DisambiguationCard
-            jobId={jobId!}
-            ambiguities={jobStatus.ambiguities}
-            onResolve={handleResolveAmbiguities}
-            isResolving={isResolving}
-          />
-        )}
-
-        {/* Section 4: Curriculum Offerings Preview Table */}
-        {hasCourseSummary && jobStatus?.course_summary && (
-          <CurriculumOfferingsTable
-            summary={jobStatus.course_summary}
-            validationResult={jobStatus.validation_result}
-          />
-        )}
-
-        {/* Section 5: One-Click Commit Action */}
-        {jobId && (isCompleted || hasCourseSummary) && (
-          <CommitSection
-            jobId={jobId}
-            isReady={isCompleted}
-            onCommit={handleCommitToUniTime}
-            isSubmitting={isSubmitting}
-            submitResult={submitResult}
-            submitError={submitError}
-            onOpenReport={() => {
-              // Try to find report named after job or open report modal
-              setActiveReportFilename(null);
-              setIsReportsModalOpen(true);
-            }}
-          />
-        )}
+        </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-6 mt-12 bg-muted/20 text-xs text-muted-foreground text-center">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-foreground">UniTime</span>
-            <span>• Comprehensive Academic Scheduling System</span>
-          </div>
-          <div>Next.js 14 Web Frontend • Connected to ai-gateway REST Server</div>
-        </div>
-      </footer>
-
-      {/* Executive Audit Reports Modal */}
-      <AuditReportsModal
-        isOpen={isReportsModalOpen}
-        onClose={() => setIsReportsModalOpen(false)}
-        initialFilename={activeReportFilename}
+      {/* Admin Access Passcode Modal (BFF Security) */}
+      <AdminAccessModal
+        isOpen={isAdminModalOpen && !isAuthVerified}
+        onSuccess={() => {
+          setIsAuthVerified(true);
+          setIsAdminModalOpen(false);
+          toast.success("Akses Administrator Terverifikasi.");
+        }}
       />
     </div>
   );

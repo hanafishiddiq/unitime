@@ -27,8 +27,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
+import hmac
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, Form, HTTPException, Request, Response, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -798,6 +799,43 @@ app.add_middleware(
 
 
 # =============================================================================
+# Security & Authentication Dependencies
+# =============================================================================
+
+
+def verify_gateway_api_key(
+    x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+) -> None:
+    """Validate incoming API key against configured GATEWAY_API_KEY.
+
+    If GATEWAY_API_KEY is not configured or empty, access is unrestricted.
+    If configured, validates against X-API-Key or Authorization Bearer header.
+    Returns HTTP 403 if missing or mismatched.
+    """
+    configured_key = os.getenv("GATEWAY_API_KEY", "").strip()
+    if not configured_key:
+        return
+
+    provided_key: Optional[str] = None
+    if x_api_key and x_api_key.strip():
+        provided_key = x_api_key.strip()
+    elif authorization and authorization.strip():
+        auth_str = authorization.strip()
+        parts = auth_str.split(None, 1)
+        if len(parts) == 2 and parts[0].lower() == "bearer":
+            provided_key = parts[1].strip()
+        elif len(parts) == 1:
+            provided_key = parts[0].strip()
+
+    if not provided_key or not hmac.compare_digest(provided_key, configured_key):
+        raise HTTPException(
+            status_code=403,
+            detail="Invalid or missing Gateway API Key",
+        )
+
+
+# =============================================================================
 # REST Endpoints
 # =============================================================================
 
@@ -843,7 +881,11 @@ def health_check() -> HealthResponse:
     )
 
 
-@app.post("/api/ingest/upload", response_model=UploadResponse)
+@app.post(
+    "/api/ingest/upload",
+    response_model=UploadResponse,
+    dependencies=[Depends(verify_gateway_api_key)],
+)
 async def upload_file(
     file: UploadFile = File(...),
     provider: Optional[str] = Form(None),
@@ -903,7 +945,11 @@ async def upload_file(
     )
 
 
-@app.get("/api/ingest/status/{job_id}", response_model=JobStatusResponse)
+@app.get(
+    "/api/ingest/status/{job_id}",
+    response_model=JobStatusResponse,
+    dependencies=[Depends(verify_gateway_api_key)],
+)
 def get_job_status(job_id: str) -> JobStatusResponse:
     """Return real-time state, progress metrics, ambiguity questions, and extracted course summary."""
     job = job_manager.get_job(job_id)
@@ -928,7 +974,11 @@ def get_job_status(job_id: str) -> JobStatusResponse:
     )
 
 
-@app.post("/api/ingest/resolve/{job_id}", response_model=ResolveResponse)
+@app.post(
+    "/api/ingest/resolve/{job_id}",
+    response_model=ResolveResponse,
+    dependencies=[Depends(verify_gateway_api_key)],
+)
 def resolve_ambiguities(
     job_id: str,
     payload: Optional[ResolveRequest] = None,
@@ -980,7 +1030,11 @@ def resolve_ambiguities(
     )
 
 
-@app.post("/api/ingest/submit/{job_id}", response_model=SubmitResponse)
+@app.post(
+    "/api/ingest/submit/{job_id}",
+    response_model=SubmitResponse,
+    dependencies=[Depends(verify_gateway_api_key)],
+)
 def submit_to_unitime(
     job_id: str,
     submit_req: Optional[SubmitRequest] = None,
@@ -1043,7 +1097,11 @@ def submit_to_unitime(
     )
 
 
-@app.get("/api/reports", response_model=List[ReportItem])
+@app.get(
+    "/api/reports",
+    response_model=List[ReportItem],
+    dependencies=[Depends(verify_gateway_api_key)],
+)
 def list_reports() -> List[ReportItem]:
     """List recent executive markdown audit reports."""
     reports: List[ReportItem] = []
@@ -1066,7 +1124,11 @@ def list_reports() -> List[ReportItem]:
     return reports
 
 
-@app.get("/api/reports/{filename}", response_model=None)
+@app.get(
+    "/api/reports/{filename}",
+    response_model=None,
+    dependencies=[Depends(verify_gateway_api_key)],
+)
 def get_report(
     filename: str,
     request: Request,

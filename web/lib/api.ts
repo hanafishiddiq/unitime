@@ -173,27 +173,29 @@ export class ApiError extends Error {
   }
 }
 
+export interface AuthStatusResponse {
+  required: boolean;
+  authenticated: boolean;
+}
+
+export interface AuthLoginResponse {
+  success: boolean;
+  message?: string;
+  detail?: string;
+}
+
 // ============================================================================
 // Configuration & Base URL
 // ============================================================================
 
 export function getApiBaseUrl(): string {
-  // Use environment variable if provided, with safe defaults
+  // If explicitly overridden via NEXT_PUBLIC_API_URL, use it
   if (typeof process !== "undefined" && process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, "");
   }
 
-  // In browser development, if no env var, default to production endpoint or localhost
-  if (typeof window !== "undefined") {
-    if (
-      window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1"
-    ) {
-      return "http://localhost:8005";
-    }
-  }
-
-  return "https://tencent-vps.hanavy.online/unitime-api";
+  // Next.js BFF architecture: empty base URL for relative same-origin /api/... calls
+  return "";
 }
 
 // Helper for unified fetch and JSON error handling
@@ -392,3 +394,34 @@ export async function getReportContent(filename: string): Promise<string> {
 
   return response.text();
 }
+
+/**
+ * Check if admin passcode protection is enabled and if the session is verified.
+ */
+export async function checkAuthStatus(): Promise<AuthStatusResponse> {
+  return request<AuthStatusResponse>("/api/auth", {
+    method: "GET",
+    cache: "no-store",
+  });
+}
+
+/**
+ * Authenticate using admin passcode.
+ */
+export async function loginAdmin(password: string): Promise<AuthLoginResponse> {
+  return request<AuthLoginResponse>("/api/auth", {
+    method: "POST",
+    body: JSON.stringify({ action: "login", password }),
+  });
+}
+
+/**
+ * Terminate current admin session.
+ */
+export async function logoutAdmin(): Promise<AuthLoginResponse> {
+  return request<AuthLoginResponse>("/api/auth", {
+    method: "POST",
+    body: JSON.stringify({ action: "logout" }),
+  });
+}
+

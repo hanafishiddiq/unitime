@@ -9,14 +9,27 @@ import {
   RefreshCw,
   ExternalLink,
   Layers,
+  Lock,
+  ShieldCheck,
+  LogOut,
 } from "lucide-react";
 import { checkHealth, HealthResponse, getApiBaseUrl } from "@/lib/api";
 
 interface HeaderProps {
-  onOpenReports: () => void;
+  onOpenReports?: () => void;
+  isAdminRequired?: boolean;
+  isAuthenticated?: boolean;
+  onOpenAdminModal?: () => void;
+  onLogout?: () => void;
 }
 
-export function Header({ onOpenReports }: HeaderProps) {
+export function Header({
+  onOpenReports,
+  isAdminRequired = false,
+  isAuthenticated = false,
+  onOpenAdminModal,
+  onLogout,
+}: HeaderProps) {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiUrl, setApiUrl] = useState("");

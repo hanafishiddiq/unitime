@@ -494,3 +494,87 @@ def test_cors_preflight_for_vercel() -> None:
     assert response.status_code == 200
     assert response.headers["access-control-allow-origin"] == "https://unitime-copilot.vercel.app"
     assert response.headers["access-control-allow-credentials"] == "true"
+
+
+# =============================================================================
+# Gateway API Key Security Tests
+# =============================================================================
+
+
+def test_gateway_api_key_health_remains_public(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Health check endpoint must remain accessible without API Key even if configured."""
+    monkeypatch.setenv("GATEWAY_API_KEY", "super-secret-key-12345")
+    with patch("server.UniTimeClient.health_check", return_value={"status": "UP"}):
+        response = client.get("/api/health")
+        assert response.status_code == 200
+        assert response.json()["status"] == "ok"
+
+
+def test_gateway_api_key_missing_returns_403(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Protected endpoints return HTTP 403 when GATEWAY_API_KEY is configured but missing in request."""
+    monkeypatch.setenv("GATEWAY_API_KEY", "prod-secret-gateway-key")
+
+    # 1. Reports endpoint
+    rep_resp = client.get("/api/reports")
+    assert rep_resp.status_code == 403
+    assert rep_resp.json() == {"detail": "Invalid or missing Gateway API Key"}
+
+    # 2. Status endpoint
+    stat_resp = client.get("/api/ingest/status/job_dummy_123")
+    assert stat_resp.status_code == 403
+    assert stat_resp.json() == {"detail": "Invalid or missing Gateway API Key"}
+
+    # 3. Upload endpoint
+    fake_file = io.BytesIO(b"IF2110 ASD 4 SKS")
+    up_resp = client.post(
+        "/api/ingest/upload",
+        files={"file": ("memo.txt", fake_file, "text/plain")},
+    )
+    assert up_resp.status_code == 403
+    assert up_resp.json() == {"detail": "Invalid or missing Gateway API Key"}
+
+
+def test_gateway_api_key_invalid_returns_403(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Protected endpoints return HTTP 403 when wrong API key is provided."""
+    monkeypatch.setenv("GATEWAY_API_KEY", "correct-gateway-key")
+
+    # Wrong X-API-Key header
+    resp = client.get("/api/reports", headers={"X-API-Key": "wrong-key"})
+    assert resp.status_code == 403
+    assert resp.json() == {"detail": "Invalid or missing Gateway API Key"}
+
+    # Wrong Bearer token
+    resp_bearer = client.get("/api/reports", headers={"Authorization": "Bearer wrong-key"})
+    assert resp_bearer.status_code == 403
+    assert resp_bearer.json() == {"detail": "Invalid or missing Gateway API Key"}
+
+
+def test_gateway_api_key_valid_via_x_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Protected endpoints succeed when valid key is provided in X-API-Key header."""
+    monkeypatch.setenv("GATEWAY_API_KEY", "valid-gateway-key-xyz")
+
+    response = client.get("/api/reports", headers={"X-API-Key": "valid-gateway-key-xyz"})
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+
+def test_gateway_api_key_valid_via_authorization_bearer(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Protected endpoints succeed when valid key is provided via Authorization Bearer header."""
+    monkeypatch.setenv("GATEWAY_API_KEY", "bearer-token-secret-999")
+
+    response = client.get(
+        "/api/reports",
+        headers={"Authorization": "Bearer bearer-token-secret-999"},
+    )
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+
+def test_gateway_api_key_unconfigured_bypasses_auth(monkeypatch: pytest.MonkeyPatch) -> None:
+    """When GATEWAY_API_KEY is empty or unset, endpoints remain accessible without headers."""
+    monkeypatch.delenv("GATEWAY_API_KEY", raising=False)
+
+    response = client.get("/api/reports")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
