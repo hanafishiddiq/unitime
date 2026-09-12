@@ -205,6 +205,7 @@ pytest
 
 | File / Folder Path | Description |
 | :--- | :--- |
+| [`ROADMAP.md`](ROADMAP.md) | **Current status, active tasks, and upcoming deployment & frontend roadmap.** |
 | [`ai-gateway/`](ai-gateway/) | Core Python module: *slicers*, *merger*, validator, LangGraph agent, and `ingest.py` CLI. |
 | [`JavaSource/.../SmartIngestConnector.java`](JavaSource/org/unitime/timetable/api/connectors/SmartIngestConnector.java) | Native UniTime REST API endpoint for receiving JSON payloads and persisting to MySQL. |
 | [`Documentation/ai-integration/`](Documentation/ai-integration/) | Complete specification: System prompt, JSON schema (`unitime-smart-ingest-schema.json`), and sample payloads. |
