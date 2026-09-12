@@ -20,12 +20,25 @@ from jsonschema.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_SCHEMA_PATH = (
-    Path(__file__).resolve().parent.parent.parent
-    / "Documentation"
-    / "ai-integration"
-    / "unitime-smart-ingest-schema.json"
-)
+def _resolve_default_schema_path() -> Path:
+    """Find schema path across local dev, Docker container, or custom env."""
+    env_path = os.getenv("UNITIME_SCHEMA_PATH")
+    if env_path and Path(env_path).is_file():
+        return Path(env_path)
+
+    candidates = [
+        Path(__file__).resolve().parent.parent / "schema" / "unitime-smart-ingest-schema.json",
+        Path(__file__).resolve().parent.parent.parent / "Documentation" / "ai-integration" / "unitime-smart-ingest-schema.json",
+        Path("/app/schema/unitime-smart-ingest-schema.json"),
+        Path("/Documentation/ai-integration/unitime-smart-ingest-schema.json"),
+    ]
+    for c in candidates:
+        if c.is_file():
+            return c
+    return candidates[0]
+
+
+DEFAULT_SCHEMA_PATH = _resolve_default_schema_path()
 
 
 @dataclass

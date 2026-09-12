@@ -63,6 +63,8 @@ services:
     volumes:
       - ./ai-gateway/data:/app/data
       - ./ai-gateway/reports:/app/reports
+      - ./Documentation/ai-integration/unitime-smart-ingest-schema.json:/Documentation/ai-integration/unitime-smart-ingest-schema.json:ro
+      - ./ai-gateway/schema/unitime-smart-ingest-schema.json:/app/schema/unitime-smart-ingest-schema.json:ro
 
 volumes:
   unitime-db-data:
