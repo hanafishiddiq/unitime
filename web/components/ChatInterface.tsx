@@ -252,6 +252,7 @@ export function ChatInterface({
                 )}
 
                 <div
+                  suppressHydrationWarning
                   className={`text-[9px] text-right font-mono ${
                     isUser ? "text-primary-foreground/70" : "text-muted-foreground"
                   }`}

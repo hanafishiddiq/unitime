@@ -180,7 +180,10 @@ export function ProgressLogStream({ status }: ProgressLogStreamProps) {
           </div>
         </div>
 
-        <span className="text-[11px] text-muted-foreground whitespace-nowrap">
+        <span
+          suppressHydrationWarning
+          className="text-[11px] text-muted-foreground whitespace-nowrap"
+        >
           {new Date(updated_at).toLocaleTimeString()}
         </span>
       </div>

@@ -61,7 +61,7 @@ export default function DashboardPage() {
       id: "msg_welcome",
       sender: "assistant",
       text: "Halo! Saya Asisten AI Penjadwalan UniTime. Silakan unggah dokumen jadwal (PDF, Excel, Word, Teks, atau JSON) atau ketik instruksi di bawah untuk memulai.",
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "08:00",
     },
   ]);
 
@@ -83,6 +83,23 @@ export default function DashboardPage() {
         // If auth endpoint unreachable, fail open or proceed
         setIsAuthVerified(true);
       });
+  }, []);
+
+  // Update welcome message timestamp on mount to match client local time
+  useEffect(() => {
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === "msg_welcome"
+          ? {
+              ...m,
+              timestamp: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            }
+          : m
+      )
+    );
   }, []);
 
   // Stop polling helper
