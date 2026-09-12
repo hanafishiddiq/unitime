@@ -41,6 +41,7 @@ if str(GATEWAY_DIR) not in sys.path:
 # Load environment configuration
 load_dotenv(GATEWAY_DIR / ".env")
 
+from agent.chat_agent import ChatReActAgent
 from agent.graph import build_ingest_graph
 from agent.memory import AgentMemory
 from agent.nodes import _create_log, _extract_all_classes
@@ -241,6 +242,39 @@ class ReportDetailResponse(BaseModel):
     modified_at: str = Field(..., description="Modification timestamp.")
 
 
+class ChatMessageInput(BaseModel):
+    """Message item in conversational chat history."""
+
+    role: str = Field(..., description="Role of the sender: user, assistant, or system.")
+    content: str = Field(..., description="Text content of the message.")
+
+
+class ChatRequest(BaseModel):
+    """Inbound chat message payload for conversational ReAct agent."""
+
+    message: str = Field(..., description="User message text.")
+    history: Optional[List[ChatMessageInput]] = Field(
+        default=None, description="Recent conversation turns."
+    )
+    job_id: Optional[str] = Field(
+        default=None, description="Optional active job ID for timetable context grounding."
+    )
+
+
+class ChatResponse(BaseModel):
+    """Outbound chat response with ReAct reasoning metadata."""
+
+    reply: str = Field(..., description="AI assistant response message in Indonesian Markdown.")
+    thought_process: List[str] = Field(
+        default_factory=list, description="Reasoning steps executed by the agent."
+    )
+    tools_used: List[str] = Field(
+        default_factory=list, description="List of tools invoked during reasoning."
+    )
+    timestamp: str = Field(..., description="UTC ISO timestamp of the response.")
+    error: Optional[str] = Field(None, description="Optional error detail if degraded.")
+
+
 # =============================================================================
 # In-Memory Job Management
 # =============================================================================
@@ -313,6 +347,7 @@ class JobManager:
 
 
 job_manager = JobManager()
+chat_agent = ChatReActAgent(job_manager_ref=job_manager)
 
 
 # =============================================================================
@@ -1163,6 +1198,33 @@ def get_report(
         content=content,
         size_bytes=stat.st_size,
         modified_at=datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat(),
+    )
+
+
+@app.post(
+    "/api/chat",
+    response_model=ChatResponse,
+    tags=["Chat"],
+    dependencies=[Depends(verify_gateway_api_key)],
+)
+def chat_with_agent(
+    payload: ChatRequest,
+):
+    """Engage with UniTime ReAct AI Assistant with scheduling tools and active timetable grounding."""
+    history_dicts = (
+        [item.model_dump() for item in payload.history] if payload.history else []
+    )
+    result = chat_agent.run_chat(
+        message=payload.message,
+        history=history_dicts,
+        job_id=payload.job_id,
+    )
+    return ChatResponse(
+        reply=result.get("reply", ""),
+        thought_process=result.get("thought_process", []),
+        tools_used=result.get("tools_used", []),
+        timestamp=result.get("timestamp", datetime.now(timezone.utc).isoformat()),
+        error=result.get("error"),
     )
 
 

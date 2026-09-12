@@ -425,3 +425,37 @@ export async function logoutAdmin(): Promise<AuthLoginResponse> {
   });
 }
 
+export interface ChatApiMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+export interface ChatApiResponse {
+  reply: string;
+  thought_process: string[];
+  tools_used: string[];
+  timestamp: string;
+  error?: string | null;
+}
+
+/**
+ * Send interactive message to ReAct Chat Agent with active schedule grounding.
+ */
+export async function sendChatMessage(
+  message: string,
+  history?: ChatApiMessage[],
+  jobId?: string | null
+): Promise<ChatApiResponse> {
+  return request<ChatApiResponse>("/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message,
+      history,
+      job_id: jobId || null,
+    }),
+  });
+}
+

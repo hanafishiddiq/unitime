@@ -17,6 +17,8 @@ import {
   resolveDisambiguation,
   submitToUniTime,
   checkAuthStatus,
+  sendChatMessage,
+  ChatApiMessage,
   JobStatusResponse,
   SubmitResponse,
   ApiError,
@@ -47,6 +49,7 @@ export default function DashboardPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
 
   // Submission Results
   const [submitResult, setSubmitResult] = useState<SubmitResponse | null>(null);
@@ -222,44 +225,64 @@ export default function DashboardPage() {
     }
   };
 
-  // Handle Chat Message Send
-  const handleSendMessage = (text: string) => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: `msg_user_${Date.now()}`,
-        sender: "user",
-        text,
+  // Handle Chat Message Send with Autonomous ReAct AI Agent
+  const handleSendMessage = async (text: string) => {
+    if (!text.trim() || isThinking || isUploading) return;
+
+    const userMsgId = `msg_user_${Date.now()}`;
+    const userMsg: ChatMessage = {
+      id: userMsgId,
+      sender: "user",
+      text: text.trim(),
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setIsThinking(true);
+
+    try {
+      // Map previous messages for context
+      const historyPayload: ChatApiMessage[] = messages
+        .filter((m) => m.sender === "user" || m.sender === "assistant")
+        .slice(-6)
+        .map((m) => ({
+          role: m.sender as "user" | "assistant",
+          content: m.text,
+        }));
+
+      const res = await sendChatMessage(text.trim(), historyPayload, jobId);
+
+      const assistantMsg: ChatMessage = {
+        id: `msg_ai_${Date.now()}`,
+        sender: "assistant",
+        text: res.reply,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      },
-    ]);
+        tools_used: res.tools_used,
+        thought_process: res.thought_process,
+      };
 
-    // Conversational smart guidance response
-    setTimeout(() => {
-      let replyText =
-        "Saya siap membantu memproses jadwal kurikulum Anda. Silakan lampirkan file dokumen (PDF/Excel) menggunakan ikon klip kertas di bawah agar saya dapat mengekstrak dan menyusunnya ke kalender UniTime.";
+      setMessages((prev) => [...prev, assistantMsg]);
 
-      const lower = text.toLowerCase();
-      if (lower.includes("unggah") || lower.includes("upload") || lower.includes("jadwal")) {
-        replyText =
-          "Silakan klik ikon klip kertas atau drag-and-drop file jadwal kurikulum (Excel atau PDF) ke area obrolan ini.";
-      } else if (lower.includes("status") || lower.includes("cek") || lower.includes("unitime")) {
-        replyText =
-          "Koneksi ke backend UniTime di Tencent VPS terpantau UP dan aktif 24/7. Anda dapat melihat status server pada indikator hijau di header atas.";
-      } else if (lower.includes("terima kasih") || lower.includes("makasih")) {
-        replyText = "Sama-sama! Senang dapat membantu proses penjadwalan akademik Anda.";
+      if (res.tools_used && res.tools_used.length > 0) {
+        toast.info(`ReAct Agent mengeksekusi: ${res.tools_used.join(", ")}`);
       }
+    } catch (err) {
+      const apiErr = err as ApiError;
+      const errorDetail = apiErr.detail || apiErr.message || "Gagal menghubungi AI Agent";
+      toast.error(`ReAct Agent Error: ${errorDetail}`);
 
       setMessages((prev) => [
         ...prev,
         {
-          id: `msg_bot_${Date.now()}`,
+          id: `msg_err_${Date.now()}`,
           sender: "assistant",
-          text: replyText,
+          text: `⚠️ Maaf, terjadi kendala saat memproses penalaran AI: ${errorDetail}`,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
-    }, 500);
+    } finally {
+      setIsThinking(false);
+    }
   };
 
   // Handle HITL Ambiguity Resolution
@@ -378,6 +401,7 @@ export default function DashboardPage() {
               onSendMessage={handleSendMessage}
               onUploadFile={handleUploadFile}
               isUploading={isUploading}
+              isThinking={isThinking}
               jobStatus={jobStatus}
               onSelectPrompt={handleSendMessage}
             />
