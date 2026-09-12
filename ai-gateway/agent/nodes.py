@@ -173,11 +173,24 @@ def extract_chunk_node(state: IngestAgentState) -> Dict[str, Any]:
 
     try:
         if chunk.get("chunk_type") == "image" and chunk.get("image_bytes"):
-            res = extractor.extract_image(
-                chunk["image_bytes"],
-                mime_type=chunk.get("mime_type", "image/png"),
-                context=context,
-            )
+            try:
+                res = extractor.extract_image(
+                    chunk["image_bytes"],
+                    mime_type=chunk.get("mime_type", "image/png"),
+                    context=context,
+                )
+            except Exception as vision_err:
+                extracted_text = (chunk.get("metadata") or {}).get("extracted_text")
+                if extracted_text and str(extracted_text).strip():
+                    logger.warning(
+                        "Vision extraction failed for chunk %d/%d (%s). Falling back to extracted text metadata.",
+                        idx + 1,
+                        len(slices),
+                        vision_err,
+                    )
+                    res = extractor.extract_text(str(extracted_text), context=context)
+                else:
+                    raise vision_err
         else:
             text = chunk.get("text_content") or ""
             res = extractor.extract_text(text, context=context)

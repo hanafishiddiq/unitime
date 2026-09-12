@@ -488,6 +488,18 @@ class Merger:
                 ins["sharePercentage"] = int(sp)
 
         if len(valid_shares) == n and sum(valid_shares) == 100:
+            lead_found = False
+            for ins in instructors:
+                if ins.get("isLead") is True:
+                    if not lead_found:
+                        lead_found = True
+                    else:
+                        ins["isLead"] = False
+                else:
+                    ins["isLead"] = False
+
+            if not lead_found:
+                instructors[0]["isLead"] = True
             return
 
         # Allocate per N-instructor formula: member = floor(100/N), lead = 100 - (N-1)*member
@@ -694,14 +706,18 @@ class Merger:
                                 ):
                                     master["name"] = ins.get("name")
 
-        # Apply master catalog back to all instances
+        # Apply master catalog back to all instances and normalize teaching shares
         for c in courses:
             if not isinstance(c, dict):
                 continue
             for cfg in c.get("configurations", []):
                 for sp in cfg.get("subparts", []):
                     for cls_obj in sp.get("classes", []):
-                        for ins in cls_obj.get("instructors", []):
+                        instructors = cls_obj.get("instructors", [])
+                        if not isinstance(instructors, list) or not instructors:
+                            continue
+
+                        for ins in instructors:
                             ins_id = str(ins.get("id", "")).strip().upper()
                             if ins_id in catalog:
                                 master = catalog[ins_id]
@@ -709,3 +725,6 @@ class Merger:
                                     ins["name"] = master["name"]
                                 if master.get("email") and not ins.get("email"):
                                     ins["email"] = master["email"]
+
+                        # Globally normalize teaching shares and lead assignment per class
+                        Merger._recalculate_shares(instructors)
