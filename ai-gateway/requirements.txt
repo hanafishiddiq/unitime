@@ -11,3 +11,6 @@ pytest>=8.0.0
 Pillow>=10.0.0
 langgraph>=0.2.0
 langchain-core>=0.3.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+python-multipart>=0.0.9

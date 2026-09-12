@@ -22,8 +22,10 @@ __pycache__/
 htmlcov/
 .env
 
-# Local AI gateway SQLite runtime databases
+# Local AI gateway SQLite runtime databases & uploads
 ai-gateway/data/*.db*
 !ai-gateway/data/.gitkeep
+ai-gateway/data/uploads/*
+!ai-gateway/data/uploads/.gitkeep
 ai-gateway/reports/*.md
 !ai-gateway/reports/.gitkeep

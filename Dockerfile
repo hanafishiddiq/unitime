@@ -45,7 +45,14 @@ RUN mkdir -p /usr/local/tomcat/data && chmod -R 777 /usr/local/tomcat/data
 
 # Configure Tomcat setenv.sh for clean JVM parameter passing
 RUN printf '%s\n' \
-    'export CATALINA_OPTS="-Xms512m -Xmx2048m -Dconnection.url=\"jdbc:mysql://unitime-db:3306/timetable?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&characterEncoding=UTF-8\" -Dconnection.username=timetable -Dconnection.password=unitime -Dunitime.data.dir=/usr/local/tomcat/data"' \
+    'JVM_MEM="${JVM_MEM:--Xms512m -Xmx2048m}"' \
+    'CONN_URL="${CONNECTION_URL:-jdbc:mysql://unitime-db:3306/timetable?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&characterEncoding=UTF-8}"' \
+    'DB_USER="${CONNECTION_USERNAME:-timetable}"' \
+    'DB_PASS="${CONNECTION_PASSWORD:-unitime}"' \
+    'DATA_DIR="${UNITIME_DATA_DIR:-/usr/local/tomcat/data}"' \
+    'if [ -z "$CATALINA_OPTS" ]; then' \
+    '  export CATALINA_OPTS="$JVM_MEM -Dconnection.url=\"$CONN_URL\" -Dconnection.username=$DB_USER -Dconnection.password=$DB_PASS -Dunitime.data.dir=$DATA_DIR"' \
+    'fi' \
     > /usr/local/tomcat/bin/setenv.sh && chmod +x /usr/local/tomcat/bin/setenv.sh
 
 EXPOSE 8080

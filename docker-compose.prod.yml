@@ -1,0 +1,67 @@
+services:
+  unitime-db:
+    container_name: unitime-db
+    image: mysql:8.3
+    restart: unless-stopped
+    command: --innodb-buffer-pool-size=128M --max-connections=50
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_USER=timetable
+      - MYSQL_PASSWORD=unitime
+      - MYSQL_DATABASE=timetable
+    volumes:
+      - ./Documentation/Database/MySQL/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./Documentation/Database/MySQL/woebegon-data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./docker/mysql-init/03-permissions.sql:/docker-entrypoint-initdb.d/03-permissions.sql:ro
+      - unitime-db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "timetable", "-punitime"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  unitime-web:
+    container_name: unitime-web
+    image: ghcr.io/hanafishiddiq/unitime-web:latest
+    restart: unless-stopped
+    depends_on:
+      unitime-db:
+        condition: service_healthy
+    ports:
+      - "8888:8080"
+    environment:
+      - JVM_MEM=-Xms256m -Xmx768m
+      - CONNECTION_URL=jdbc:mysql://unitime-db:3306/timetable?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&characterEncoding=UTF-8
+      - CONNECTION_USERNAME=timetable
+      - CONNECTION_PASSWORD=unitime
+      - CATALINA_OPTS=-Xms256m -Xmx768m -Dconnection.url="jdbc:mysql://unitime-db:3306/timetable?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&characterEncoding=UTF-8" -Dconnection.username=timetable -Dconnection.password=unitime -Dunitime.data.dir=/usr/local/tomcat/data
+    volumes:
+      - unitime-app-data:/usr/local/tomcat/data
+
+  unitime-ai-gateway:
+    container_name: unitime-ai-gateway
+    build:
+      context: ./ai-gateway
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - unitime-web
+    ports:
+      - "8005:8005"
+    environment:
+      - UNITIME_API_URL=http://unitime-web:8080/api/smart-ingest
+      - DEFAULT_LLM_PROVIDER=${DEFAULT_LLM_PROVIDER:-gemini}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+    volumes:
+      - ./ai-gateway/data:/app/data
+      - ./ai-gateway/reports:/app/reports
+
+volumes:
+  unitime-db-data:
+  unitime-app-data:
