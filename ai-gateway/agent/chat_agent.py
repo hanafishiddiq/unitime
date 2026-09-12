@@ -22,7 +22,13 @@ from agent.memory import AgentMemory
 from agent.nodes import _extract_all_classes
 from agent.tools import (
     check_time_conflict,
+    commit_draft_to_unitime,
+    draft_course_offering,
+    get_draft_summary,
     inspect_room_capacity,
+    record_building_and_rooms,
+    record_campus_topology,
+    record_scheduling_preference,
     resolve_instructor_identity,
 )
 from core.client import UniTimeClient
@@ -33,10 +39,23 @@ REACT_SYSTEM_PROMPT = """Anda adalah UniTime AI Scheduling Assistant, agen kecer
 
 Tugas Anda:
 1. Membantu staf akademik, dosen, dan administrator dalam memeriksa jadwal, kapasitas kelas, kurikulum mata kuliah, dan status sinkronisasi UniTime.
-2. Selalu menggunakan penalaran kritis (Reasoning) dan mengeksekusi alat (Tools) jika pengguna menanyakan data spesifik jadwal, ruangan, dosen, atau benturan jam.
-3. Selalu menjawab dengan sopan, terstruktur, ramah, dan profesional dalam Bahasa Indonesia (format Markdown).
+2. Membantu merakit data akademik secara bertahap percakapan demi percakapan (Progressive Conversational Data Builder) mencakup wilayah kampus, gedung, ruangan, mata kuliah, kelas, dan preferensi jadwal dosen.
+3. Selalu menggunakan penalaran kritis (Reasoning) dan mengeksekusi alat (Tools) yang sesuai ketika pengguna menyebutkan fakta data baru atau menanyakan data spesifik.
+4. Selalu menjawab dengan sopan, terstruktur, ramah, dan profesional dalam Bahasa Indonesia (format Markdown). Setelah mengeksekusi aksi pembentukan draft, selalu berikan konfirmasi ringkas dan tanyakan langkah logis selanjutnya (guided dialogue).
 
 Alat (Tools) yang tersedia untuk Anda:
+- `record_campus_topology`: Mencatat wilayah kampus (misal Depok, Salemba) dan estimasi transit antarkampus ke draft.
+  Parameter JSON: `{"session_id": "<session_id>", "regions": ["Depok", "Salemba"], "travel_times": {"Depok_Salemba": 45}}`
+- `record_building_and_rooms`: Mencatat gedung dan daftar ruangan (nama, kapasitas, tipe) ke draft.
+  Parameter JSON: `{"session_id": "<session_id>", "building": "Gedung A", "campus_region": "Depok", "rooms": [{"room_number": "101", "capacity": 50}]}`
+- `draft_course_offering`: Mencatat penawaran mata kuliah, SKS, kelas paralel, waktu, ruangan, dan dosen ke draft.
+  Parameter JSON: `{"session_id": "<session_id>", "subject": "IF", "course_number": "IF2110", "title": "Algoritma", "sks": 3, "classes": [{"section": "01", "time": "Senin 08:00-10:00", "room": "LABTEK V 7601", "instructor": "Dr. Turing"}]}`
+- `record_scheduling_preference`: Mencatat aturan/preferensi khusus penjadwalan (dosen, ruangan, waktu dilarang).
+  Parameter JSON: `{"session_id": "<session_id>", "entity_type": "instructor", "entity_name": "Dr. Turing", "preference_type": "unavailable_time", "details": "Tidak bisa mengajar hari Jumat"}`
+- `get_draft_summary`: Menampilkan rangkuman seluruh entitas draft data akademik sesi saat ini.
+  Parameter JSON: `{"session_id": "<session_id>"}`
+- `commit_draft_to_unitime`: Memvalidasi dan mengirimkan draft kanonikal ke server UniTime.
+  Parameter JSON: `{"session_id": "<session_id>", "dry_run": false}`
 - `get_active_schedule_context`: Mengambil data kurikulum & jadwal dari dokumen yang sedang aktif di dashboard (berdasarkan job_id).
   Parameter JSON: `{"job_id": "<opsional_job_id>", "query": "<kata_kunci_opsional>"}`
 - `check_time_conflict`: Memeriksa tumpang tindih waktu, benturan ruangan, atau dosen ganda dari daftar kelas aktif.
@@ -65,8 +84,54 @@ Final Answer: <jawaban lengkap, rapi, dan solutif untuk pengguna dalam Bahasa In
 PENTING:
 - Jangan mengarang data jadwal atau kapasitas ruangan jika Anda bisa mengeceknya via tools.
 - Jangan gunakan formatting code blocks (```) untuk blok Thought/Action/Action Input.
-- Berikan format tabel atau poin-poin yang mudah dibaca pada bagian Final Answer jika menampilkan jadwal.
+- Berikan format tabel atau poin-poin yang mudah dibaca pada bagian Final Answer jika menampilkan jadwal atau ringkasan draft.
 """
+
+
+def _extract_action_and_input(text: str) -> tuple[Optional[str], Optional[str], Optional[str]]:
+    """Extract action name, balanced JSON action input, and preceding thought from LLM response."""
+    act_match = re.search(r"Action:\s*([a-zA-Z0-9_]+)", text)
+    if not act_match:
+        return None, None, None
+
+    thought_prefix = text[: act_match.start()].strip()
+    action_name = act_match.group(1).strip()
+
+    input_idx = text.find("Action Input:", act_match.end())
+    if input_idx == -1:
+        return thought_prefix, action_name, "{}"
+
+    remainder = text[input_idx + len("Action Input:") :].strip()
+    start_pos = remainder.find("{")
+    if start_pos == -1:
+        return thought_prefix, action_name, "{}"
+
+    depth = 0
+    in_string = False
+    escape = False
+    end_pos = -1
+    for i in range(start_pos, len(remainder)):
+        ch = remainder[i]
+        if escape:
+            escape = False
+            continue
+        if ch == "\\":
+            escape = True
+            continue
+        if ch == '"':
+            in_string = not in_string
+            continue
+        if not in_string:
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    end_pos = i + 1
+                    break
+
+    raw_input = remainder[start_pos:end_pos] if end_pos != -1 else remainder[start_pos:]
+    return thought_prefix, action_name, raw_input
 
 
 class ChatReActAgent:
@@ -116,12 +181,18 @@ class ChatReActAgent:
         )
 
         # Register Available Tools
-        self.tools: Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {
+        self.tools: Dict[str, Callable[[Dict[str, Any]], Any]] = {
             "get_active_schedule_context": self._tool_get_schedule_context,
             "check_time_conflict": self._tool_check_time_conflict,
             "inspect_room_capacity": self._tool_inspect_room_capacity,
             "resolve_instructor_identity": self._tool_resolve_instructor,
             "check_unitime_server_health": self._tool_check_server_health,
+            "record_campus_topology": self._tool_record_campus_topology,
+            "record_building_and_rooms": self._tool_record_building_and_rooms,
+            "draft_course_offering": self._tool_draft_course_offering,
+            "record_scheduling_preference": self._tool_record_scheduling_preference,
+            "get_draft_summary": self._tool_get_draft_summary,
+            "commit_draft_to_unitime": self._tool_commit_draft_to_unitime,
         }
 
     # -------------------------------------------------------------------------
@@ -266,6 +337,78 @@ class ChatReActAgent:
                 "error": str(exc),
             }
 
+    def _tool_record_campus_topology(self, args: Dict[str, Any]) -> str:
+        session_id = args.get("session_id") or "default_session"
+        regions = args.get("regions", [])
+        travel_times = args.get("travel_times")
+        return record_campus_topology(
+            session_id=session_id,
+            regions=regions,
+            travel_times=travel_times,
+            memory_instance=self.memory,
+        )
+
+    def _tool_record_building_and_rooms(self, args: Dict[str, Any]) -> str:
+        session_id = args.get("session_id") or "default_session"
+        building = args.get("building", "")
+        campus_region = args.get("campus_region", "")
+        rooms = args.get("rooms", [])
+        return record_building_and_rooms(
+            session_id=session_id,
+            building=building,
+            campus_region=campus_region,
+            rooms=rooms,
+            memory_instance=self.memory,
+        )
+
+    def _tool_draft_course_offering(self, args: Dict[str, Any]) -> str:
+        session_id = args.get("session_id") or "default_session"
+        subject = args.get("subject", "IF")
+        course_number = args.get("course_number", "")
+        title = args.get("title", "")
+        sks = args.get("sks", 3)
+        classes = args.get("classes")
+        return draft_course_offering(
+            session_id=session_id,
+            subject=subject,
+            course_number=course_number,
+            title=title,
+            sks=sks,
+            classes=classes,
+            memory_instance=self.memory,
+        )
+
+    def _tool_record_scheduling_preference(self, args: Dict[str, Any]) -> str:
+        session_id = args.get("session_id") or "default_session"
+        entity_type = args.get("entity_type", "general")
+        entity_name = args.get("entity_name", "")
+        preference_type = args.get("preference_type", "constraint")
+        details = args.get("details", "")
+        return record_scheduling_preference(
+            session_id=session_id,
+            entity_type=entity_type,
+            entity_name=entity_name,
+            preference_type=preference_type,
+            details=details,
+            memory_instance=self.memory,
+        )
+
+    def _tool_get_draft_summary(self, args: Dict[str, Any]) -> str:
+        session_id = args.get("session_id") or "default_session"
+        return get_draft_summary(
+            session_id=session_id,
+            memory_instance=self.memory,
+        )
+
+    def _tool_commit_draft_to_unitime(self, args: Dict[str, Any]) -> str:
+        session_id = args.get("session_id") or "default_session"
+        dry_run = bool(args.get("dry_run", False))
+        return commit_draft_to_unitime(
+            session_id=session_id,
+            dry_run=dry_run,
+            memory_instance=self.memory,
+        )
+
     # -------------------------------------------------------------------------
     # LLM Request Handler
     # -------------------------------------------------------------------------
@@ -292,7 +435,6 @@ class ChatReActAgent:
                 return data["choices"][0]["message"]["content"]
         except Exception as exc:
             logger.warning("Failed to reach LLM endpoint at %s: %s", self.endpoint, exc)
-            raise
 
     # -------------------------------------------------------------------------
     # ReAct Loop Execution
@@ -303,6 +445,7 @@ class ChatReActAgent:
         message: str,
         history: Optional[List[Dict[str, str]]] = None,
         job_id: Optional[str] = None,
+        session_id: Optional[str] = None,
         max_steps: int = 5,
     ) -> Dict[str, Any]:
         """Execute the multi-turn ReAct reasoning loop with tool execution."""
@@ -318,20 +461,21 @@ class ChatReActAgent:
 
         # Inject current turn context
         user_prompt = message
+        context_hints = []
         if job_id:
-            user_prompt += f"\n[Context: Active Job ID is '{job_id}']"
+            context_hints.append(f"Active Job ID is '{job_id}'")
+        if session_id:
+            context_hints.append(f"Active Session ID is '{session_id}'")
+        if context_hints:
+            user_prompt += f"\n[Context: {'; '.join(context_hints)}]"
+
+        active_session_id = session_id or job_id or "default_session"
 
         messages.append({"role": "user", "content": user_prompt})
 
         thought_steps: List[str] = []
         tools_used: List[str] = []
         final_answer = ""
-
-        # Pattern matching for Thought, Action, Action Input, Final Answer
-        action_pattern = re.compile(
-            r"Action:\s*([a-zA-Z0-9_]+)\s*\nAction Input:\s*(\{.*?\})",
-            re.DOTALL,
-        )
 
         for step in range(max_steps):
             try:
@@ -360,13 +504,8 @@ class ChatReActAgent:
                 break
 
             # Check if Action is invoked
-            match = action_pattern.search(llm_response)
-            if match:
-                action_name = match.group(1).strip()
-                action_input_raw = match.group(2).strip()
-
-                # Extract preceding thought
-                thought_prefix = llm_response[: match.start()].strip()
+            thought_prefix, action_name, action_input_raw = _extract_action_and_input(llm_response)
+            if action_name and action_input_raw:
                 if thought_prefix:
                     thought_steps.append(thought_prefix)
 
@@ -385,6 +524,10 @@ class ChatReActAgent:
                 if job_id and "job_id" not in action_args:
                     action_args["job_id"] = job_id
 
+                # Inject active session_id if omitted
+                if active_session_id and "session_id" not in action_args:
+                    action_args["session_id"] = active_session_id
+
                 tools_used.append(action_name)
                 logger.info("ReAct step %d: Invoking tool '%s' with args: %s", step + 1, action_name, action_args)
 
@@ -393,7 +536,10 @@ class ChatReActAgent:
                 if tool_func:
                     try:
                         obs_result = tool_func(action_args)
-                        obs_str = json.dumps(obs_result, ensure_ascii=False)
+                        if isinstance(obs_result, str):
+                            obs_str = obs_result
+                        else:
+                            obs_str = json.dumps(obs_result, ensure_ascii=False)
                     except Exception as err:
                         obs_str = json.dumps({"error": f"Tool execution failed: {err}"})
                 else:

@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { JobStatusResponse } from "@/lib/api";
 import { formatBytes } from "@/lib/utils";
+import { AiResponseParser } from "@/components/AiResponseParser";
 
 export interface ChatMessage {
   id: string;
@@ -199,104 +200,83 @@ export function ChatInterface({
 
               {/* Chat Bubble */}
               <div
-                className={`w-fit max-w-[85%] sm:max-w-[80%] rounded-2xl px-3.5 py-1.5 text-xs shadow-xs transition-all ${
+                className={`w-fit min-w-[70px] max-w-[85%] sm:max-w-[80%] rounded-2xl px-3.5 py-2 text-xs shadow-xs transition-all ${
                   isUser
                     ? "bg-primary text-primary-foreground rounded-tr-sm"
                     : "bg-muted/50 dark:bg-muted/30 text-foreground border border-border/80 rounded-tl-sm"
                 }`}
               >
-                {!hasExtras ? (
-                  /* WhatsApp-style dynamic inline text + timestamp */
-                  <div className="relative leading-relaxed break-words">
-                    <span className="whitespace-pre-wrap">{displayText}</span>
-                    {/* Inline spacer that reserves space on the current row or forces a clean wrap */}
-                    <span
-                      className="inline-block w-14 h-3 select-none pointer-events-none align-baseline"
-                      aria-hidden="true"
-                    />
-                    <span
-                      suppressHydrationWarning
-                      className={`absolute bottom-0.5 right-0 text-[10px] font-mono leading-none select-none tracking-tight ${
-                        isUser ? "text-primary-foreground/75" : "text-muted-foreground/75"
+                <div className="space-y-1.5">
+                  {displayText && (
+                    <AiResponseParser content={displayText} isUser={isUser} />
+                  )}
+
+                  {/* Attachment Badge */}
+                  {msg.attachment && (
+                    <div
+                      className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-[11px] font-mono ${
+                        isUser
+                          ? "bg-primary-foreground/15 text-primary-foreground border border-primary-foreground/20"
+                          : "bg-background text-foreground border border-border/70"
                       }`}
                     >
-                      {msg.timestamp}
-                    </span>
-                  </div>
-                ) : (
-                  /* Rich message with extras (attachments, tools, or reasoning) */
-                  <div className="space-y-1.5">
-                    {displayText && (
-                      <p className="leading-relaxed whitespace-pre-wrap break-words">{displayText}</p>
-                    )}
-
-                    {/* Attachment Badge */}
-                    {msg.attachment && (
-                      <div
-                        className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-[11px] font-mono ${
-                          isUser
-                            ? "bg-primary-foreground/15 text-primary-foreground border border-primary-foreground/20"
-                            : "bg-background text-foreground border border-border/70"
+                      <FileText
+                        className={`h-3.5 w-3.5 shrink-0 ${
+                          isUser ? "text-primary-foreground" : "text-emerald-500"
                         }`}
-                      >
-                        <FileText
-                          className={`h-3.5 w-3.5 shrink-0 ${
-                            isUser ? "text-primary-foreground" : "text-emerald-500"
-                          }`}
-                        />
-                        <span className="truncate max-w-[170px] font-medium">
-                          {msg.attachment.name}
-                        </span>
-                        <span className="text-[10px] opacity-75 shrink-0">
-                          ({formatBytes(msg.attachment.size)})
-                        </span>
-                      </div>
-                    )}
+                      />
+                      <span className="truncate max-w-[170px] font-medium">
+                        {msg.attachment.name}
+                      </span>
+                      <span className="text-[10px] opacity-75 shrink-0">
+                        ({formatBytes(msg.attachment.size)})
+                      </span>
+                    </div>
+                  )}
 
-                    {/* Tools Used Badges */}
-                    {msg.tools_used && msg.tools_used.length > 0 && (
-                      <div className="flex flex-wrap items-center gap-1 pt-1.5 border-t border-border/40">
-                        <span className="text-[10px] text-muted-foreground flex items-center gap-1 font-mono shrink-0">
-                          <Wrench className="h-2.5 w-2.5 text-emerald-500" /> Tools:
+                  {/* Tools Used Badges */}
+                  {msg.tools_used && msg.tools_used.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-1 pt-1.5 border-t border-border/40">
+                      <span className="text-[10px] text-muted-foreground flex items-center gap-1 font-mono shrink-0">
+                        <Wrench className="h-2.5 w-2.5 text-emerald-500" /> Tools:
+                      </span>
+                      {msg.tools_used.map((tool, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                        >
+                          {tool}
                         </span>
-                        {msg.tools_used.map((tool, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                          >
-                            {tool}
-                          </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* ReAct Thought Process Collapsible */}
+                  {msg.thought_process && msg.thought_process.length > 0 && (
+                    <details className="text-[11px] text-muted-foreground bg-muted/40 rounded-lg p-1.5 cursor-pointer border border-border/50">
+                      <summary className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 select-none flex items-center gap-1 hover:underline">
+                        <BrainCircuit className="h-3 w-3" /> ReAct Reasoning ({msg.thought_process.length} langkah)
+                      </summary>
+                      <div className="mt-1.5 space-y-1.5 pl-2 border-l border-emerald-500/30 font-mono text-[10px]">
+                        {msg.thought_process.map((t, idx) => (
+                          <div key={idx} className="text-muted-foreground/90 leading-relaxed">
+                            <AiResponseParser content={t} className="text-[10px]" />
+                          </div>
                         ))}
                       </div>
-                    )}
+                    </details>
+                  )}
 
-                    {/* ReAct Thought Process Collapsible */}
-                    {msg.thought_process && msg.thought_process.length > 0 && (
-                      <details className="text-[11px] text-muted-foreground bg-muted/40 rounded-lg p-1.5 cursor-pointer border border-border/50">
-                        <summary className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 select-none flex items-center gap-1 hover:underline">
-                          <BrainCircuit className="h-3 w-3" /> ReAct Reasoning ({msg.thought_process.length} langkah)
-                        </summary>
-                        <div className="mt-1.5 space-y-1 pl-2 border-l border-emerald-500/30 font-mono text-[10px] whitespace-pre-wrap">
-                          {msg.thought_process.map((t, idx) => (
-                            <p key={idx} className="text-muted-foreground/90">
-                              {t}
-                            </p>
-                          ))}
-                        </div>
-                      </details>
-                    )}
-
-                    {/* Timestamp for Rich Message */}
-                    <div
-                      suppressHydrationWarning
-                      className={`text-[10px] text-right font-mono select-none leading-none pt-0.5 ${
-                        isUser ? "text-primary-foreground/75" : "text-muted-foreground/75"
-                      }`}
-                    >
-                      {msg.timestamp}
-                    </div>
+                  {/* Timestamp with Clearance */}
+                  <div
+                    suppressHydrationWarning
+                    className={`flex items-center justify-end text-[10px] font-mono select-none leading-none pt-0.5 tracking-tight ${
+                      isUser ? "text-primary-foreground/75" : "text-muted-foreground/75"
+                    }`}
+                  >
+                    {msg.timestamp}
                   </div>
-                )}
+                </div>
               </div>
             </div>
           );

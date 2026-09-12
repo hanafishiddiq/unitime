@@ -259,6 +259,9 @@ class ChatRequest(BaseModel):
     job_id: Optional[str] = Field(
         default=None, description="Optional active job ID for timetable context grounding."
     )
+    session_id: Optional[str] = Field(
+        default=None, description="Optional drafting session ID for progressive data builder."
+    )
 
 
 class ChatResponse(BaseModel):
@@ -1218,6 +1221,7 @@ def chat_with_agent(
         message=payload.message,
         history=history_dicts,
         job_id=payload.job_id,
+        session_id=payload.session_id,
     )
     return ChatResponse(
         reply=result.get("reply", ""),

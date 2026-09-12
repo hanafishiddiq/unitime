@@ -25,6 +25,7 @@ Dokumen ini adalah **sumber kebenaran tunggal (*Single Source of Truth*)** menge
 | **M4: Backend Connector Java** | Implementasi [`SmartIngestConnector.java`](JavaSource/org/unitime/timetable/api/connectors/SmartIngestConnector.java) di endpoint `/api/smart-ingest`. Mengeliminasi benturan transaksi Hibernate, translasi SKS $\rightarrow$ `semesterHours`, dan translasi tipe pengajaran (`Kuliah` $\rightarrow$ `Lec`, `Praktikum` $\rightarrow$ `Lab`, dll.). | ✅ **100% Selesai** |
 | **M5: Live End-to-End MySQL Testing** | Pengujian data riil ke container MySQL `timetable`. Berhasil menyimpan penawaran MK, kelas paralel, dosen, dan batasan distribusi secara *idempotent* dan bebas duplikasi. | ✅ **100% Selesai** (Commit `1f29255`) |
 | **M6: GitHub Documentation & CI Prep** | Perombakan `README.md` ramah pengguna, migrasi cabang `master` $\rightarrow$ `main`, dan penambahan dukungan Custom LLM Base URL (OpenRouter, Ollama, AI Proxy). | ✅ **100% Selesai** (Commit `c8f188a`) |
+| **M7: Progressive Conversational Data Builder** | Asisten ReAct interaktif turn-by-turn untuk perakitan data wilayah, waktu tempuh (*travel times*), gedung, ruangan, mata kuliah, dan preferensi jadwal secara bertahap via obrolan santai, didukung SQLite WAL persisten dan 6 tools mutasi. | ✅ **100% Selesai** (122/122 Tests Passing) |
 
 ---
 

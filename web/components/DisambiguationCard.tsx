@@ -11,6 +11,7 @@ import {
   Edit3,
 } from "lucide-react";
 import { AmbiguityItem } from "@/lib/api";
+import { AiResponseParser } from "@/components/AiResponseParser";
 
 interface DisambiguationCardProps {
   jobId: string;
@@ -156,9 +157,9 @@ export function DisambiguationCard({
               </div>
 
               {/* Question Text */}
-              <p className="text-sm font-medium text-foreground leading-relaxed">
-                {amb.question}
-              </p>
+              <div className="text-sm font-medium text-foreground leading-relaxed">
+                <AiResponseParser content={amb.question} />
+              </div>
 
               {/* Context preview pills */}
               {amb.context && (

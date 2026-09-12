@@ -388,7 +388,7 @@ def test_all_tools_in_toolnode() -> None:
     """Verify that all exported tools integrate properly with LangGraph ToolNode."""
     tool_node = ToolNode(ALL_TOOLS)
     assert tool_node is not None
-    assert len(ALL_TOOLS) == 5
+    assert len(ALL_TOOLS) == 11
 
     # Direct positional execution
     room_check = inspect_room_capacity("HAAS", "G066", 50)

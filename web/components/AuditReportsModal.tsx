@@ -11,9 +11,11 @@ import {
   HardDrive,
   RefreshCw,
   Eye,
+  Code2,
 } from "lucide-react";
 import { getReports, getReportContent, ReportItem } from "@/lib/api";
 import { formatBytes, formatDate } from "@/lib/utils";
+import { AiResponseParser } from "@/components/AiResponseParser";
 
 interface AuditReportsModalProps {
   isOpen: boolean;
@@ -32,6 +34,7 @@ export function AuditReportsModal({
   const [isLoadingList, setIsLoadingList] = useState(false);
   const [isLoadingContent, setIsLoadingContent] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [viewMode, setViewMode] = useState<"preview" | "raw">("preview");
 
   // Fetch list of reports
   const fetchList = async () => {
@@ -180,6 +183,33 @@ export function AuditReportsModal({
                 </span>
 
                 <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 p-0.5 rounded-lg bg-muted border border-border">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("preview")}
+                      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium transition-colors ${
+                        viewMode === "preview"
+                          ? "bg-background text-foreground shadow-xs font-semibold"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Eye className="h-3 w-3" />
+                      <span>Preview</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("raw")}
+                      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium transition-colors ${
+                        viewMode === "raw"
+                          ? "bg-background text-foreground shadow-xs font-semibold"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Code2 className="h-3 w-3" />
+                      <span>Raw</span>
+                    </button>
+                  </div>
+
                   <button
                     type="button"
                     onClick={handleCopy}
@@ -212,14 +242,22 @@ export function AuditReportsModal({
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto p-6 font-mono text-xs text-foreground whitespace-pre-wrap leading-relaxed select-text">
+            <div className="flex-1 overflow-y-auto p-6 text-foreground select-text">
               {isLoadingContent ? (
                 <div className="flex items-center justify-center h-48 text-muted-foreground gap-2">
                   <RefreshCw className="h-4 w-4 animate-spin" />
                   <span>Loading report content...</span>
                 </div>
               ) : reportContent ? (
-                reportContent
+                viewMode === "preview" ? (
+                  <div className="max-w-4xl mx-auto py-1">
+                    <AiResponseParser content={reportContent} className="text-sm" />
+                  </div>
+                ) : (
+                  <div className="font-mono text-xs whitespace-pre-wrap leading-relaxed">
+                    {reportContent}
+                  </div>
+                )
               ) : (
                 <div className="text-center text-muted-foreground mt-12">
                   Select a report from the sidebar to view audit details.

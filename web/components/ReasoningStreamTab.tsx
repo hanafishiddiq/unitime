@@ -17,6 +17,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { JobStatusResponse, SubmitResponse } from "@/lib/api";
+import { AiResponseParser } from "@/components/AiResponseParser";
 
 interface ReasoningStreamTabProps {
   jobStatus: JobStatusResponse | null;
@@ -341,9 +342,9 @@ export function ReasoningStreamTab({
                         key={amb.id}
                         className="p-2.5 rounded-md bg-muted/40 border border-border space-y-2"
                       >
-                        <p className="text-[11px] font-semibold text-foreground">
-                          {amb.question}
-                        </p>
+                        <div className="text-[11px] font-semibold text-foreground">
+                          <AiResponseParser content={amb.question} className="text-[11px]" />
+                        </div>
                         {amb.options && (
                           <div className="flex flex-wrap gap-1.5">
                             {amb.options.map((opt) => (

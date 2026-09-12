@@ -155,6 +155,20 @@ class AgentMemory:
 
                 CREATE INDEX IF NOT EXISTS idx_audit_timestamp 
                 ON audit_journal (timestamp DESC);
+
+                -- Table 5: Progressive draft academic state for turn-by-turn conversational ingestion
+                CREATE TABLE IF NOT EXISTS draft_academic_state (
+                    session_id TEXT PRIMARY KEY,
+                    campus_topology JSON,
+                    buildings JSON,
+                    courses JSON,
+                    preferences JSON,
+                    metadata JSON,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_draft_updated_at 
+                ON draft_academic_state (updated_at DESC);
                 """
             )
 
@@ -600,6 +614,410 @@ class AgentMemory:
 
         return results
 
+    # -------------------------------------------------------------------------
+    # Progressive Draft Academic State (Turn-by-Turn Ingestion)
+    # -------------------------------------------------------------------------
+
+    def get_draft_state(self, session_id: str) -> Dict[str, Any]:
+        """Fetch the current progressive draft state for a given session.
+
+        Args:
+            session_id: Unique identifier for the conversational drafting session.
+
+        Returns:
+            Dictionary containing campus_topology, buildings, courses, preferences,
+            metadata, and updated_at.
+        """
+        clean_sid = str(session_id).strip()
+        default_state: Dict[str, Any] = {
+            "session_id": clean_sid,
+            "campus_topology": {"regions": [], "travel_times": {}},
+            "buildings": [],
+            "courses": [],
+            "preferences": [],
+            "metadata": {},
+            "updated_at": None,
+        }
+        if not clean_sid:
+            return default_state
+
+        conn = self._get_connection()
+        with contextlib.closing(conn.execute(
+            """
+            SELECT session_id, campus_topology, buildings, courses, preferences, metadata, updated_at
+            FROM draft_academic_state
+            WHERE session_id = ?
+            LIMIT 1
+            """,
+            (clean_sid,),
+        )) as cursor:
+            row = cursor.fetchone()
+            if not row:
+                return default_state
+
+            def _parse_field(val: Any, default: Any) -> Any:
+                if val is None:
+                    return default
+                if isinstance(val, (dict, list)):
+                    return val
+                try:
+                    return json.loads(val)
+                except (json.JSONDecodeError, ValueError, TypeError) as exc:
+                    logger.debug("Failed to deserialize draft field: %s", exc)
+                    return default
+
+            topology = _parse_field(row["campus_topology"], {"regions": [], "travel_times": {}})
+            if not isinstance(topology, dict):
+                topology = {"regions": [], "travel_times": {}}
+            topology.setdefault("regions", [])
+            topology.setdefault("travel_times", {})
+
+            buildings = _parse_field(row["buildings"], [])
+            if not isinstance(buildings, list):
+                buildings = []
+
+            courses = _parse_field(row["courses"], [])
+            if not isinstance(courses, list):
+                courses = []
+
+            preferences = _parse_field(row["preferences"], [])
+            if not isinstance(preferences, list):
+                preferences = []
+
+            metadata = _parse_field(row["metadata"], {})
+            if not isinstance(metadata, dict):
+                metadata = {}
+
+            return {
+                "session_id": row["session_id"],
+                "campus_topology": topology,
+                "buildings": buildings,
+                "courses": courses,
+                "preferences": preferences,
+                "metadata": metadata,
+                "updated_at": str(row["updated_at"]) if row["updated_at"] else None,
+            }
+
+    def upsert_draft_topology(
+        self,
+        session_id: str,
+        regions: List[str],
+        travel_times: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """Update or initialize campus topology (regions and inter-campus transit times).
+
+        Args:
+            session_id: Session identifier.
+            regions: List of campus region names (e.g. ['Depok', 'Salemba']).
+            travel_times: Optional transit duration mappings.
+
+        Returns:
+            Updated draft state dictionary.
+        """
+        clean_sid = str(session_id).strip()
+        if not clean_sid:
+            raise ValueError("session_id cannot be empty")
+
+        current = self.get_draft_state(clean_sid)
+        topology = current["campus_topology"]
+
+        # Merge regions preserving order without duplicates
+        existing_regions = topology.get("regions", [])
+        new_regions = [str(r).strip() for r in regions if r and str(r).strip()]
+        combined_regions = list(dict.fromkeys(existing_regions + new_regions))
+
+        # Merge travel times
+        existing_tt = dict(topology.get("travel_times", {}))
+        if travel_times and isinstance(travel_times, dict):
+            for k, v in travel_times.items():
+                existing_tt[str(k).strip()] = v
+
+        updated_topology = {
+            "regions": combined_regions,
+            "travel_times": existing_tt,
+        }
+
+        conn = self._get_connection()
+        with conn:
+            with contextlib.closing(conn.execute(
+                """
+                INSERT INTO draft_academic_state (
+                    session_id, campus_topology, buildings, courses, preferences, metadata, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(session_id) DO UPDATE SET
+                    campus_topology = excluded.campus_topology,
+                    updated_at = CURRENT_TIMESTAMP
+                """,
+                (
+                    clean_sid,
+                    json.dumps(updated_topology),
+                    json.dumps(current["buildings"]),
+                    json.dumps(current["courses"]),
+                    json.dumps(current["preferences"]),
+                    json.dumps(current["metadata"]),
+                ),
+            )):
+                pass
+
+        return self.get_draft_state(clean_sid)
+
+    def upsert_draft_building_rooms(
+        self,
+        session_id: str,
+        building_name: str,
+        campus: str,
+        rooms: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """Register or update a building and its classrooms/labs within a campus region.
+
+        Args:
+            session_id: Session identifier.
+            building_name: Name or code of the building.
+            campus: Campus region name where building is located.
+            rooms: List of room dictionaries (e.g. [{'room_number': '101', 'capacity': 50}]).
+
+        Returns:
+            Updated draft state dictionary.
+        """
+        clean_sid = str(session_id).strip()
+        clean_bldg = str(building_name).strip()
+        clean_campus = str(campus).strip()
+        if not clean_sid:
+            raise ValueError("session_id cannot be empty")
+        if not clean_bldg:
+            raise ValueError("building_name cannot be empty")
+
+        current = self.get_draft_state(clean_sid)
+        buildings = list(current["buildings"])
+
+        # Locate existing building
+        target_bldg: Optional[Dict[str, Any]] = None
+        for b in buildings:
+            if str(b.get("name", "")).strip().lower() == clean_bldg.lower():
+                target_bldg = b
+                break
+
+        if target_bldg is None:
+            target_bldg = {
+                "name": clean_bldg,
+                "campus": clean_campus,
+                "rooms": [],
+            }
+            buildings.append(target_bldg)
+        else:
+            if clean_campus:
+                target_bldg["campus"] = clean_campus
+
+        # Merge rooms within building
+        existing_rooms: List[Dict[str, Any]] = target_bldg.setdefault("rooms", [])
+        for new_r in rooms:
+            if not isinstance(new_r, dict):
+                continue
+            r_num = str(new_r.get("room_number") or new_r.get("name") or "").strip()
+            found_room = False
+            for ex_r in existing_rooms:
+                ex_num = str(ex_r.get("room_number") or ex_r.get("name") or "").strip()
+                if ex_num and ex_num.lower() == r_num.lower():
+                    ex_r.update(new_r)
+                    found_room = True
+                    break
+            if not found_room:
+                existing_rooms.append(dict(new_r))
+
+        conn = self._get_connection()
+        with conn:
+            with contextlib.closing(conn.execute(
+                """
+                INSERT INTO draft_academic_state (
+                    session_id, campus_topology, buildings, courses, preferences, metadata, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(session_id) DO UPDATE SET
+                    buildings = excluded.buildings,
+                    updated_at = CURRENT_TIMESTAMP
+                """,
+                (
+                    clean_sid,
+                    json.dumps(current["campus_topology"]),
+                    json.dumps(buildings),
+                    json.dumps(current["courses"]),
+                    json.dumps(current["preferences"]),
+                    json.dumps(current["metadata"]),
+                ),
+            )):
+                pass
+
+        return self.get_draft_state(clean_sid)
+
+    def upsert_draft_course(
+        self,
+        session_id: str,
+        course_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Add or update a course offering in the draft timetable.
+
+        Args:
+            session_id: Session identifier.
+            course_data: Course information including course_number, title, sks, and classes.
+
+        Returns:
+            Updated draft state dictionary.
+        """
+        clean_sid = str(session_id).strip()
+        if not clean_sid:
+            raise ValueError("session_id cannot be empty")
+        if not isinstance(course_data, dict):
+            raise ValueError("course_data must be a dictionary")
+
+        c_num = str(
+            course_data.get("course_number")
+            or course_data.get("courseNumber")
+            or course_data.get("code")
+            or ""
+        ).strip().upper()
+
+        if not c_num:
+            raise ValueError("course_data must contain a valid course_number or code")
+
+        current = self.get_draft_state(clean_sid)
+        courses = list(current["courses"])
+
+        # Match existing course by course_number
+        found_idx: Optional[int] = None
+        for idx, c in enumerate(courses):
+            existing_num = str(
+                c.get("course_number")
+                or c.get("courseNumber")
+                or c.get("code")
+                or ""
+            ).strip().upper()
+            if existing_num == c_num:
+                found_idx = idx
+                break
+
+        if found_idx is not None:
+            existing_course = courses[found_idx]
+            merged_course = dict(existing_course)
+            merged_course.update(course_data)
+            merged_course["course_number"] = c_num
+            courses[found_idx] = merged_course
+        else:
+            new_course = dict(course_data)
+            new_course["course_number"] = c_num
+            courses.append(new_course)
+
+        conn = self._get_connection()
+        with conn:
+            with contextlib.closing(conn.execute(
+                """
+                INSERT INTO draft_academic_state (
+                    session_id, campus_topology, buildings, courses, preferences, metadata, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(session_id) DO UPDATE SET
+                    courses = excluded.courses,
+                    updated_at = CURRENT_TIMESTAMP
+                """,
+                (
+                    clean_sid,
+                    json.dumps(current["campus_topology"]),
+                    json.dumps(current["buildings"]),
+                    json.dumps(courses),
+                    json.dumps(current["preferences"]),
+                    json.dumps(current["metadata"]),
+                ),
+            )):
+                pass
+
+        return self.get_draft_state(clean_sid)
+
+    def upsert_draft_preference(
+        self,
+        session_id: str,
+        preference_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Record or update a scheduling constraint or entity preference in draft state.
+
+        Args:
+            session_id: Session identifier.
+            preference_data: Preference specification (entity_type, entity_name, preference_type, details).
+
+        Returns:
+            Updated draft state dictionary.
+        """
+        clean_sid = str(session_id).strip()
+        if not clean_sid:
+            raise ValueError("session_id cannot be empty")
+        if not isinstance(preference_data, dict):
+            raise ValueError("preference_data must be a dictionary")
+
+        entity_type = str(preference_data.get("entity_type", "")).strip().lower()
+        entity_name = str(preference_data.get("entity_name", "")).strip().lower()
+        pref_type = str(preference_data.get("preference_type", "")).strip().lower()
+
+        current = self.get_draft_state(clean_sid)
+        preferences = list(current["preferences"])
+
+        found = False
+        for ex_pref in preferences:
+            ex_et = str(ex_pref.get("entity_type", "")).strip().lower()
+            ex_en = str(ex_pref.get("entity_name", "")).strip().lower()
+            ex_pt = str(ex_pref.get("preference_type", "")).strip().lower()
+            if ex_et == entity_type and ex_en == entity_name and ex_pt == pref_type:
+                ex_pref.update(preference_data)
+                found = True
+                break
+
+        if not found:
+            preferences.append(dict(preference_data))
+
+        conn = self._get_connection()
+        with conn:
+            with contextlib.closing(conn.execute(
+                """
+                INSERT INTO draft_academic_state (
+                    session_id, campus_topology, buildings, courses, preferences, metadata, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(session_id) DO UPDATE SET
+                    preferences = excluded.preferences,
+                    updated_at = CURRENT_TIMESTAMP
+                """,
+                (
+                    clean_sid,
+                    json.dumps(current["campus_topology"]),
+                    json.dumps(current["buildings"]),
+                    json.dumps(current["courses"]),
+                    json.dumps(preferences),
+                    json.dumps(current["metadata"]),
+                ),
+            )):
+                pass
+
+        return self.get_draft_state(clean_sid)
+
+    def clear_draft_state(self, session_id: str) -> bool:
+        """Purge draft state for a given session.
+
+        Args:
+            session_id: Unique session identifier.
+
+        Returns:
+            True if draft was deleted or empty, False on invalid session_id.
+        """
+        clean_sid = str(session_id).strip()
+        if not clean_sid:
+            return False
+
+        conn = self._get_connection()
+        with conn:
+            with contextlib.closing(conn.execute(
+                "DELETE FROM draft_academic_state WHERE session_id = ?",
+                (clean_sid,),
+            )) as cursor:
+                return cursor.rowcount >= 0
+
     def clear_all_for_testing(self) -> None:
         """Utility method to clear all tables during unit testing."""
         conn = self._get_connection()
@@ -611,6 +1029,8 @@ class AgentMemory:
             with contextlib.closing(conn.execute("DELETE FROM resolution_history;")):
                 pass
             with contextlib.closing(conn.execute("DELETE FROM audit_journal;")):
+                pass
+            with contextlib.closing(conn.execute("DELETE FROM draft_academic_state;")):
                 pass
 
     def close(self) -> None:
