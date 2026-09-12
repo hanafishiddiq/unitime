@@ -79,39 +79,39 @@ flowchart TD
 ### 📦 Rincian Langkah-Langkah Kerja:
 
 #### 🔹 Fase 1: Backend Deployment 24/7 di Tencent VPS
-- [ ] **1.1 Wrapper REST API FastAPI**:
-  Membuat file `ai-gateway/server.py` yang menyediakan endpoint:
-  - `POST /api/ingest/upload`: Menerima berkas dari web UI.
-  - `GET /api/ingest/status/{job_id}`: Polling status pemrosesan dokumen.
-  - `POST /api/ingest/resolve`: Mengirim jawaban admin untuk pertanyaan ambigu.
-  - `GET /api/health`: Healthcheck koneksi ke UniTime Tomcat & MySQL.
-- [ ] **1.2 Konfigurasi Docker Produksi (`docker-compose.prod.yml`)**:
-  Menyusun konfigurasi kontainer dengan limit memori ketat dan restart policy `unless-stopped`.
-- [ ] **1.3 Deployment ke Tencent VPS**:
-  Menjalankan layanan di VPS Tencent dan memastikan semua service berjalan *healthy* 24/7.
-- [ ] **1.4 Ekspos Domain & SSL**:
-  Menghubungkan port FastAPI dan UniTime ke Cloudflare Tunnel (`https://unitime-api.hanavy.online`) sehingga frontend Vercel dapat memanggilnya via HTTPS tanpa masalah CORS.
+- [x] **1.1 Wrapper REST API FastAPI**:
+  Membuat file `ai-gateway/server.py` yang menyediakan endpoint upload, polling status, resolusi ambigu, healthcheck, submit, dan audit reports.
+- [x] **1.2 Konfigurasi Docker Produksi (`docker-compose.prod.yml`)**:
+  Menyusun konfigurasi kontainer dengan limit memori hemat (`-Xms256m -Xmx768m`, buffer pool 128M) dan restart policy `unless-stopped`.
+- [x] **1.3 Deployment ke Tencent VPS**:
+  Menjalankan 3 layanan Docker (MySQL 8.3, UniTime Tomcat v4.8, AI Gateway) di VPS Tencent secara *healthy* 24/7.
+- [x] **1.4 Ekspos Domain & SSL**:
+  Menghubungkan endpoint FastAPI ke Nginx reverse proxy SSL di `https://tencent-vps.hanavy.online/unitime-api`.
+- [x] **1.5 Integrasi Real LLM (Antigravity Gateway)**:
+  Menghubungkan AI Gateway ke live engine Antigravity Gateway port 8080 dengan model `gemini-flash-latest`.
 
 ---
 
 #### 🔹 Fase 2: Pembangunan Frontend di Vercel (Next.js)
-- [ ] **2.1 Setup Proyek Web**:
-  Membuat repo/folder frontend Next.js App Router dengan komponen UI modern (Tailwind + Lucide Icons).
-- [ ] **2.2 Komponen Drag & Drop Upload**:
-  Area upload berkas yang mendukung multi-file (PDF SK Dekan, Excel roster jadwal, file teks).
-- [ ] **2.3 Interactive Curriculum Table**:
-  Tabel visual yang menampilkan daftar mata kuliah, dosen, SKS, kuota, dan subpart yang berhasil diekstrak AI sebelum disubmit ke database.
-- [ ] **2.4 Human-in-the-Loop Dialog**:
-  UI pop-up jika ada dosen ambigu atau aturan jadwal yang butuh klarifikasi pengguna.
-- [ ] **2.5 One-Click Live Commit**:
-  Tombol pengiriman akhir yang memicu penulisan ke database UniTime dan menampilkan laporan audit status HTTP 200.
-- [ ] **2.6 Deployment Vercel**:
-  Deploy otomatis ke Vercel dan menghubungkan variabel environment `NEXT_PUBLIC_API_URL=https://unitime-api.hanavy.online`.
+- [x] **2.1 Setup Proyek Web**:
+  Next.js 14 App Router, Tailwind CSS, Lucide Icons di direktori `web/`.
+- [x] **2.2 Komponen Drag & Drop Upload**:
+  Multi-file support (`.pdf`, `.xlsx`, `.csv`, `.txt`, `.json`) dengan opsi provider & model override.
+- [x] **2.3 Interactive Curriculum & Visual Timetable**:
+  Tabel visual mata kuliah dan grid visual jadwal mingguan interaktif (07:00–21:00).
+- [x] **2.4 Human-in-the-Loop Dialog & Split-View Chat**:
+  UI modal interaktif untuk resolusi konflik kapasitas/waktu serta streaming penalaran AI (*Reasoning Stream*).
+- [x] **2.5 One-Click Live Commit & Audit Inspector**:
+  Tombol pengiriman akhir ke database UniTime dan inspeksi modal laporan audit Markdown & JSON.
+- [x] **2.6 Keamanan Enterprise BFF Proxy**:
+  Route internal `/api/*` menyembunyikan API key & backend URL dari browser, dilengkapi `AdminAccessModal` dengan sandi master.
+- [x] **2.7 Deployment Vercel**:
+  Deploy produksi aktif di `https://unitime-rho.vercel.app` terintegrasi CI/CD Git GitHub `main`.
 
 ---
 
 #### 🔹 Fase 3: User Acceptance Testing (UAT) & Monitoring
-- [ ] **3.1 Pengujian End-to-End Realistis**:
-  Menguji alur nyata: membuka website di Vercel $\rightarrow$ upload dokumen jadwal Excel $\rightarrow$ review di UI $\rightarrow$ klik Submit $\rightarrow$ cek data di database MySQL Tencent VPS.
-- [ ] **3.2 Uji Beban Memori & Stabilitas**:
-  Memastikan RAM Tencent VPS tetap stabil di bawah 1.5 GB dan tidak mengganggu proses AdsPower/Node.js lainnya.
+- [x] **3.1 Pengujian End-to-End Realistis**:
+  Alur penuh terverifikasi: Login `mahasiswaCS25` &rarr; upload dokumen &rarr; ekstraksi live AI (`gemini-flash-latest`) &rarr; validasi skema 100% valid &rarr; sinkronisasi data ke UniTime database.
+- [ ] **3.2 Monitoring Stabilitas Rutin**:
+  Memantau stabilitas memori RAM Tencent VPS tetap di bawah 1.5 GB selama pengoperasian berkelanjutan.
