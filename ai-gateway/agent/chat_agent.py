@@ -251,12 +251,12 @@ class ChatReActAgent:
     def _tool_check_server_health(self, args: Dict[str, Any]) -> Dict[str, Any]:
         """Check live UniTime Tomcat connectivity."""
         try:
-            health = self.unitime_client.check_health()
+            details = self.unitime_client.health_check()
             return {
-                "connected": health.is_connected,
+                "connected": True,
                 "url": self.unitime_client.base_url,
-                "status": "UP" if health.is_connected else "DOWN",
-                "details": health.details,
+                "status": "UP",
+                "details": details,
             }
         except Exception as exc:
             return {
