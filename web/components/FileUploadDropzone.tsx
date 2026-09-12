@@ -165,7 +165,8 @@ export function FileUploadDropzone({
                 disabled={isUploading}
                 className="w-full text-xs rounded-md border border-input bg-background px-2.5 py-1.5 text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option value="gemini">Google Gemini 1.5</option>
+                <option value="gemini">Google Gemini (gemini-flash-latest)</option>
+                <option value="antigravity">Antigravity Gateway (VPS Live LLM)</option>
                 <option value="openai">OpenAI GPT-4o</option>
                 <option value="openrouter">OpenRouter / Anthropic</option>
                 <option value="custom">Custom Provider</option>
@@ -183,7 +184,7 @@ export function FileUploadDropzone({
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
                 disabled={isUploading}
-                placeholder="e.g. gemini-1.5-pro-latest"
+                placeholder="e.g. gemini-flash-latest"
                 className="w-full text-xs rounded-md border border-input bg-background px-2.5 py-1.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>

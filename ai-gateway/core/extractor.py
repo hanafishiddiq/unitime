@@ -51,12 +51,19 @@ class ExtractionResult:
 
 def load_system_prompt(custom_path: Optional[Path | str] = None) -> str:
     """Load the UniTime system prompt from file or fallback to embedded instructions."""
-    target_path = Path(custom_path) if custom_path else DEFAULT_SYSTEM_PROMPT_PATH
-    if target_path.is_file():
-        try:
-            return target_path.read_text(encoding="utf-8")
-        except Exception as exc:
-            logger.warning("Failed to read system prompt from %s: %s", target_path, exc)
+    candidates = [
+        Path(custom_path) if custom_path else None,
+        DEFAULT_SYSTEM_PROMPT_PATH,
+        Path(__file__).resolve().parent.parent / "schema" / "ai-system-prompt.md",
+        Path("/app/schema/ai-system-prompt.md"),
+        Path("/Documentation/ai-integration/ai-system-prompt.md"),
+    ]
+    for p in candidates:
+        if p and p.is_file():
+            try:
+                return p.read_text(encoding="utf-8")
+            except Exception as exc:
+                logger.warning("Failed to read system prompt from %s: %s", p, exc)
 
     return (
         "You are UniTime Ingestion AI. Extract academic curriculum and class schedules "
@@ -505,10 +512,6 @@ class OpenAIExtractor(BaseExtractor):
         base_url: Optional[str] = None,
     ) -> None:
         super().__init__(system_prompt)
-        self.api_key = api_key or os.getenv("OPENAI_API_KEY") or os.getenv("LLM_API_KEY")
-        if not self.api_key:
-            raise ValueError("OPENAI_API_KEY environment variable or argument is required.")
-        self.model = model or os.getenv("OPENAI_MODEL") or os.getenv("LLM_MODEL", "gpt-4o")
         raw_base = (
             base_url
             or os.getenv("OPENAI_BASE_URL")
@@ -516,6 +519,12 @@ class OpenAIExtractor(BaseExtractor):
             or os.getenv("LLM_ENDPOINT")
             or "https://api.openai.com/v1"
         ).rstrip("/")
+        # If custom base_url (like Antigravity Gateway) is used, default api_key to 'antigravity'
+        default_key = "antigravity" if any(h in raw_base for h in ("host.docker.internal", "localhost", "127.0.0.1", "172.")) else None
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY") or os.getenv("LLM_API_KEY") or default_key
+        if not self.api_key:
+            raise ValueError("OPENAI_API_KEY environment variable or argument is required.")
+        self.model = model or os.getenv("OPENAI_MODEL") or os.getenv("DEFAULT_LLM_MODEL") or os.getenv("LLM_MODEL", "gemini-flash-latest")
         if raw_base.endswith("/chat/completions"):
             self.endpoint = raw_base
         else:
@@ -717,10 +726,19 @@ def get_extractor(
 
     if prov == "mock":
         return MockExtractor(system_prompt=system_prompt)
-    if prov in ("gemini", "google"):
-        return GeminiExtractor(api_key=api_key, model=model, system_prompt=system_prompt, base_url=base_url)
-    if prov in ("openai", "gpt", "custom", "openrouter", "ollama", "vllm", "proxy", "local"):
+    if prov in ("antigravity", "antigravity-gateway", "openai", "gpt", "custom", "openrouter", "ollama", "vllm", "proxy", "local"):
         return OpenAIExtractor(api_key=api_key, model=model, system_prompt=system_prompt, base_url=base_url)
+    if prov in ("gemini", "google"):
+        # If GEMINI_API_KEY is not set but OPENAI_BASE_URL is configured (e.g. Antigravity Gateway proxying Gemini), route to OpenAIExtractor!
+        if not (api_key or os.getenv("GEMINI_API_KEY")) and os.getenv("OPENAI_BASE_URL"):
+            target_model = model or os.getenv("OPENAI_MODEL") or "gemini-flash-latest"
+            return OpenAIExtractor(
+                api_key=api_key or os.getenv("OPENAI_API_KEY") or "antigravity",
+                model=target_model,
+                system_prompt=system_prompt,
+                base_url=base_url or os.getenv("OPENAI_BASE_URL"),
+            )
+        return GeminiExtractor(api_key=api_key, model=model, system_prompt=system_prompt, base_url=base_url)
     if prov in ("anthropic", "claude"):
         return AnthropicExtractor(api_key=api_key, model=model, system_prompt=system_prompt, base_url=base_url)
 

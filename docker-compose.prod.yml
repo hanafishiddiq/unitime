@@ -49,23 +49,28 @@ services:
     restart: unless-stopped
     depends_on:
       - unitime-web
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "8005:8005"
     environment:
       - UNITIME_API_URL=http://unitime-web:8080/api/smart-ingest
       - UNITIME_USERNAME=${UNITIME_USERNAME:-admin}
       - UNITIME_PASSWORD=${UNITIME_PASSWORD:-admin}
-      - DEFAULT_LLM_PROVIDER=${DEFAULT_LLM_PROVIDER:-gemini}
+      - DEFAULT_LLM_PROVIDER=${DEFAULT_LLM_PROVIDER:-openai}
+      - DEFAULT_LLM_MODEL=${DEFAULT_LLM_MODEL:-gemini-flash-latest}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gemini-flash-latest}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-antigravity-gateway}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-http://host.docker.internal:8080/v1}
       - GATEWAY_API_KEY=${GATEWAY_API_KEY:-}
     volumes:
       - ./ai-gateway/data:/app/data
       - ./ai-gateway/reports:/app/reports
       - ./Documentation/ai-integration/unitime-smart-ingest-schema.json:/Documentation/ai-integration/unitime-smart-ingest-schema.json:ro
       - ./ai-gateway/schema/unitime-smart-ingest-schema.json:/app/schema/unitime-smart-ingest-schema.json:ro
+      - ./ai-gateway/schema/ai-system-prompt.md:/app/schema/ai-system-prompt.md:ro
 
 volumes:
   unitime-db-data:

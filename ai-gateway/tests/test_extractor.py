@@ -69,3 +69,19 @@ def test_get_extractor_custom_base_url():
     ext_gemini = get_extractor("gemini", api_key="gm-test", base_url="https://myproxy.com/v1beta")
     assert ext_gemini.endpoint.startswith("https://myproxy.com/v1beta/models/")
 
+
+def test_get_extractor_antigravity_and_gemini_flash_latest(monkeypatch):
+    # Test antigravity provider
+    ext = get_extractor("antigravity", base_url="http://host.docker.internal:8080/v1")
+    assert ext.endpoint == "http://host.docker.internal:8080/v1/chat/completions"
+    assert ext.model == "gemini-flash-latest"
+    assert ext.api_key == "antigravity"
+
+    # Test gemini fallback to OPENAI_BASE_URL when GEMINI_API_KEY is not set
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.setenv("OPENAI_BASE_URL", "http://host.docker.internal:8080/v1")
+    monkeypatch.setenv("OPENAI_MODEL", "gemini-flash-latest")
+    ext_fallback = get_extractor("gemini")
+    assert ext_fallback.endpoint == "http://host.docker.internal:8080/v1/chat/completions"
+    assert ext_fallback.model == "gemini-flash-latest"
+
