@@ -53,6 +53,8 @@ services:
       - "8005:8005"
     environment:
       - UNITIME_API_URL=http://unitime-web:8080/api/smart-ingest
+      - UNITIME_USERNAME=${UNITIME_USERNAME:-admin}
+      - UNITIME_PASSWORD=${UNITIME_PASSWORD:-admin}
       - DEFAULT_LLM_PROVIDER=${DEFAULT_LLM_PROVIDER:-gemini}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
