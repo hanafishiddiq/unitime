@@ -56,3 +56,16 @@ def test_repair_and_parse_json_empty_strings_and_arrays():
     result = repair_and_parse_json(raw)
     assert result["empty"] == ""
     assert result["arr"] == ["a", "b"]
+
+
+def test_get_extractor_custom_base_url():
+    ext = get_extractor("openrouter", api_key="sk-test", base_url="https://openrouter.ai/api/v1")
+    assert ext.endpoint == "https://openrouter.ai/api/v1/chat/completions"
+    assert ext.api_key == "sk-test"
+
+    ext_ollama = get_extractor("ollama", api_key="ollama", base_url="http://localhost:11434/v1")
+    assert ext_ollama.endpoint == "http://localhost:11434/v1/chat/completions"
+
+    ext_gemini = get_extractor("gemini", api_key="gm-test", base_url="https://myproxy.com/v1beta")
+    assert ext_gemini.endpoint.startswith("https://myproxy.com/v1beta/models/")
+

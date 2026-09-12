@@ -90,8 +90,13 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--provider",
         default=os.getenv("DEFAULT_LLM_PROVIDER", "mock"),
-        choices=["mock", "gemini", "openai", "anthropic"],
+        choices=["mock", "gemini", "openai", "anthropic", "custom", "openrouter", "ollama", "vllm", "proxy"],
         help="LLM extraction provider.",
+    )
+    parser.add_argument(
+        "--base-url",
+        default=os.getenv("OPENAI_BASE_URL") or os.getenv("LLM_BASE_URL") or os.getenv("LLM_ENDPOINT"),
+        help="Custom LLM API base URL / endpoint (for OpenRouter, Ollama, vLLM, or custom proxies).",
     )
     parser.add_argument(
         "--mock",
@@ -350,7 +355,7 @@ def main() -> int:
     # 2. Extract Chunks via LLM / Mock
     console.print(f"[bold blue]Step 2: Extracting data with provider '{provider}'...[/bold blue]")
     try:
-        extractor = get_extractor(provider=provider, model=args.model)
+        extractor = get_extractor(provider=provider, model=args.model, base_url=args.base_url)
     except Exception as exc:
         console.print(f"[bold red]Failed to initialize extractor:[/bold red] {exc}")
         return 1

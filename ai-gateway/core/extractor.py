@@ -415,14 +415,20 @@ class GeminiExtractor(BaseExtractor):
         api_key: Optional[str] = None,
         model: Optional[str] = None,
         system_prompt: Optional[str] = None,
+        base_url: Optional[str] = None,
     ) -> None:
         super().__init__(system_prompt)
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY environment variable or argument is required.")
         self.model = model or os.getenv("GEMINI_MODEL", "gemini-1.5-pro-latest")
+        raw_base = (
+            base_url
+            or os.getenv("GEMINI_BASE_URL")
+            or "https://generativelanguage.googleapis.com/v1beta"
+        ).rstrip("/")
         self.endpoint = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent?key={self.api_key}"
+            f"{raw_base}/models/{self.model}:generateContent?key={self.api_key}"
         )
 
     def extract_text(
@@ -496,13 +502,24 @@ class OpenAIExtractor(BaseExtractor):
         api_key: Optional[str] = None,
         model: Optional[str] = None,
         system_prompt: Optional[str] = None,
+        base_url: Optional[str] = None,
     ) -> None:
         super().__init__(system_prompt)
-        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY") or os.getenv("LLM_API_KEY")
         if not self.api_key:
             raise ValueError("OPENAI_API_KEY environment variable or argument is required.")
-        self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o")
-        self.endpoint = "https://api.openai.com/v1/chat/completions"
+        self.model = model or os.getenv("OPENAI_MODEL") or os.getenv("LLM_MODEL", "gpt-4o")
+        raw_base = (
+            base_url
+            or os.getenv("OPENAI_BASE_URL")
+            or os.getenv("LLM_BASE_URL")
+            or os.getenv("LLM_ENDPOINT")
+            or "https://api.openai.com/v1"
+        ).rstrip("/")
+        if raw_base.endswith("/chat/completions"):
+            self.endpoint = raw_base
+        else:
+            self.endpoint = f"{raw_base}/chat/completions"
 
     def extract_text(
         self, text_chunk: str, context: Optional[Dict[str, Any]] = None
@@ -588,13 +605,25 @@ class AnthropicExtractor(BaseExtractor):
         api_key: Optional[str] = None,
         model: Optional[str] = None,
         system_prompt: Optional[str] = None,
+        base_url: Optional[str] = None,
     ) -> None:
         super().__init__(system_prompt)
-        self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY") or os.getenv("LLM_API_KEY")
         if not self.api_key:
             raise ValueError("ANTHROPIC_API_KEY environment variable or argument is required.")
         self.model = model or os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022")
-        self.endpoint = "https://api.anthropic.com/v1/messages"
+        raw_base = (
+            base_url
+            or os.getenv("ANTHROPIC_BASE_URL")
+            or os.getenv("LLM_BASE_URL")
+            or "https://api.anthropic.com"
+        ).rstrip("/")
+        if raw_base.endswith("/messages"):
+            self.endpoint = raw_base
+        elif raw_base.endswith("/v1"):
+            self.endpoint = f"{raw_base}/messages"
+        else:
+            self.endpoint = f"{raw_base}/v1/messages"
 
     def extract_text(
         self, text_chunk: str, context: Optional[Dict[str, Any]] = None
@@ -681,6 +710,7 @@ def get_extractor(
     api_key: Optional[str] = None,
     model: Optional[str] = None,
     system_prompt: Optional[str] = None,
+    base_url: Optional[str] = None,
 ) -> BaseExtractor:
     """Factory creating an extractor instance based on provider name."""
     prov = (provider or "mock").strip().lower()
@@ -688,12 +718,12 @@ def get_extractor(
     if prov == "mock":
         return MockExtractor(system_prompt=system_prompt)
     if prov in ("gemini", "google"):
-        return GeminiExtractor(api_key=api_key, model=model, system_prompt=system_prompt)
-    if prov in ("openai", "gpt"):
-        return OpenAIExtractor(api_key=api_key, model=model, system_prompt=system_prompt)
+        return GeminiExtractor(api_key=api_key, model=model, system_prompt=system_prompt, base_url=base_url)
+    if prov in ("openai", "gpt", "custom", "openrouter", "ollama", "vllm", "proxy", "local"):
+        return OpenAIExtractor(api_key=api_key, model=model, system_prompt=system_prompt, base_url=base_url)
     if prov in ("anthropic", "claude"):
-        return AnthropicExtractor(api_key=api_key, model=model, system_prompt=system_prompt)
+        return AnthropicExtractor(api_key=api_key, model=model, system_prompt=system_prompt, base_url=base_url)
 
     raise ValueError(
-        f"Unsupported provider '{provider}'. Must be one of: 'mock', 'gemini', 'openai', 'anthropic'."
+        f"Unsupported provider '{provider}'. Must be one of: 'mock', 'gemini', 'openai', 'anthropic', or OpenAI-compatible ('custom', 'openrouter', 'ollama', 'vllm', 'proxy')."
     )
